@@ -119,5 +119,6 @@ git init
 git remote add origin url_on_github
 git fetch origin
 git reset origin/master
-git status
+git commit
+git push --set-upstream origin master
 ```
