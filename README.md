@@ -7,8 +7,11 @@ Complete the following before cloning the repo. This process is a bit jank and I
 Complete the steps on this page - only the first page: https://docs.amplify.aws/start/getting-started/installation/q/integration/react-native
 
 `npm install -g expo-cli  `
+
 `expo init RNAmplify`
+
 `cd RNAmplify`
+
 `amplify init`
 
 ```
@@ -32,7 +35,9 @@ Copy everything from the cloned repo directory (leftward) into the RNAmplify dir
 Delete the assets folder (this was created by amplify)
 
 Back in the RNAmplify folder, run:
-> amplify add auth
+`amplify add auth`
+
+```
  Do you want to use the default authentication and security configuration? Manual configuration
  Select the authentication/authorization services that you want to use: User Sign-Up, Sign-In, connected with AWS IAM co
 ntrols (Enables per-user Storage features for images or other content, Analytics, and more)
@@ -64,10 +69,11 @@ ntrols (Enables per-user Storage features for images or other content, Analytics
  Do you want to enable any of the following capabilities?
  Do you want to use an OAuth flow? No
 ? Do you want to configure Lambda Triggers for Cognito? No
+```
 
+`amplify add api`
 
-
->amplify add api
+```
 ? Please select from one of the below mentioned services: GraphQL
 ? Provide API name: leftward
 ? Choose the default authorization type for the API Amazon Cognito User Pool
@@ -77,8 +83,10 @@ Use a Cognito user pool configured as a part of this project.
 ? Configure conflict detection? No
 ? Do you have an annotated GraphQL schema? Yes
 ? Provide your schema file path: .\amplify\backend\api\leftwardmvptest\schema.graphql
+```
 
->amplify push
+`amplify push`
+
 accept all defaults
 
 
@@ -88,14 +96,16 @@ Congrats! You've completely configured a connected back end for the app! You can
 - Other stuff is probably somewhere but that's basically all I use
 
 Now in the RNAmplify folder, we need to configure the NPM environment:
-> npm i
+`npm i`
+
 (you might have to install expo here too?)
 Configure an android virtual device - follow Mosh's instructions at 18 minutes: https://www.youtube.com/watch?v=0-S5a0eXPoc&t=1490s
 
 To run the app:
 open the AVD
-> expo start
-> a
+`expo start`
+
+`a`
 
 It should work and be hooked up to the back end! Woo!!!
 
