@@ -1,12 +1,6 @@
 # leftward
 Make the world more equal
 
-# leftward
-Make the world more equal
-
-# leftward
-Make the world more equal
-
 Development environment setup
 Complete the following before cloning the repo. This process is a bit jank and I'm not sure how to do it better. For now:
 
