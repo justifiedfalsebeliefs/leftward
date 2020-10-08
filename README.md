@@ -6,11 +6,12 @@ Complete the following before cloning the repo. This process is a bit jank and I
 
 Complete the steps on this page - only the first page: https://docs.amplify.aws/start/getting-started/installation/q/integration/react-native
 
-> npm install -g expo-cli  
-> expo init RNAmplify
-> cd RNAmplify
-> amplify init
+`npm install -g expo-cli  `
+`expo init RNAmplify`
+`cd RNAmplify`
+`amplify init`
 
+```
 ? Enter a name for the project: leftward
 ? Enter a name for the environment: dev
 ? Choose your default editor: <Your favorite text editor>
@@ -22,8 +23,8 @@ Complete the steps on this page - only the first page: https://docs.amplify.aws/
 ? Start Command: npm run-script start
 ? Do you want to use an AWS profile? Y
 ? Please choose the profile you want to use: <Your AWS profile from the configuration step>
-  
-npm install aws-amplify aws-amplify-react-native @react-native-community/netinfo
+```
+`npm install aws-amplify aws-amplify-react-native @react-native-community/netinfo`
 
 Clone this repo to the directory that the RNAmplify folder was created in - it should just contain the leftward folder and the RNAmplify folder at this point
 
