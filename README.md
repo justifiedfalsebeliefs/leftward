@@ -103,6 +103,7 @@ Configure an android virtual device - follow Mosh's instructions at 18 minutes: 
 
 To run the app:
 open the AVD
+
 `expo start`
 
 `a`
