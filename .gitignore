@@ -32,3 +32,16 @@ amplifytools.xcconfig
 
 .vscode/*
 vsws.code-workspace
+.expo-shared/assets.json
+.graphqlconfig.yml
+amplify/.config/project-config.json
+amplify/backend/api/leftwardmvptest/parameters.json
+amplify/backend/api/leftwardmvptest/stacks/CustomResources.json
+amplify/backend/api/leftwardmvptest/transform.conf.json
+amplify/backend/auth/leftwardmvp76e8b474/leftwardmvp76e8b474-cloudformation-template.yml
+amplify/backend/auth/leftwardmvp76e8b474/parameters.json
+amplify/backend/backend-config.json
+amplify/backend/tags.json
+amplify/cli.json
+amplify/team-provider-info.json
+babel.config.js

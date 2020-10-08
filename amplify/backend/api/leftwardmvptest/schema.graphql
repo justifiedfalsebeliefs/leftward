@@ -1,0 +1,120 @@
+type Campaign
+  @model
+  @auth(
+    rules: [
+      { allow: groups, groups: ["Admin"] }
+      { allow: owner, ownerField: "owner", operations: [update, read] }
+      {
+        allow: groups
+        groups: ["orgContributor"]
+        operations: [create, update, delete, read]
+      }
+      { allow: groups, groups: ["defaultUser"], operations: [read] }
+    ]
+  ) {
+  title: String
+  description: String
+  liveDate: String
+  expireDate: String
+  sponsoringOrganization: Organization
+  supportsCauses: [Cause]
+  hasActions: [Action]
+}
+
+type Action
+  @auth(
+    rules: [
+      { allow: groups, groups: ["Admin"] }
+      { allow: owner, ownerField: "owner", operations: [update, read] }
+      {
+        allow: groups
+        groups: ["orgContributor"]
+        operations: [create, update, delete, read]
+      }
+      { allow: groups, groups: ["defaultUser"], operations: [read] }
+    ]
+  )
+  @model {
+  title: String
+  description: String
+  partofCampaign: Campaign
+  needsContribution: Contribution
+  image: String
+  reward: Int
+  liveDate: String
+  expireDate: String
+}
+
+type Cause
+  @model
+  @auth(
+    rules: [
+      { allow: groups, groups: ["Admin"] }
+      {
+        allow: groups
+        groups: ["defaultUser", "orgContributor"]
+        operations: [read]
+      }
+    ]
+  ) {
+  description: String
+  title: String
+  icon: String
+}
+
+type Contribution
+  @model
+  @auth(
+    rules: [
+      { allow: groups, groups: ["Admin"] }
+      {
+        allow: groups
+        groups: ["defaultUser", "orgContributor"]
+        operations: [read]
+      }
+    ]
+  ) {
+  title: String
+  description: String
+  icon: String
+}
+
+type Organization
+  @model
+  @auth(
+    rules: [
+      { allow: groups, groups: ["Admin"] }
+      { allow: owner, ownerField: "owner", operations: [update, read] }
+      {
+        allow: groups
+        groups: ["orgContributor"]
+        operations: [create, update, delete, read]
+      }
+      { allow: groups, groups: ["defaultUser"], operations: [read] }
+    ]
+  ) {
+  title: String
+  description: String
+  image: String
+  contact: String
+  supportsCauses: [Cause]
+}
+
+type User
+  @model
+  @auth(
+    rules: [
+      { allow: groups, groups: ["Admin"] }
+      {
+        allow: owner
+        ownerField: "owner"
+        operations: [create, update, delete, read]
+      }
+    ]
+  ) {
+  username: String
+  causeRank: [String]
+  actPreference: [String]
+  experience: Int
+  participatedActions: [Action]
+}
