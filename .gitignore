@@ -15,7 +15,6 @@ web-build/
 .DS_Store
 
 #amplify
-amplify/*
 amplify/\#current-cloud-backend
 amplify/.config/local-*
 amplify/mock-data

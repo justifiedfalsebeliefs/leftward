@@ -1,4 +1,5 @@
 # leftward
+
 Make the world more equal
 
 Development environment setup
@@ -6,7 +7,7 @@ Complete the following before cloning the repo. This process is a bit jank and I
 
 Complete the steps on this page - only the first page: https://docs.amplify.aws/start/getting-started/installation/q/integration/react-native
 
-`npm install -g expo-cli  `
+`npm install -g expo-cli `
 
 `expo init RNAmplify`
 
@@ -27,6 +28,7 @@ Complete the steps on this page - only the first page: https://docs.amplify.aws/
 ? Do you want to use an AWS profile? Y
 ? Please choose the profile you want to use: <Your AWS profile from the configuration step>
 ```
+
 `npm install aws-amplify aws-amplify-react-native @react-native-community/netinfo`
 
 Clone this repo to the directory that the RNAmplify folder was created in - it should just contain the leftward folder and the RNAmplify folder at this point
@@ -89,8 +91,8 @@ Use a Cognito user pool configured as a part of this project.
 
 accept all defaults
 
-
 Congrats! You've completely configured a connected back end for the app! You can manage things in these places:
+
 - Cognito is where user stuff is handled.
 - Appsync is where data goes
 - Other stuff is probably somewhere but that's basically all I use
@@ -111,3 +113,11 @@ open the AVD
 It should work and be hooked up to the back end! Woo!!!
 
 Now how to clean up the git jank...
+
+```
+git init
+git remote add origin url_on_github
+git fetch origin
+git reset origin/master
+git status
+```
