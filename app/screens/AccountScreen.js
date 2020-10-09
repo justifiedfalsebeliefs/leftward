@@ -17,12 +17,12 @@ const menuItems = [
     },
   },
   {
-    title: "Campaign Manager",
+    title: "Manage Account",
     icon: {
-      name: "email",
+      name: "account-settings",
       backgroundColor: colors.secondary,
     },
-    targetScreen: routes.CAMPAIGN,
+    targetScreen: routes.SETTINGS,
   },
 ];
 
