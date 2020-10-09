@@ -24,6 +24,8 @@ export default function App() {
     if (user) setUser(user);
   };
 
+  restoreUser();
+
   return (
     //<TestingScreen></TestingScreen>
     <AuthContext.Provider value={{ user, setUser }}>

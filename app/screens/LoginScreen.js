@@ -29,11 +29,7 @@ function LoginScreen({ navigation }) {
         auth.logIn(data.accessToken.jwtToken);
       });
     } catch (error) {
-      console.log(error.message);
-      Alert.alert("Please try again", error.message, [
-        { text: "Cancel", style: "cancel" },
-        { text: "OK" },
-      ]);
+      setError(error.message);
     }
   };
 
