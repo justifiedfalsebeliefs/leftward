@@ -110,7 +110,21 @@ open the AVD
 
 `a`
 
-It should work and be hooked up to the back end! Woo!!!
+As a final step, we need to implement a lambda function to auto-authorize users. This skips the step of needing to verify an email to log in.
+- Go to AWS console and open Lambda
+- Create a new function called "autoAuthorize"
+- Dump in this code and save it:
+
+```
+exports.handler = (event, context, callback) => {
+        event.response.autoConfirmUser = true;
+    callback(null, event);
+};
+```
+
+Then go to your user pool on Cognito, click "Triggers" on the side, and set pre sign-up to autoAuthorize. Save.
+
+Now EVERYTHING should work and be hooked up to the back end! Woo!!!
 
 Now how to clean up the git jank...
 
