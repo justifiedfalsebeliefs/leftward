@@ -6,6 +6,6 @@ export default Object.freeze({
   REGISTER: "Register",
   REGISTERCAUSE: "RegisterCause",
   REGISTERACT: "RegisterAct",
-  REGISTERCONFIRM: "RegisterConfirm",
+  SETTINGS: "Settings",
   CAMPAIGN: "Campaign",
 });
