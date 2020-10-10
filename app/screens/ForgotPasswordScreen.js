@@ -1,22 +1,19 @@
 import React, { useState } from "react";
 import { StyleSheet } from "react-native";
 import routes from "../navigation/routes";
-import AuthForm from "../components/AuthForm";
 import Screen from "../components/Screen";
 import { Auth } from "aws-amplify";
+import AuthForm from "../components/AuthForm";
 import useAuth from "../auth/useAuth";
-import AppButton from "../components/AppButton";
 
-function LoginScreen({ navigation }) {
+function ForgotPasswordScreen({ navigation }) {
   const auth = useAuth();
   const [error, setError] = useState();
 
   const handleSubmit = async (userInfo) => {
     try {
-      const result = await Auth.signIn(userInfo.username, userInfo.password);
-      Auth.currentSession().then((data) => {
-        auth.logIn(data.accessToken.jwtToken);
-      });
+      Auth.forgotPassword((username = userInfo.username));
+      navigation.navigate(routes.CONFIRMRECOVERPASSWORD);
     } catch (error) {
       setError(error.message);
     }
@@ -26,15 +23,11 @@ function LoginScreen({ navigation }) {
     <>
       <Screen style={styles.container}>
         <AuthForm
-          fields={["username", "password"]}
+          fields={["username", "email"]}
           onSubmit={handleSubmit}
-          submitTitle={"Log In"}
+          submitTitle={"Set new password"}
           error={error}
         ></AuthForm>
-        <AppButton
-          title="Forgot Password?"
-          onPress={() => navigation.navigate(routes.RECOVERPASSWORD)}
-        ></AppButton>
       </Screen>
     </>
   );
@@ -46,4 +39,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default LoginScreen;
+export default ForgotPasswordScreen;
