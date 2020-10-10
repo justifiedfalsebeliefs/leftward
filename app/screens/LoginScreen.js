@@ -12,6 +12,8 @@ import {
   SubmitButton,
 } from "../components/forms";
 import useAuth from "../auth/useAuth";
+import AppText from "../components/AppText";
+import AppButton from "../components/AppButton";
 
 const validationSchema = Yup.object().shape({
   username: Yup.string().required().label("Username"),
@@ -58,6 +60,10 @@ function LoginScreen({ navigation }) {
             textContentType="password"
           />
           <SubmitButton title="Log In" />
+          <AppButton
+            title="Forgot Password?"
+            onPress={() => navigation.navigate(routes.RECOVERPASSWORD)}
+          ></AppButton>
         </Form>
       </Screen>
     </>

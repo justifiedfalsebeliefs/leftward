@@ -6,7 +6,8 @@ import RegisterScreen from "../screens/RegisterScreen";
 import WelcomeScreen from "../screens/WelcomeScreen";
 import RegisterCauseScreen from "../screens/RegisterCauseScreen";
 import RegisterActScreen from "../screens/RegisterActScreen";
-import RegisterConfirmScreen from "../screens/RegisterConfirmScreen";
+import ForgotPasswordScreen from "../screens/ForgotPasswordScreen";
+import ConfirmRecoverPasswordScreen from "../screens/ConfirmRecoverPasswordScreen";
 
 const Stack = createStackNavigator();
 
@@ -22,7 +23,11 @@ const AuthNavigator = () => {
       <Stack.Screen name="Register" component={RegisterScreen} />
       <Stack.Screen name="RegisterCause" component={RegisterCauseScreen} />
       <Stack.Screen name="RegisterAct" component={RegisterActScreen} />
-      <Stack.Screen name="RegisterConfirm" component={RegisterConfirmScreen} />
+      <Stack.Screen name="RecoverPassword" component={ForgotPasswordScreen} />
+      <Stack.Screen
+        name="ConfirmRecoverPassword"
+        component={ConfirmRecoverPasswordScreen}
+      />
     </Stack.Navigator>
   );
 };

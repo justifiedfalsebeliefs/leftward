@@ -8,4 +8,6 @@ export default Object.freeze({
   REGISTERACT: "RegisterAct",
   SETTINGS: "Settings",
   CAMPAIGN: "Campaign",
+  RECOVERPASSWORD: "RecoverPassword",
+  CONFIRMRECOVERPASSWORD: "ConfirmRecoverPassword",
 });
