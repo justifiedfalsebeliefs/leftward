@@ -1,27 +1,9 @@
 import React, { useState } from "react";
-import { StyleSheet, Alert } from "react-native";
-import * as Yup from "yup";
-import routes from "../navigation/routes";
+import { StyleSheet } from "react-native";
+import AuthForm from "../components/AuthForm";
 import useAuth from "../auth/useAuth";
 import Screen from "../components/Screen";
 import { Auth } from "aws-amplify";
-import {
-  ErrorMessage,
-  Form,
-  FormField,
-  SubmitButton,
-  AppButton,
-} from "../components/forms";
-
-const validationSchema = Yup.object().shape({
-  username: Yup.string().required().label("Username"),
-  email: Yup.string().required().email().label("Email"),
-  password: Yup.string().required().min(4).label("Password"),
-  passwordConfirmation: Yup.string().oneOf(
-    [Yup.ref("password"), null],
-    "Passwords must match"
-  ),
-});
 
 function RegisterScreen({ navigation }) {
   const [error, setError] = useState();
@@ -50,47 +32,12 @@ function RegisterScreen({ navigation }) {
   return (
     <>
       <Screen style={styles.container}>
-        <Form
-          initialValues={{ username: "", email: "", password: "" }}
+        <AuthForm
+          fields={["username", "email", "password", "passwordConfirmation"]}
           onSubmit={handleSubmit}
-          validationSchema={validationSchema}
-        >
-          <ErrorMessage error={error} visible={error} />
-          <FormField
-            autoCorrect={false}
-            icon="account"
-            name="username"
-            placeholder="Username"
-          />
-          <FormField
-            autoCapitalize="none"
-            autoCorrect={false}
-            icon="email"
-            keyboardType="email-address"
-            name="email"
-            placeholder="Email"
-            textContentType="emailAddress"
-          />
-          <FormField
-            autoCapitalize="none"
-            autoCorrect={false}
-            icon="lock"
-            name="password"
-            placeholder="Password"
-            secureTextEntry
-            textContentType="password"
-          />
-          <FormField
-            autoCapitalize="none"
-            autoCorrect={false}
-            icon="lock"
-            name="passwordConfirmation"
-            placeholder="Confirm"
-            secureTextEntry
-            textContentType="password"
-          />
-          <SubmitButton title="Register" />
-        </Form>
+          submitTitle={"Register"}
+          error={error}
+        ></AuthForm>
       </Screen>
     </>
   );
