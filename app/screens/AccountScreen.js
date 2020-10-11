@@ -24,6 +24,22 @@ const menuItems = [
     },
     targetScreen: routes.SETTINGS,
   },
+  {
+    title: "Update Cause Preferences",
+    icon: {
+      name: "account-settings",
+      backgroundColor: colors.secondary,
+    },
+    targetScreen: routes.UPDATECAUSE,
+  },
+  {
+    title: "Update Action Preferences",
+    icon: {
+      name: "account-settings",
+      backgroundColor: colors.secondary,
+    },
+    targetScreen: routes.UPDATEACTION,
+  },
 ];
 
 function AccountScreen({ navigation }) {

@@ -10,4 +10,6 @@ export default Object.freeze({
   CAMPAIGN: "Campaign",
   RECOVERPASSWORD: "RecoverPassword",
   CONFIRMRECOVERPASSWORD: "ConfirmRecoverPassword",
+  UPDATECAUSE: "UpdateCause",
+  UPDATEACTION: "UpdateAction",
 });
