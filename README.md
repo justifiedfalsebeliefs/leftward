@@ -111,6 +111,7 @@ open the AVD
 `a`
 
 As a final step, we need to implement a lambda function to auto-authorize users. This skips the step of needing to verify an email to log in.
+
 - Go to AWS console and open Lambda
 - Create a new function called "autoAuthorize"
 - Dump in this code and save it:
@@ -123,6 +124,8 @@ exports.handler = (event, context, callback) => {
 ```
 
 Then go to your user pool on Cognito, click "Triggers" on the side, and set pre sign-up to autoAuthorize. Save.
+
+Now, go to Cognito. Add two custom attributes: "causes" and "attributes". Keep other settings default.
 
 Now EVERYTHING should work and be hooked up to the back end! Woo!!!
 
