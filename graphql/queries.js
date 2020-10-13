@@ -7,13 +7,15 @@ export const getCampaign = /* GraphQL */ `
       id
       title
       description
-      organization {
+      liveDate
+      expireDate
+      sponsoringOrganization {
         id
         title
         description
         image
         contact
-        cause {
+        supportsCauses {
           id
           description
           title
@@ -24,7 +26,7 @@ export const getCampaign = /* GraphQL */ `
         createdAt
         updatedAt
       }
-      cause {
+      supportsCauses {
         id
         description
         title
@@ -32,13 +34,11 @@ export const getCampaign = /* GraphQL */ `
         createdAt
         updatedAt
       }
-      liveDate
-      expireDate
-      actions {
+      hasActions {
         id
         title
         description
-        campaign {
+        partofCampaign {
           id
           title
           description
@@ -47,7 +47,8 @@ export const getCampaign = /* GraphQL */ `
           createdAt
           updatedAt
         }
-        contribution {
+        tmpCampaign
+        needsContribution {
           id
           title
           description
@@ -55,6 +56,9 @@ export const getCampaign = /* GraphQL */ `
           createdAt
           updatedAt
         }
+        tmpContribution
+        tmpOrganization
+        tmpcause
         image
         reward
         liveDate
@@ -78,7 +82,9 @@ export const listCampaigns = /* GraphQL */ `
         id
         title
         description
-        organization {
+        liveDate
+        expireDate
+        sponsoringOrganization {
           id
           title
           description
@@ -87,7 +93,7 @@ export const listCampaigns = /* GraphQL */ `
           createdAt
           updatedAt
         }
-        cause {
+        supportsCauses {
           id
           description
           title
@@ -95,12 +101,14 @@ export const listCampaigns = /* GraphQL */ `
           createdAt
           updatedAt
         }
-        liveDate
-        expireDate
-        actions {
+        hasActions {
           id
           title
           description
+          tmpCampaign
+          tmpContribution
+          tmpOrganization
+          tmpcause
           image
           reward
           liveDate
@@ -121,11 +129,13 @@ export const getAction = /* GraphQL */ `
       id
       title
       description
-      campaign {
+      partofCampaign {
         id
         title
         description
-        organization {
+        liveDate
+        expireDate
+        sponsoringOrganization {
           id
           title
           description
@@ -134,7 +144,7 @@ export const getAction = /* GraphQL */ `
           createdAt
           updatedAt
         }
-        cause {
+        supportsCauses {
           id
           description
           title
@@ -142,12 +152,14 @@ export const getAction = /* GraphQL */ `
           createdAt
           updatedAt
         }
-        liveDate
-        expireDate
-        actions {
+        hasActions {
           id
           title
           description
+          tmpCampaign
+          tmpContribution
+          tmpOrganization
+          tmpcause
           image
           reward
           liveDate
@@ -158,7 +170,8 @@ export const getAction = /* GraphQL */ `
         createdAt
         updatedAt
       }
-      contribution {
+      tmpCampaign
+      needsContribution {
         id
         title
         description
@@ -166,6 +179,9 @@ export const getAction = /* GraphQL */ `
         createdAt
         updatedAt
       }
+      tmpContribution
+      tmpOrganization
+      tmpcause
       image
       reward
       liveDate
@@ -186,7 +202,7 @@ export const listActions = /* GraphQL */ `
         id
         title
         description
-        campaign {
+        partofCampaign {
           id
           title
           description
@@ -195,7 +211,8 @@ export const listActions = /* GraphQL */ `
           createdAt
           updatedAt
         }
-        contribution {
+        tmpCampaign
+        needsContribution {
           id
           title
           description
@@ -203,6 +220,9 @@ export const listActions = /* GraphQL */ `
           createdAt
           updatedAt
         }
+        tmpContribution
+        tmpOrganization
+        tmpcause
         image
         reward
         liveDate
@@ -284,7 +304,7 @@ export const getOrganization = /* GraphQL */ `
       description
       image
       contact
-      cause {
+      supportsCauses {
         id
         description
         title
@@ -310,7 +330,7 @@ export const listOrganizations = /* GraphQL */ `
         description
         image
         contact
-        cause {
+        supportsCauses {
           id
           description
           title
@@ -333,11 +353,11 @@ export const getUser = /* GraphQL */ `
       causeRank
       actPreference
       experience
-      actions {
+      participatedActions {
         id
         title
         description
-        campaign {
+        partofCampaign {
           id
           title
           description
@@ -346,7 +366,8 @@ export const getUser = /* GraphQL */ `
           createdAt
           updatedAt
         }
-        contribution {
+        tmpCampaign
+        needsContribution {
           id
           title
           description
@@ -354,27 +375,13 @@ export const getUser = /* GraphQL */ `
           createdAt
           updatedAt
         }
+        tmpContribution
+        tmpOrganization
+        tmpcause
         image
         reward
         liveDate
         expireDate
-        createdAt
-        updatedAt
-      }
-      achievement {
-        id
-        title
-        description
-        icon
-        cause {
-          id
-          description
-          title
-          icon
-          createdAt
-          updatedAt
-        }
-        condition
         createdAt
         updatedAt
       }
@@ -396,10 +403,14 @@ export const listUsers = /* GraphQL */ `
         causeRank
         actPreference
         experience
-        actions {
+        participatedActions {
           id
           title
           description
+          tmpCampaign
+          tmpContribution
+          tmpOrganization
+          tmpcause
           image
           reward
           liveDate
@@ -407,64 +418,6 @@ export const listUsers = /* GraphQL */ `
           createdAt
           updatedAt
         }
-        achievement {
-          id
-          title
-          description
-          icon
-          condition
-          createdAt
-          updatedAt
-        }
-        createdAt
-        updatedAt
-      }
-      nextToken
-    }
-  }
-`;
-export const getAchievement = /* GraphQL */ `
-  query GetAchievement($id: ID!) {
-    getAchievement(id: $id) {
-      id
-      title
-      description
-      icon
-      cause {
-        id
-        description
-        title
-        icon
-        createdAt
-        updatedAt
-      }
-      condition
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const listAchievements = /* GraphQL */ `
-  query ListAchievements(
-    $filter: ModelAchievementFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
-    listAchievements(filter: $filter, limit: $limit, nextToken: $nextToken) {
-      items {
-        id
-        title
-        description
-        icon
-        cause {
-          id
-          description
-          title
-          icon
-          createdAt
-          updatedAt
-        }
-        condition
         createdAt
         updatedAt
       }
