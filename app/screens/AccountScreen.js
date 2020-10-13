@@ -2,6 +2,7 @@ import React from "react";
 import { StyleSheet, View, FlatList } from "react-native";
 
 import { ListItem, ListItemSeparator } from "../components/lists";
+import AppText from "../components/AppText";
 import colors from "../config/colors";
 import Icon from "../components/Icon";
 import routes from "../navigation/routes";
@@ -47,13 +48,8 @@ function AccountScreen({ navigation }) {
 
   return (
     <Screen style={styles.screen}>
-      <View style={styles.container}>
-        <ListItem
-          title={user.username}
-          subTitle={user.email}
-          image={require("../assets/luke.jpg")}
-        />
-      </View>
+      <AppText style={styles.username}>{user.username}</AppText>
+
       <View style={styles.container}>
         <FlatList
           data={menuItems}
@@ -89,6 +85,7 @@ const styles = StyleSheet.create({
   container: {
     marginVertical: 20,
   },
+  username: { marginHorizontal: 20 },
 });
 
 export default AccountScreen;

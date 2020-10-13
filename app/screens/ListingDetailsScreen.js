@@ -8,25 +8,22 @@ import Text from "../components/Text";
 
 function ListingDetailsScreen({ route }) {
   const listing = route.params;
-
+  console.log(listing);
   return (
     <View>
-      <Image
+      {/* <Image
         style={styles.image}
         preview={{ uri: listing.images[0].thumbnailUrl }}
         tint="light"
         uri={listing.images[0].url}
-      />
+      /> */}
       <View style={styles.detailsContainer}>
+        <Text style={styles.price}>Points{listing.points}</Text>
         <Text style={styles.title}>{listing.title}</Text>
-        <Text style={styles.price}>${listing.price}</Text>
-        <View style={styles.userContainer}>
-          <ListItem
-            image={require("../assets/luke.jpg")}
-            title="Luke"
-            subTitle="5 Listings"
-          />
-        </View>
+
+        <Text style={styles.description}>{listing.description}</Text>
+
+        <View style={styles.userContainer}></View>
       </View>
     </View>
   );
@@ -47,7 +44,11 @@ const styles = StyleSheet.create({
     marginVertical: 10,
   },
   title: {
-    fontSize: 24,
+    fontSize: 36,
+    fontWeight: "500",
+  },
+  description: {
+    fontSize: 12,
     fontWeight: "500",
   },
   userContainer: {

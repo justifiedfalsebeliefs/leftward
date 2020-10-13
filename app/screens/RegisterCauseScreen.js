@@ -31,15 +31,11 @@ function RegisterCauseScreen({ navigation }) {
           }}
         />
         <AppButton
-          title="NEXT"
+          title="Next"
           onPress={() =>
             navigation.navigate(routes.REGISTERACT, { causes: causes })
           }
         ></AppButton>
-        {/* <AppButton
-          title="Confirm Registration"
-          onPress={() => navigation.navigate(routes.REGISTERCONFIRM)}
-        ></AppButton> */}
       </Screen>
     </>
   );
