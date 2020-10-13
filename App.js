@@ -27,7 +27,6 @@ export default function App() {
   restoreUser();
 
   return (
-    //<TestingScreen></TestingScreen>
     <AuthContext.Provider value={{ user, setUser }}>
       <OfflineNotice />
       <NavigationContainer theme={navigationTheme}>

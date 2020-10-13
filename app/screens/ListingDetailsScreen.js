@@ -5,10 +5,10 @@ import { Image } from "react-native-expo-image-cache";
 import colors from "../config/colors";
 import ListItem from "../components/lists/ListItem";
 import Text from "../components/Text";
+import routes from "../navigation/routes";
 
-function ListingDetailsScreen({ route }) {
+function ListingDetailsScreen({ route, navigation }) {
   const listing = route.params;
-  console.log(listing);
   return (
     <View>
       {/* <Image
@@ -22,7 +22,14 @@ function ListingDetailsScreen({ route }) {
         <Text style={styles.title}>{listing.title}</Text>
 
         <Text style={styles.description}>{listing.description}</Text>
-
+        <Text
+          style={styles.org}
+          onPress={() =>
+            navigation.navigate(routes.CAMPAIGN_DETAILS, listing.partofCampaign)
+          }
+        >
+          Campaign: {listing.partofCampaign.title}
+        </Text>
         <View style={styles.userContainer}></View>
       </View>
     </View>
@@ -46,6 +53,9 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 36,
     fontWeight: "500",
+  },
+  org: {
+    fontSize: 20,
   },
   description: {
     fontSize: 12,

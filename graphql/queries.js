@@ -27,44 +27,33 @@ export const getCampaign = /* GraphQL */ `
         updatedAt
       }
       supportsCauses {
-        id
-        description
-        title
-        icon
-        createdAt
-        updatedAt
+        items {
+          id
+          description
+          title
+          icon
+          createdAt
+          updatedAt
+        }
+        nextToken
       }
       hasActions {
-        id
-        title
-        description
-        partofCampaign {
+        items {
           id
           title
           description
+          tmpCampaign
+          tmpContribution
+          tmpOrganization
+          tmpcause
+          image
+          reward
           liveDate
           expireDate
           createdAt
           updatedAt
         }
-        tmpCampaign
-        needsContribution {
-          id
-          title
-          description
-          icon
-          createdAt
-          updatedAt
-        }
-        tmpContribution
-        tmpOrganization
-        tmpcause
-        image
-        reward
-        liveDate
-        expireDate
-        createdAt
-        updatedAt
+        nextToken
       }
       createdAt
       updatedAt
@@ -94,27 +83,10 @@ export const listCampaigns = /* GraphQL */ `
           updatedAt
         }
         supportsCauses {
-          id
-          description
-          title
-          icon
-          createdAt
-          updatedAt
+          nextToken
         }
         hasActions {
-          id
-          title
-          description
-          tmpCampaign
-          tmpContribution
-          tmpOrganization
-          tmpcause
-          image
-          reward
-          liveDate
-          expireDate
-          createdAt
-          updatedAt
+          nextToken
         }
         createdAt
         updatedAt
@@ -145,27 +117,10 @@ export const getAction = /* GraphQL */ `
           updatedAt
         }
         supportsCauses {
-          id
-          description
-          title
-          icon
-          createdAt
-          updatedAt
+          nextToken
         }
         hasActions {
-          id
-          title
-          description
-          tmpCampaign
-          tmpContribution
-          tmpOrganization
-          tmpcause
-          image
-          reward
-          liveDate
-          expireDate
-          createdAt
-          updatedAt
+          nextToken
         }
         createdAt
         updatedAt
@@ -210,6 +165,17 @@ export const listActions = /* GraphQL */ `
           expireDate
           createdAt
           updatedAt
+          sponsoringOrganization {
+            contact
+            description
+            id
+            image
+            title
+            updatedAt
+            supportsCauses {
+              title
+            }
+          }
         }
         tmpCampaign
         needsContribution {
