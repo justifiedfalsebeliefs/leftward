@@ -9,7 +9,6 @@ import initialCauses from "../values/initialCauses";
 function RegisterCauseScreen({ navigation }) {
   const [causes, setCauses] = useState(initialCauses);
   renderItem = ({ item, id, drag, isActive }) => {
-    // Update colors to cascading rainbow
     return (
       <DraggableFlatListItem
         onLongPress={drag}

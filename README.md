@@ -125,9 +125,13 @@ exports.handler = (event, context, callback) => {
 
 Then go to your user pool on Cognito, click "Triggers" on the side, and set pre sign-up to autoAuthorize. Save.
 
-Now, go to Cognito. Add two custom attributes: "causes" and "attributes". Keep other settings default.
+Now, go to Cognito. Add three custom attributes: "causes", "attributes" and "GQLuserID". Keep other settings default.
 
 Now EVERYTHING should work and be hooked up to the back end! Woo!!!
+
+Note: This needs to be updated to reflect changes to a relational DB. In short:
+https://docs.amplify.aws/cli/graphql-transformer/relational
+Need to discover a way to save and load all customer resolvers. Maybe a deploy will just be arduous.
 
 Now how to clean up the git jank...
 

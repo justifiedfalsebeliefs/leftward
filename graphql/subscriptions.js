@@ -1,601 +1,184 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
-export const onCreateCampaign = /* GraphQL */ `
-  subscription OnCreateCampaign($owner: String) {
-    onCreateCampaign(owner: $owner) {
-      id
-      title
-      description
-      liveDate
-      expireDate
-      sponsoringOrganization {
-        id
-        title
-        description
-        image
-        contact
-        supportsCauses {
-          id
-          description
-          title
-          icon
-          createdAt
-          updatedAt
-        }
-        createdAt
-        updatedAt
-      }
-      supportsCauses {
-        items {
-          id
-          description
-          title
-          icon
-          createdAt
-          updatedAt
-        }
-        nextToken
-      }
-      hasActions {
-        items {
-          id
-          title
-          description
-          tmpCampaign
-          tmpContribution
-          tmpOrganization
-          tmpcause
-          image
-          reward
-          liveDate
-          expireDate
-          createdAt
-          updatedAt
-        }
-        nextToken
-      }
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const onUpdateCampaign = /* GraphQL */ `
-  subscription OnUpdateCampaign($owner: String) {
-    onUpdateCampaign(owner: $owner) {
-      id
-      title
-      description
-      liveDate
-      expireDate
-      sponsoringOrganization {
-        id
-        title
-        description
-        image
-        contact
-        supportsCauses {
-          id
-          description
-          title
-          icon
-          createdAt
-          updatedAt
-        }
-        createdAt
-        updatedAt
-      }
-      supportsCauses {
-        items {
-          id
-          description
-          title
-          icon
-          createdAt
-          updatedAt
-        }
-        nextToken
-      }
-      hasActions {
-        items {
-          id
-          title
-          description
-          tmpCampaign
-          tmpContribution
-          tmpOrganization
-          tmpcause
-          image
-          reward
-          liveDate
-          expireDate
-          createdAt
-          updatedAt
-        }
-        nextToken
-      }
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const onDeleteCampaign = /* GraphQL */ `
-  subscription OnDeleteCampaign($owner: String) {
-    onDeleteCampaign(owner: $owner) {
-      id
-      title
-      description
-      liveDate
-      expireDate
-      sponsoringOrganization {
-        id
-        title
-        description
-        image
-        contact
-        supportsCauses {
-          id
-          description
-          title
-          icon
-          createdAt
-          updatedAt
-        }
-        createdAt
-        updatedAt
-      }
-      supportsCauses {
-        items {
-          id
-          description
-          title
-          icon
-          createdAt
-          updatedAt
-        }
-        nextToken
-      }
-      hasActions {
-        items {
-          id
-          title
-          description
-          tmpCampaign
-          tmpContribution
-          tmpOrganization
-          tmpcause
-          image
-          reward
-          liveDate
-          expireDate
-          createdAt
-          updatedAt
-        }
-        nextToken
-      }
-      createdAt
-      updatedAt
-    }
-  }
-`;
 export const onCreateAction = /* GraphQL */ `
-  subscription OnCreateAction($owner: String) {
-    onCreateAction(owner: $owner) {
-      id
+  subscription OnCreateAction {
+    onCreateAction {
+      actionId
+      createDT
+      updateDT
+      ownerId
+      actionTypeId
+      campaignId
       title
       description
-      partofCampaign {
-        id
-        title
-        description
-        liveDate
-        expireDate
-        sponsoringOrganization {
-          id
-          title
-          description
-          image
-          contact
-          createdAt
-          updatedAt
-        }
-        supportsCauses {
-          nextToken
-        }
-        hasActions {
-          nextToken
-        }
-        createdAt
-        updatedAt
-      }
-      tmpCampaign
-      needsContribution {
-        id
-        title
-        description
-        icon
-        createdAt
-        updatedAt
-      }
-      tmpContribution
-      tmpOrganization
-      tmpcause
-      image
       reward
-      liveDate
-      expireDate
-      createdAt
-      updatedAt
+      imageURL
+      liveDT
+      expireDT
     }
   }
 `;
-export const onUpdateAction = /* GraphQL */ `
-  subscription OnUpdateAction($owner: String) {
-    onUpdateAction(owner: $owner) {
-      id
+export const onCreateActionType = /* GraphQL */ `
+  subscription OnCreateActionType {
+    onCreateActionType {
+      actionTypeId
+      createDT
+      updateDT
+      ownerId
       title
       description
-      partofCampaign {
-        id
-        title
-        description
-        liveDate
-        expireDate
-        sponsoringOrganization {
-          id
-          title
-          description
-          image
-          contact
-          createdAt
-          updatedAt
-        }
-        supportsCauses {
-          nextToken
-        }
-        hasActions {
-          nextToken
-        }
-        createdAt
-        updatedAt
-      }
-      tmpCampaign
-      needsContribution {
-        id
-        title
-        description
-        icon
-        createdAt
-        updatedAt
-      }
-      tmpContribution
-      tmpOrganization
-      tmpcause
-      image
-      reward
-      liveDate
-      expireDate
-      createdAt
-      updatedAt
+      icon
     }
   }
 `;
-export const onDeleteAction = /* GraphQL */ `
-  subscription OnDeleteAction($owner: String) {
-    onDeleteAction(owner: $owner) {
-      id
+export const onCreateCampaign = /* GraphQL */ `
+  subscription OnCreateCampaign {
+    onCreateCampaign {
+      campaignId
+      createDT
+      updateDT
+      ownerId
+      organizationId
       title
       description
-      partofCampaign {
-        id
-        title
-        description
-        liveDate
-        expireDate
-        sponsoringOrganization {
-          id
-          title
-          description
-          image
-          contact
-          createdAt
-          updatedAt
-        }
-        supportsCauses {
-          nextToken
-        }
-        hasActions {
-          nextToken
-        }
-        createdAt
-        updatedAt
-      }
-      tmpCampaign
-      needsContribution {
-        id
-        title
-        description
-        icon
-        createdAt
-        updatedAt
-      }
-      tmpContribution
-      tmpOrganization
-      tmpcause
-      image
-      reward
-      liveDate
-      expireDate
-      createdAt
-      updatedAt
+      liveDT
+      expireDT
+      imageURL
+    }
+  }
+`;
+export const onCreateCampaignCause = /* GraphQL */ `
+  subscription OnCreateCampaignCause {
+    onCreateCampaignCause {
+      campaignCauseId
+      createDT
+      updateDT
+      ownerId
+      causeId
+      rank
+      campaignId
     }
   }
 `;
 export const onCreateCause = /* GraphQL */ `
   subscription OnCreateCause {
     onCreateCause {
-      id
-      description
-      title
-      icon
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const onUpdateCause = /* GraphQL */ `
-  subscription OnUpdateCause {
-    onUpdateCause {
-      id
-      description
-      title
-      icon
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const onDeleteCause = /* GraphQL */ `
-  subscription OnDeleteCause {
-    onDeleteCause {
-      id
-      description
-      title
-      icon
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const onCreateContribution = /* GraphQL */ `
-  subscription OnCreateContribution {
-    onCreateContribution {
-      id
+      causeId
+      createDT
+      updateDT
+      ownerId
       title
       description
       icon
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const onUpdateContribution = /* GraphQL */ `
-  subscription OnUpdateContribution {
-    onUpdateContribution {
-      id
-      title
-      description
-      icon
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const onDeleteContribution = /* GraphQL */ `
-  subscription OnDeleteContribution {
-    onDeleteContribution {
-      id
-      title
-      description
-      icon
-      createdAt
-      updatedAt
     }
   }
 `;
 export const onCreateOrganization = /* GraphQL */ `
-  subscription OnCreateOrganization($owner: String) {
-    onCreateOrganization(owner: $owner) {
-      id
+  subscription OnCreateOrganization {
+    onCreateOrganization {
+      organizationId
+      createDT
+      updateDT
+      ownerId
+      contact
       title
       description
-      image
-      contact
-      supportsCauses {
-        id
-        description
-        title
-        icon
-        createdAt
-        updatedAt
-      }
-      createdAt
-      updatedAt
+      imageURL
     }
   }
 `;
-export const onUpdateOrganization = /* GraphQL */ `
-  subscription OnUpdateOrganization($owner: String) {
-    onUpdateOrganization(owner: $owner) {
-      id
-      title
-      description
-      image
-      contact
-      supportsCauses {
-        id
-        description
-        title
-        icon
-        createdAt
-        updatedAt
-      }
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const onDeleteOrganization = /* GraphQL */ `
-  subscription OnDeleteOrganization($owner: String) {
-    onDeleteOrganization(owner: $owner) {
-      id
-      title
-      description
-      image
-      contact
-      supportsCauses {
-        id
-        description
-        title
-        icon
-        createdAt
-        updatedAt
-      }
-      createdAt
-      updatedAt
+export const onCreateOrganizationCause = /* GraphQL */ `
+  subscription OnCreateOrganizationCause {
+    onCreateOrganizationCause {
+      organizationCauseId
+      createDT
+      updateDT
+      ownerId
+      organizationId
+      causeId
+      rank
     }
   }
 `;
 export const onCreateUser = /* GraphQL */ `
-  subscription OnCreateUser($owner: String) {
-    onCreateUser(owner: $owner) {
+  subscription OnCreateUser {
+    onCreateUser {
+      userId
+      createDT
+      updateDT
+      ownerId
+      guid
+    }
+  }
+`;
+export const onCreateUserAction = /* GraphQL */ `
+  subscription OnCreateUserAction {
+    onCreateUserAction {
+      userActionId
+      createDT
+      updateDT
+      ownerId
+      userId
+      status
+      actionId
+    }
+  }
+`;
+export const onCreateUserActionType = /* GraphQL */ `
+  subscription OnCreateUserActionType {
+    onCreateUserActionType {
+      userActionTypeId
+      createDT
+      updateDT
+      ownerId
+      userId
+      actionTypeId
+      isActive
+    }
+  }
+`;
+export const onCreateUserCause = /* GraphQL */ `
+  subscription OnCreateUserCause {
+    onCreateUserCause {
+      userCauseId
+      createDT
+      updateDT
+      ownerId
+      userId
+      causeId
+      rank
+    }
+  }
+`;
+export const onCreateTodo = /* GraphQL */ `
+  subscription OnCreateTodo {
+    onCreateTodo {
       id
-      username
-      causeRank
-      actPreference
-      experience
-      participatedActions {
-        id
-        title
-        description
-        partofCampaign {
-          id
-          title
-          description
-          liveDate
-          expireDate
-          createdAt
-          updatedAt
-        }
-        tmpCampaign
-        needsContribution {
-          id
-          title
-          description
-          icon
-          createdAt
-          updatedAt
-        }
-        tmpContribution
-        tmpOrganization
-        tmpcause
-        image
-        reward
-        liveDate
-        expireDate
-        createdAt
-        updatedAt
-      }
+      name
+      description
       createdAt
       updatedAt
     }
   }
 `;
-export const onUpdateUser = /* GraphQL */ `
-  subscription OnUpdateUser($owner: String) {
-    onUpdateUser(owner: $owner) {
+export const onUpdateTodo = /* GraphQL */ `
+  subscription OnUpdateTodo {
+    onUpdateTodo {
       id
-      username
-      causeRank
-      actPreference
-      experience
-      participatedActions {
-        id
-        title
-        description
-        partofCampaign {
-          id
-          title
-          description
-          liveDate
-          expireDate
-          createdAt
-          updatedAt
-        }
-        tmpCampaign
-        needsContribution {
-          id
-          title
-          description
-          icon
-          createdAt
-          updatedAt
-        }
-        tmpContribution
-        tmpOrganization
-        tmpcause
-        image
-        reward
-        liveDate
-        expireDate
-        createdAt
-        updatedAt
-      }
+      name
+      description
       createdAt
       updatedAt
     }
   }
 `;
-export const onDeleteUser = /* GraphQL */ `
-  subscription OnDeleteUser($owner: String) {
-    onDeleteUser(owner: $owner) {
+export const onDeleteTodo = /* GraphQL */ `
+  subscription OnDeleteTodo {
+    onDeleteTodo {
       id
-      username
-      causeRank
-      actPreference
-      experience
-      participatedActions {
-        id
-        title
-        description
-        partofCampaign {
-          id
-          title
-          description
-          liveDate
-          expireDate
-          createdAt
-          updatedAt
-        }
-        tmpCampaign
-        needsContribution {
-          id
-          title
-          description
-          icon
-          createdAt
-          updatedAt
-        }
-        tmpContribution
-        tmpOrganization
-        tmpcause
-        image
-        reward
-        liveDate
-        expireDate
-        createdAt
-        updatedAt
-      }
+      name
+      description
       createdAt
       updatedAt
     }
