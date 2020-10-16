@@ -12,7 +12,7 @@ function ActionCard({
   onPress,
   cause,
   reward,
-  opportunityType,
+  actionType,
   organization,
   thumbnailUrl,
 }) {
@@ -33,10 +33,10 @@ function ActionCard({
         <View style={styles.orgContainer}>
           <Text style={styles.organization}>{organization}</Text>
 
-          <CauseIcon style={styles.icon} cause={cause}></CauseIcon>
+          {/* <CauseIcon style={styles.icon} cause={cause}></CauseIcon> */}
         </View>
         <View style={styles.rewardContainer}>
-          <Text style={styles.opportunityType}>{opportunityType}</Text>
+          <Text style={styles.actionType}>{actionType}</Text>
           <Text style={styles.reward}>{reward}</Text>
         </View>
       </View>

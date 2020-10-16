@@ -4,6 +4,9 @@ import AuthForm from "../components/AuthForm";
 import useAuth from "../auth/useAuth";
 import Screen from "../components/Screen";
 import { Auth } from "aws-amplify";
+import { API, graphqlOperation } from "aws-amplify";
+import { createUser } from "../../graphql/mutations";
+import uuidv4 from "../utility/uuid";
 
 function RegisterScreen({ route, navigation }) {
   const [error, setError] = useState();
@@ -57,6 +60,20 @@ function RegisterScreen({ route, navigation }) {
         userInfo.username,
         userInfo.password
       );
+      // Create a user in our graphQL db then save it in the user attributes
+      const newuuid = uuidv4();
+      const createGQLUserResult = await API.graphql(
+        graphqlOperation(createUser, {
+          createUserInput: {
+            ownerId: "", //TBD - owner ID
+            guid: newuuid,
+          },
+        })
+      );
+      const currentUser = await Auth.currentAuthenticatedUser();
+      Auth.updateUserAttributes(currentUser, {
+        "custom:GQLuserID": newuuid,
+      });
       Auth.currentSession().then((data) => {
         auth.logIn(data.accessToken.jwtToken);
       });

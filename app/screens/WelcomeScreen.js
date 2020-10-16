@@ -10,7 +10,7 @@ function WelcomeScreen({ navigation }) {
     <ImageBackground
       blurRadius={1.5}
       style={styles.background}
-      source={require("../assets/WelcomeBackground.jpg")}
+      source={require("../assets/WelcomeBackground.png")}
     >
       <View style={styles.logoContainer}>
         <AntDesign name="leftcircle" size={110} color="black" />
