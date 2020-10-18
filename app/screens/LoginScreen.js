@@ -15,7 +15,7 @@ function LoginScreen({ navigation }) {
     try {
       const result = await Auth.signIn(userInfo.username, userInfo.password);
       Auth.currentSession().then((data) => {
-        auth.logIn(data.accessToken.jwtToken);
+        auth.logIn(data);
       });
     } catch (error) {
       setError(error.message);

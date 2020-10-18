@@ -22,10 +22,8 @@ export default function App() {
   const restoreUser = async () => {
     const user = await authStorage.getUser();
     if (user) {
-      const cognitoAttributes = await Auth.currentUserInfo();
       const cognitoToken = await Auth.currentAuthenticatedUser();
-      user.attributes = cognitoAttributes.attributes;
-      user.cognitoToken = cognitoToken;
+      user.attributes = cognitoToken.attributes;
       setUser(user);
       console.log("Logged in!");
     }

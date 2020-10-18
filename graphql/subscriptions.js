@@ -4,9 +4,6 @@
 export const onCreateAction = /* GraphQL */ `
   subscription OnCreateAction {
     onCreateAction {
-      actionId
-      createDT
-      updateDT
       ownerId
       actionTypeId
       campaignId
@@ -16,15 +13,24 @@ export const onCreateAction = /* GraphQL */ `
       imageURL
       liveDT
       expireDT
+      actionId
+      actionTitle
+      actionDescription
+      actionType
+      causeTitle
+      campaignTitle
+      campaignDescription
+      organizationContact
+      organizationTitle
+      organizationDescription
+      test
+      userGuid
     }
   }
 `;
 export const onCreateActionType = /* GraphQL */ `
   subscription OnCreateActionType {
     onCreateActionType {
-      actionTypeId
-      createDT
-      updateDT
       ownerId
       title
       description
@@ -35,9 +41,6 @@ export const onCreateActionType = /* GraphQL */ `
 export const onCreateCampaign = /* GraphQL */ `
   subscription OnCreateCampaign {
     onCreateCampaign {
-      campaignId
-      createDT
-      updateDT
       ownerId
       organizationId
       title
@@ -51,9 +54,6 @@ export const onCreateCampaign = /* GraphQL */ `
 export const onCreateCampaignCause = /* GraphQL */ `
   subscription OnCreateCampaignCause {
     onCreateCampaignCause {
-      campaignCauseId
-      createDT
-      updateDT
       ownerId
       causeId
       rank
@@ -64,9 +64,6 @@ export const onCreateCampaignCause = /* GraphQL */ `
 export const onCreateCause = /* GraphQL */ `
   subscription OnCreateCause {
     onCreateCause {
-      causeId
-      createDT
-      updateDT
       ownerId
       title
       description
@@ -77,9 +74,6 @@ export const onCreateCause = /* GraphQL */ `
 export const onCreateOrganization = /* GraphQL */ `
   subscription OnCreateOrganization {
     onCreateOrganization {
-      organizationId
-      createDT
-      updateDT
       ownerId
       contact
       title
@@ -91,9 +85,6 @@ export const onCreateOrganization = /* GraphQL */ `
 export const onCreateOrganizationCause = /* GraphQL */ `
   subscription OnCreateOrganizationCause {
     onCreateOrganizationCause {
-      organizationCauseId
-      createDT
-      updateDT
       ownerId
       organizationId
       causeId
@@ -104,9 +95,6 @@ export const onCreateOrganizationCause = /* GraphQL */ `
 export const onCreateUser = /* GraphQL */ `
   subscription OnCreateUser {
     onCreateUser {
-      userId
-      createDT
-      updateDT
       ownerId
       guid
     }
@@ -115,11 +103,8 @@ export const onCreateUser = /* GraphQL */ `
 export const onCreateUserAction = /* GraphQL */ `
   subscription OnCreateUserAction {
     onCreateUserAction {
-      userActionId
-      createDT
-      updateDT
       ownerId
-      userId
+      userGuid
       status
       actionId
     }
@@ -128,9 +113,6 @@ export const onCreateUserAction = /* GraphQL */ `
 export const onCreateUserActionType = /* GraphQL */ `
   subscription OnCreateUserActionType {
     onCreateUserActionType {
-      userActionTypeId
-      createDT
-      updateDT
       ownerId
       userId
       actionTypeId
@@ -141,9 +123,6 @@ export const onCreateUserActionType = /* GraphQL */ `
 export const onCreateUserCause = /* GraphQL */ `
   subscription OnCreateUserCause {
     onCreateUserCause {
-      userCauseId
-      createDT
-      updateDT
       ownerId
       userId
       causeId
