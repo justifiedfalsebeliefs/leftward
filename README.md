@@ -73,29 +73,11 @@ ntrols (Enables per-user Storage features for images or other content, Analytics
 ? Do you want to configure Lambda Triggers for Cognito? No
 ```
 
-`amplify add api`
-
-```
-? Please select from one of the below mentioned services: GraphQL
-? Provide API name: leftward
-? Choose the default authorization type for the API Amazon Cognito User Pool
-Use a Cognito user pool configured as a part of this project.
-? Do you want to configure advanced settings for the GraphQL API Yes, I want to make some additional changes.
-? Configure additional auth types? No
-? Configure conflict detection? No
-? Do you have an annotated GraphQL schema? Yes
-? Provide your schema file path: .\amplify\backend\api\leftwardmvptest\schema.graphql
-```
-
 `amplify push`
 
 accept all defaults
 
-Congrats! You've completely configured a connected back end for the app! You can manage things in these places:
-
-- Cognito is where user stuff is handled.
-- Appsync is where data goes
-- Other stuff is probably somewhere but that's basically all I use
+Congrats! You've completely configured auth for the app! In the AWS console, Cognito is where user stuff is handled.
 
 Now in the RNAmplify folder, we need to configure the NPM environment:
 `npm i`
@@ -103,8 +85,7 @@ Now in the RNAmplify folder, we need to configure the NPM environment:
 (you might have to install expo here too?)
 Configure an android virtual device - follow Mosh's instructions at 18 minutes: https://www.youtube.com/watch?v=0-S5a0eXPoc&t=1490s
 
-To run the app:
-open the AVD
+To run the app, open the AVD
 
 `expo start`
 
@@ -128,10 +109,6 @@ Then go to your user pool on Cognito, click "Triggers" on the side, and set pre 
 Now, go to Cognito. Add three custom attributes: "causes", "attributes" and "GQLuserID". Keep other settings default.
 
 Now EVERYTHING should work and be hooked up to the back end! Woo!!!
-
-Note: This needs to be updated to reflect changes to a relational DB. In short:
-https://docs.amplify.aws/cli/graphql-transformer/relational
-Need to discover a way to save and load all customer resolvers. Maybe a deploy will just be arduous.
 
 Now how to clean up the git jank...
 
