@@ -57,10 +57,10 @@ function AccountSettingsScreen({ navigation }) {
           ></AuthForm>
         )}
 
-        <AppButton
+        {!emailVerified &&  (<AppButton
           title="Send Confirmation Code"
           onPress={() => Auth.verifyCurrentUserAttribute("email")}
-        ></AppButton>
+        ></AppButton>)}
 
         <AuthForm
           fields={["password", "newPassword", "newPasswordConfirmation"]}

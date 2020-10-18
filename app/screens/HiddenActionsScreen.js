@@ -4,25 +4,20 @@ import { StyleSheet } from "react-native";
 import colors from "../config/colors";
 
 import Screen from "../components/Screen";
-import AppButton from "../components/AppButton";
 import ActionList from "../components/ActionList"
-import fetchDashboardListings from "../data/fetchDashboardListings"
-
-import debug from "../utility/debug"
+import fetchHiddenActions from "../data/fetchHiddenActions"
 
 
-function DashboardScreen({ navigation }) {
+
+function HiddenActionsScreen({ navigation }) {
   const [actions, setActions] = useState();
   
   useEffect(() => {
-    fetchDashboardListings(setActions);
+    fetchHiddenActions(setActions);
   }, []);
 
   return (
       <Screen style={styles.screen}>
-        <AppButton
-          title={"debug printer"}
-          onPress={() => debug(actions)} />
         <ActionList
           itemList={actions}
           navigation={navigation}/>
@@ -37,4 +32,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default DashboardScreen;
+export default HiddenActionsScreen;

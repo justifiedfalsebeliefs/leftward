@@ -4,7 +4,7 @@ import AppButton from "../components/AppButton";
 import routes from "../navigation/routes";
 import DraggableFlatListItem from "../components/DraggableFlatListItem";
 import DraggableFlatListPicker from "../components/DraggableFlatListPicker";
-import initialCauses from "../values/initialCauses";
+import initialCauses from "../data/initialCauses";
 
 function RegisterCauseScreen({ navigation }) {
   const [causes, setCauses] = useState(initialCauses);

@@ -14,7 +14,7 @@ function ActionCard({
   reward,
   actionType,
   organization,
-  thumbnailUrl,
+  thumbnailUrl
 }) {
   return (
     <TouchableWithoutFeedback onPress={onPress}>
