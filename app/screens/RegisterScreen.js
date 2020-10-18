@@ -4,8 +4,6 @@ import AuthForm from "../components/AuthForm";
 import useAuth from "../auth/useAuth";
 import Screen from "../components/Screen";
 import { Auth } from "aws-amplify";
-import { API, graphqlOperation } from "aws-amplify";
-import { createUser } from "../../graphql/mutations";
 import uuidv4 from "../utility/uuid";
 
 function RegisterScreen({ route, navigation }) {
@@ -62,11 +60,11 @@ function RegisterScreen({ route, navigation }) {
       );
 
       const newuuid = uuidv4();
-      const createGQLUserResult = await API.graphql(
-        graphqlOperation(createUser, {
-          createUserInput: { guid: newuuid },
-        })
-      );
+      // const createGQLUserResult = await API.graphql(
+      //   graphqlOperation(createUser, {
+      //     createUserInput: { guid: newuuid },
+      //   })
+      // );
       const currentUser = await Auth.currentAuthenticatedUser();
       Auth.updateUserAttributes(currentUser, {
         "custom:GQLuserID": newuuid,
