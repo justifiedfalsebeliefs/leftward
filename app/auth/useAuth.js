@@ -7,32 +7,17 @@ import authStorage from "./storage";
 export default useAuth = () => {
   const { user, setUser } = useContext(AuthContext);
 
-  // const getAttributes = async () => {
-  //   try {
-  //     const cognitoAttributes = await Auth.currentUserInfo();
-  //     return cognitoAttributes.attributes;
-  //   } catch (error) {
-  //     setError(error.message);
-  //   }
-  // };
-
-  // const getCognito = async () => {
-  //   try {
-  //     const cognitoToken = await Auth.currentAuthenticatedUser();
-  //     return cognitoToken;
-  //   } catch (error) {
-  //     setError(error.message);
-  //   }
-  // };
-
-  const logIn = (authToken) => {
-    const user = jwtDecode(authToken);
-    // Commented sections have the issue with only returning a promise and not actually getting the info.
-    // user.attributes = getAttributes();
-    // user.cognitoToken = getCognito();
+  const logIn = (cognitoSessionObject) => {
+    const user = jwtDecode(cognitoSessionObject.idToken.jwtToken);
+    user.attributes = {
+      "custom:GQLuserID":
+        cognitoSessionObject.idToken.payload["custom:GQLuserID"],
+      "custom:actions": cognitoSessionObject.idToken.payload["custom:actions"],
+      "custom:causes": cognitoSessionObject.idToken.payload["custom:causes"],
+      email: cognitoSessionObject.idToken.payload.email,
+    };
     setUser(user);
-    // console.log(user.attributes);
-    authStorage.storeToken(authToken);
+    authStorage.storeToken(cognitoSessionObject.accessToken.jwtToken);
   };
 
   const logOut = () => {

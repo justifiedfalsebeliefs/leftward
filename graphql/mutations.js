@@ -4,9 +4,6 @@
 export const deleteAction = /* GraphQL */ `
   mutation DeleteAction($actionId: Int!) {
     deleteAction(actionId: $actionId) {
-      actionId
-      createDT
-      updateDT
       ownerId
       actionTypeId
       campaignId
@@ -16,15 +13,24 @@ export const deleteAction = /* GraphQL */ `
       imageURL
       liveDT
       expireDT
+      actionId
+      actionTitle
+      actionDescription
+      actionType
+      causeTitle
+      campaignTitle
+      campaignDescription
+      organizationContact
+      organizationTitle
+      organizationDescription
+      test
+      userGuid
     }
   }
 `;
 export const createAction = /* GraphQL */ `
   mutation CreateAction($createActionInput: CreateActionInput!) {
     createAction(createActionInput: $createActionInput) {
-      actionId
-      createDT
-      updateDT
       ownerId
       actionTypeId
       campaignId
@@ -34,15 +40,24 @@ export const createAction = /* GraphQL */ `
       imageURL
       liveDT
       expireDT
+      actionId
+      actionTitle
+      actionDescription
+      actionType
+      causeTitle
+      campaignTitle
+      campaignDescription
+      organizationContact
+      organizationTitle
+      organizationDescription
+      test
+      userGuid
     }
   }
 `;
 export const updateAction = /* GraphQL */ `
   mutation UpdateAction($updateActionInput: UpdateActionInput!) {
     updateAction(updateActionInput: $updateActionInput) {
-      actionId
-      createDT
-      updateDT
       ownerId
       actionTypeId
       campaignId
@@ -52,15 +67,24 @@ export const updateAction = /* GraphQL */ `
       imageURL
       liveDT
       expireDT
+      actionId
+      actionTitle
+      actionDescription
+      actionType
+      causeTitle
+      campaignTitle
+      campaignDescription
+      organizationContact
+      organizationTitle
+      organizationDescription
+      test
+      userGuid
     }
   }
 `;
 export const deleteActionType = /* GraphQL */ `
   mutation DeleteActionType($actionTypeId: Int!) {
     deleteActionType(actionTypeId: $actionTypeId) {
-      actionTypeId
-      createDT
-      updateDT
       ownerId
       title
       description
@@ -71,9 +95,6 @@ export const deleteActionType = /* GraphQL */ `
 export const createActionType = /* GraphQL */ `
   mutation CreateActionType($createActionTypeInput: CreateActionTypeInput!) {
     createActionType(createActionTypeInput: $createActionTypeInput) {
-      actionTypeId
-      createDT
-      updateDT
       ownerId
       title
       description
@@ -84,9 +105,6 @@ export const createActionType = /* GraphQL */ `
 export const updateActionType = /* GraphQL */ `
   mutation UpdateActionType($updateActionTypeInput: UpdateActionTypeInput!) {
     updateActionType(updateActionTypeInput: $updateActionTypeInput) {
-      actionTypeId
-      createDT
-      updateDT
       ownerId
       title
       description
@@ -97,9 +115,6 @@ export const updateActionType = /* GraphQL */ `
 export const deleteCampaign = /* GraphQL */ `
   mutation DeleteCampaign($campaignId: Int!) {
     deleteCampaign(campaignId: $campaignId) {
-      campaignId
-      createDT
-      updateDT
       ownerId
       organizationId
       title
@@ -113,9 +128,6 @@ export const deleteCampaign = /* GraphQL */ `
 export const createCampaign = /* GraphQL */ `
   mutation CreateCampaign($createCampaignInput: CreateCampaignInput!) {
     createCampaign(createCampaignInput: $createCampaignInput) {
-      campaignId
-      createDT
-      updateDT
       ownerId
       organizationId
       title
@@ -129,9 +141,6 @@ export const createCampaign = /* GraphQL */ `
 export const updateCampaign = /* GraphQL */ `
   mutation UpdateCampaign($updateCampaignInput: UpdateCampaignInput!) {
     updateCampaign(updateCampaignInput: $updateCampaignInput) {
-      campaignId
-      createDT
-      updateDT
       ownerId
       organizationId
       title
@@ -145,9 +154,6 @@ export const updateCampaign = /* GraphQL */ `
 export const deleteCampaignCause = /* GraphQL */ `
   mutation DeleteCampaignCause($campaignCauseId: Int!) {
     deleteCampaignCause(campaignCauseId: $campaignCauseId) {
-      campaignCauseId
-      createDT
-      updateDT
       ownerId
       causeId
       rank
@@ -160,9 +166,6 @@ export const createCampaignCause = /* GraphQL */ `
     $createCampaignCauseInput: CreateCampaignCauseInput!
   ) {
     createCampaignCause(createCampaignCauseInput: $createCampaignCauseInput) {
-      campaignCauseId
-      createDT
-      updateDT
       ownerId
       causeId
       rank
@@ -175,9 +178,6 @@ export const updateCampaignCause = /* GraphQL */ `
     $updateCampaignCauseInput: UpdateCampaignCauseInput!
   ) {
     updateCampaignCause(updateCampaignCauseInput: $updateCampaignCauseInput) {
-      campaignCauseId
-      createDT
-      updateDT
       ownerId
       causeId
       rank
@@ -188,9 +188,6 @@ export const updateCampaignCause = /* GraphQL */ `
 export const deleteCause = /* GraphQL */ `
   mutation DeleteCause($causeId: Int!) {
     deleteCause(causeId: $causeId) {
-      causeId
-      createDT
-      updateDT
       ownerId
       title
       description
@@ -201,9 +198,6 @@ export const deleteCause = /* GraphQL */ `
 export const createCause = /* GraphQL */ `
   mutation CreateCause($createCauseInput: CreateCauseInput!) {
     createCause(createCauseInput: $createCauseInput) {
-      causeId
-      createDT
-      updateDT
       ownerId
       title
       description
@@ -214,9 +208,6 @@ export const createCause = /* GraphQL */ `
 export const updateCause = /* GraphQL */ `
   mutation UpdateCause($updateCauseInput: UpdateCauseInput!) {
     updateCause(updateCauseInput: $updateCauseInput) {
-      causeId
-      createDT
-      updateDT
       ownerId
       title
       description
@@ -227,9 +218,6 @@ export const updateCause = /* GraphQL */ `
 export const deleteOrganization = /* GraphQL */ `
   mutation DeleteOrganization($organizationId: Int!) {
     deleteOrganization(organizationId: $organizationId) {
-      organizationId
-      createDT
-      updateDT
       ownerId
       contact
       title
@@ -243,9 +231,6 @@ export const createOrganization = /* GraphQL */ `
     $createOrganizationInput: CreateOrganizationInput!
   ) {
     createOrganization(createOrganizationInput: $createOrganizationInput) {
-      organizationId
-      createDT
-      updateDT
       ownerId
       contact
       title
@@ -259,9 +244,6 @@ export const updateOrganization = /* GraphQL */ `
     $updateOrganizationInput: UpdateOrganizationInput!
   ) {
     updateOrganization(updateOrganizationInput: $updateOrganizationInput) {
-      organizationId
-      createDT
-      updateDT
       ownerId
       contact
       title
@@ -273,9 +255,6 @@ export const updateOrganization = /* GraphQL */ `
 export const deleteOrganizationCause = /* GraphQL */ `
   mutation DeleteOrganizationCause($organizationCauseId: Int!) {
     deleteOrganizationCause(organizationCauseId: $organizationCauseId) {
-      organizationCauseId
-      createDT
-      updateDT
       ownerId
       organizationId
       causeId
@@ -290,9 +269,6 @@ export const createOrganizationCause = /* GraphQL */ `
     createOrganizationCause(
       createOrganizationCauseInput: $createOrganizationCauseInput
     ) {
-      organizationCauseId
-      createDT
-      updateDT
       ownerId
       organizationId
       causeId
@@ -307,9 +283,6 @@ export const updateOrganizationCause = /* GraphQL */ `
     updateOrganizationCause(
       updateOrganizationCauseInput: $updateOrganizationCauseInput
     ) {
-      organizationCauseId
-      createDT
-      updateDT
       ownerId
       organizationId
       causeId
@@ -320,9 +293,6 @@ export const updateOrganizationCause = /* GraphQL */ `
 export const deleteUser = /* GraphQL */ `
   mutation DeleteUser($userId: Int!) {
     deleteUser(userId: $userId) {
-      userId
-      createDT
-      updateDT
       ownerId
       guid
     }
@@ -339,9 +309,6 @@ export const createUser = /* GraphQL */ `
 export const updateUser = /* GraphQL */ `
   mutation UpdateUser($updateUserInput: UpdateUserInput!) {
     updateUser(updateUserInput: $updateUserInput) {
-      userId
-      createDT
-      updateDT
       ownerId
       guid
     }
@@ -350,11 +317,8 @@ export const updateUser = /* GraphQL */ `
 export const deleteUserAction = /* GraphQL */ `
   mutation DeleteUserAction($userActionId: Int!) {
     deleteUserAction(userActionId: $userActionId) {
-      userActionId
-      createDT
-      updateDT
       ownerId
-      userId
+      userGuid
       status
       actionId
     }
@@ -363,6 +327,7 @@ export const deleteUserAction = /* GraphQL */ `
 export const createUserAction = /* GraphQL */ `
   mutation CreateUserAction($createUserActionInput: CreateUserActionInput!) {
     createUserAction(createUserActionInput: $createUserActionInput) {
+      ownerId
       userGuid
       status
       actionId
@@ -372,11 +337,8 @@ export const createUserAction = /* GraphQL */ `
 export const updateUserAction = /* GraphQL */ `
   mutation UpdateUserAction($updateUserActionInput: UpdateUserActionInput!) {
     updateUserAction(updateUserActionInput: $updateUserActionInput) {
-      userActionId
-      createDT
-      updateDT
       ownerId
-      userId
+      userGuid
       status
       actionId
     }
@@ -385,9 +347,6 @@ export const updateUserAction = /* GraphQL */ `
 export const deleteUserActionType = /* GraphQL */ `
   mutation DeleteUserActionType($userActionTypeId: Int!) {
     deleteUserActionType(userActionTypeId: $userActionTypeId) {
-      userActionTypeId
-      createDT
-      updateDT
       ownerId
       userId
       actionTypeId
@@ -402,9 +361,6 @@ export const createUserActionType = /* GraphQL */ `
     createUserActionType(
       createUserActionTypeInput: $createUserActionTypeInput
     ) {
-      userActionTypeId
-      createDT
-      updateDT
       ownerId
       userId
       actionTypeId
@@ -419,9 +375,6 @@ export const updateUserActionType = /* GraphQL */ `
     updateUserActionType(
       updateUserActionTypeInput: $updateUserActionTypeInput
     ) {
-      userActionTypeId
-      createDT
-      updateDT
       ownerId
       userId
       actionTypeId
@@ -432,9 +385,6 @@ export const updateUserActionType = /* GraphQL */ `
 export const deleteUserCause = /* GraphQL */ `
   mutation DeleteUserCause($userCauseId: Int!) {
     deleteUserCause(userCauseId: $userCauseId) {
-      userCauseId
-      createDT
-      updateDT
       ownerId
       userId
       causeId
@@ -445,9 +395,6 @@ export const deleteUserCause = /* GraphQL */ `
 export const createUserCause = /* GraphQL */ `
   mutation CreateUserCause($createUserCauseInput: CreateUserCauseInput!) {
     createUserCause(createUserCauseInput: $createUserCauseInput) {
-      userCauseId
-      createDT
-      updateDT
       ownerId
       userId
       causeId
@@ -458,9 +405,6 @@ export const createUserCause = /* GraphQL */ `
 export const updateUserCause = /* GraphQL */ `
   mutation UpdateUserCause($updateUserCauseInput: UpdateUserCauseInput!) {
     updateUserCause(updateUserCauseInput: $updateUserCauseInput) {
-      userCauseId
-      createDT
-      updateDT
       ownerId
       userId
       causeId
