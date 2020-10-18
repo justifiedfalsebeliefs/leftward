@@ -4,13 +4,15 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 import AccountNavigator from "./AccountNavigator";
 import DashboardNavigator from "./DashboardNavigator";
+import MyActionsNavigator from "./MyActionsNavigator"
 import routes from "./routes";
 
 const Tab = createBottomTabNavigator();
 
 const AppNavigator = () => (
+  
   <Tab.Navigator>
-    <Tab.Screen
+        <Tab.Screen
       name="Dashboard"
       component={DashboardNavigator}
       options={{
@@ -19,6 +21,16 @@ const AppNavigator = () => (
         ),
       }}
     />
+        <Tab.Screen
+      name="My Actions"
+      component={MyActionsNavigator}
+      options={{
+        tabBarIcon: ({ color, size }) => (
+          <MaterialCommunityIcons name="home" color={color} size={size} />
+        ),
+      }}
+    />
+
 
     <Tab.Screen
       name="Account"

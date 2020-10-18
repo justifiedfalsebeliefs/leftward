@@ -60,19 +60,21 @@ function ActionDetailsScreen({ route, navigation }) {
         >
           Campaign: {action.campaignTitle}
         </Text>
-        {/* CONDITIONALLY RENDER BELOW IF NOT ALREADY IN PROGRESS */}
-        <AppButton
+
+        { action.sourceList != "myActions" && (<AppButton
           title={"Add to my in progress actions"}
           onPress={() => handleStatusPress("INPROGRESS")}
-        ></AppButton>
-        <AppButton
+        ></AppButton>)}
+
+        { action.sourceList != "hidden" && (<AppButton
           title={"Hide from actions list"}
           onPress={() => handleStatusPress("HIDDEN")}
-        ></AppButton>
-        <AppButton
+        ></AppButton>)}
+
+        { action.sourceList == "myActions" && (<AppButton
           title={"Complete action"}
           onPress={() => handleStatusPress("COMPLETE")}
-        ></AppButton>
+        ></AppButton>)}
         <View style={styles.userContainer}></View>
       </View>
     </View>

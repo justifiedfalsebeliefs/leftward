@@ -11,11 +11,12 @@ import useAuth from "../auth/useAuth";
 
 const menuItems = [
   {
-    title: "My Actions",
+    title: "Hidden Actions",
     icon: {
       name: "format-list-bulleted",
-      backgroundColor: colors.primary,
+      backgroundColor: colors.primary
     },
+    targetScreen: routes.HIDDENACTIONS,
   },
   {
     title: "Manage Account",

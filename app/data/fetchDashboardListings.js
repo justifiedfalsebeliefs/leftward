@@ -1,4 +1,6 @@
-export default initialActions = [
+export default async function fetchDashboardListings(setActions) {
+  
+  setActions([
   {
     actionId: 1,
     actionTitle: "actionTitle",
@@ -10,7 +12,8 @@ export default initialActions = [
     organizationContact: "organizationContact",
     organizationTitle: "organizationTitle",
     organizationDescription: "organizationDescription",
-    reward: 100},
+    reward: 100,
+    sourceList: "dashboard"},
     {
       actionId: 2,
       actionTitle: "actionTitle",
@@ -22,7 +25,8 @@ export default initialActions = [
       organizationContact: "organizationContact",
       organizationTitle: "organizationTitle",
       organizationDescription: "organizationDescription",
-      reward: 100},
+      reward: 100,
+      sourceList: "dashboard"},
       {
         actionId: 3,
         actionTitle: "actionTitle",
@@ -34,7 +38,8 @@ export default initialActions = [
         organizationContact: "organizationContact",
         organizationTitle: "organizationTitle",
         organizationDescription: "organizationDescription",
-        reward: 100},
+        reward: 100,
+        sourceList: "dashboard"},
         {
           actionId: 4,
           actionTitle: "actionTitle",
@@ -46,7 +51,8 @@ export default initialActions = [
           organizationContact: "organizationContact",
           organizationTitle: "organizationTitle",
           organizationDescription: "organizationDescription",
-          reward: 100},
+          reward: 100,
+          sourceList: "dashboard"},
           {
             actionId: 5,
             actionTitle: "actionTitle",
@@ -58,6 +64,7 @@ export default initialActions = [
             organizationContact: "organizationContact",
             organizationTitle: "organizationTitle",
             organizationDescription: "organizationDescription",
-            reward: 100},
+            reward: 100,
+            sourceList: "dashboard"},
 
-];
+]);}
