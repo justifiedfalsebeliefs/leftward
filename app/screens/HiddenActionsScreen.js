@@ -6,21 +6,23 @@ import colors from "../config/colors";
 import Screen from "../components/Screen";
 import ActionList from "../components/ActionList"
 import fetchHiddenActions from "../data/fetchHiddenActions"
-
+import useAuth from "../auth/useAuth";
 
 
 function HiddenActionsScreen({ navigation }) {
   const [actions, setActions] = useState();
-  
+  const { user, logOut } = useAuth();
+
   useEffect(() => {
-    fetchHiddenActions(setActions);
+    fetchHiddenActions(setActions, user.attributes["custom:GQLuserID"]);
   }, []);
 
   return (
       <Screen style={styles.screen}>
         <ActionList
           itemList={actions}
-          navigation={navigation}/>
+          navigation={navigation}
+          doOnRefresh={() => fetchHiddenActions(setActions, user.attributes["custom:GQLuserID"])}/>
       </Screen>
   );
 }

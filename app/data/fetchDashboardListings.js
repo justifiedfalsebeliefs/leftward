@@ -1,70 +1,10 @@
-export default async function fetchDashboardListings(setActions) {
-  
-  setActions([
-  {
-    actionId: 1,
-    actionTitle: "actionTitle",
-    actionDescription: "actionDescription",
-    actionType: "actionType",
-    causeTitle: "causeTitle",
-    campaignTitle: "campaignTitle",
-    campaignDescription: "campaignDescription",
-    organizationContact: "organizationContact",
-    organizationTitle: "organizationTitle",
-    organizationDescription: "organizationDescription",
-    reward: 100,
-    sourceList: "dashboard"},
-    {
-      actionId: 2,
-      actionTitle: "actionTitle",
-      actionDescription: "actionDescription",
-      actionType: "actionType",
-      causeTitle: "causeTitle",
-      campaignTitle: "campaignTitle",
-      campaignDescription: "campaignDescription",
-      organizationContact: "organizationContact",
-      organizationTitle: "organizationTitle",
-      organizationDescription: "organizationDescription",
-      reward: 100,
-      sourceList: "dashboard"},
-      {
-        actionId: 3,
-        actionTitle: "actionTitle",
-        actionDescription: "actionDescription",
-        actionType: "actionType",
-        causeTitle: "causeTitle",
-        campaignTitle: "campaignTitle",
-        campaignDescription: "campaignDescription",
-        organizationContact: "organizationContact",
-        organizationTitle: "organizationTitle",
-        organizationDescription: "organizationDescription",
-        reward: 100,
-        sourceList: "dashboard"},
-        {
-          actionId: 4,
-          actionTitle: "actionTitle",
-          actionDescription: "actionDescription",
-          actionType: "actionType",
-          causeTitle: "causeTitle",
-          campaignTitle: "campaignTitle",
-          campaignDescription: "campaignDescription",
-          organizationContact: "organizationContact",
-          organizationTitle: "organizationTitle",
-          organizationDescription: "organizationDescription",
-          reward: 100,
-          sourceList: "dashboard"},
-          {
-            actionId: 5,
-            actionTitle: "actionTitle",
-            actionDescription: "actionDescription",
-            actionType: "actionType",
-            causeTitle: "causeTitle",
-            campaignTitle: "campaignTitle",
-            campaignDescription: "campaignDescription",
-            organizationContact: "organizationContact",
-            organizationTitle: "organizationTitle",
-            organizationDescription: "organizationDescription",
-            reward: 100,
-            sourceList: "dashboard"},
+import {getEndpoint, formatParams} from "./config"
 
-]);}
+export default async function fetchDashboardListings(setActions, guid) {
+  const path = "fetchDashboardListings"
+  const REST = getEndpoint(path).concat(formatParams("userGuid", guid))
+
+  const response = await fetch(REST, { method: 'POST' })
+  listings = await response.json()
+
+  setActions(listings);}

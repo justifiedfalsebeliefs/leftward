@@ -46,3 +46,11 @@ amplify/backend/tags.json
 amplify/cli.json
 amplify/team-provider-info.json
 babel.config.js
+
+devbackend/.idea
+devbackend/.idea/*
+devbackend/venv
+devbackend/venv/*
+app/data/config.js
+*.pyc
+devbackend/config.py

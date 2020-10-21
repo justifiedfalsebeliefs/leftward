@@ -1,45 +1,10 @@
-export default async function fetchMyActions(setActions) {
-  
-  setActions([
-  {
-    actionId: 1,
-    actionTitle: "actionTitle",
-    actionDescription: "actionDescription",
-    actionType: "actionType",
-    causeTitle: "causeTitle",
-    campaignTitle: "campaignTitle",
-    campaignDescription: "campaignDescription",
-    organizationContact: "organizationContact",
-    organizationTitle: "organizationTitle",
-    organizationDescription: "organizationDescription",
-    reward: 100,
-    sourceList: "myActions"},
-    {
-      actionId: 2,
-      actionTitle: "actionTitle",
-      actionDescription: "actionDescription",
-      actionType: "actionType",
-      causeTitle: "causeTitle",
-      campaignTitle: "campaignTitle",
-      campaignDescription: "campaignDescription",
-      organizationContact: "organizationContact",
-      organizationTitle: "organizationTitle",
-      organizationDescription: "organizationDescription",
-      reward: 100,
-      sourceList: "myActions"},
-      {
-        actionId: 3,
-        actionTitle: "actionTitle",
-        actionDescription: "actionDescription",
-        actionType: "actionType",
-        causeTitle: "causeTitle",
-        campaignTitle: "campaignTitle",
-        campaignDescription: "campaignDescription",
-        organizationContact: "organizationContact",
-        organizationTitle: "organizationTitle",
-        organizationDescription: "organizationDescription",
-        reward: 100,
-       sourceList: "myActions"},
-        
+import {getEndpoint, formatParams} from "./config"
 
-]);}
+export default async function fetchMyActions(setActions, guid) {
+  const path = "fetchMyActions"
+  const REST = getEndpoint(path).concat(formatParams("userGuid", guid))
+
+  const response = await fetch(REST, { method: 'POST' })
+  listings = await response.json()
+
+  setActions(listings);}
