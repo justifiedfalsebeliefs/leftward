@@ -4,6 +4,7 @@ import ActionDetailsScreen from "../screens/ActionDetailsScreen";
 import CampaignDetailsScreen from "../screens/CampaignDetailsScreen";
 import OrganizationDetailsScreen from "../screens/OrganizationDetailsScreen";
 import DashboardScreen from "../screens/DashboardScreen";
+import CompletedActionsScreen from "../screens/CompletedActionsScreen";
 
 const Stack = createStackNavigator();
 
@@ -16,6 +17,7 @@ const DashboardNavigator = () => (
       name="OrganizationDetails"
       component={OrganizationDetailsScreen}
     />
+    <Stack.Screen name="CompletedActions" component={CompletedActionsScreen} />
   </Stack.Navigator>
 );
 
