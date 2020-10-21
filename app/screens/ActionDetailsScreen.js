@@ -5,30 +5,10 @@ import Text from "../components/Text";
 import routes from "../navigation/routes";
 import AppButton from "../components/AppButton";
 import useAuth from "../auth/useAuth";
+import pushActionStatus from "../data/pushActionStatus"
 
 function ActionDetailsScreen({ route, navigation }) {
   const { user, logOut } = useAuth();
-
-  const handleStatusPress = async (status) => {
-    try {
-      // const result = await API.graphql(
-      //   graphqlOperation(createUserAction, {
-      //     createUserActionInput: {
-      //       userGuid: user.attributes["custom:GQLuserID"],
-      //       actionId: action.actionId,
-      //       status: status,
-      //     },
-      //   })
-      // )
-      console.log("pressed");
-      Alert.alert("Success!", "Status Updated.", [{ text: "OK" }]);
-      if (status == "HIDDEN") navigation.goBack();
-      if (status == "COMPLETE") navigation.goBack();
-    } catch (error) {
-      console.log(error.message);
-    }
-  };
-
   const action = route.params;
   const campaign = {
     title: action.campaignTitle,
@@ -37,9 +17,19 @@ function ActionDetailsScreen({ route, navigation }) {
       contact: action.organizationContact,
       title: action.organizationTitle,
       description: action.organizationDescription,
-    },
-    
-  };
+    }};
+
+  const handleStatusPress = async (status, actionId) => {
+    try {
+      await pushActionStatus(user.attributes["custom:GQLuserID"], status, actionId)
+      Alert.alert("Success!", "Status Updated.", [{ text: "OK" }]);
+      if (status == "HIDDEN") navigation.goBack();
+      if (status == "COMPLETE") navigation.goBack();
+    } catch (error) {
+      console.log(error.message);
+    }
+  }
+  ;
   return (
     <View>
       {/* <Image
@@ -63,17 +53,17 @@ function ActionDetailsScreen({ route, navigation }) {
 
         { action.sourceList != "myActions" && (<AppButton
           title={"Add to my in progress actions"}
-          onPress={() => handleStatusPress("INPROGRESS")}
+          onPress={() => handleStatusPress("INPROGRESS", action.actionId)}
         ></AppButton>)}
 
         { action.sourceList != "hidden" && (<AppButton
           title={"Hide from actions list"}
-          onPress={() => handleStatusPress("HIDDEN")}
+          onPress={() => handleStatusPress("HIDDEN", action.actionId)}
         ></AppButton>)}
 
         { action.sourceList == "myActions" && (<AppButton
           title={"Complete action"}
-          onPress={() => handleStatusPress("COMPLETE")}
+          onPress={() => handleStatusPress("COMPLETE", action.actionId)}
         ></AppButton>)}
         <View style={styles.userContainer}></View>
       </View>

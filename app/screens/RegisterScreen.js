@@ -5,6 +5,7 @@ import useAuth from "../auth/useAuth";
 import Screen from "../components/Screen";
 import { Auth } from "aws-amplify";
 import uuidv4 from "../utility/uuid";
+import pushNewUserGuid from "../data/pushNewUserGuid"
 
 function RegisterScreen({ route, navigation }) {
   const [error, setError] = useState();
@@ -45,6 +46,7 @@ function RegisterScreen({ route, navigation }) {
 
   const handleSubmit = async (userInfo) => {
     try {
+      const newuuid = uuidv4();
       const result = await Auth.signUp({
         username: userInfo.username,
         password: userInfo.password,
@@ -52,23 +54,15 @@ function RegisterScreen({ route, navigation }) {
           email: userInfo.email,
           "custom:causes": causesOut,
           "custom:actions": actionsOut,
+          "custom:GQLuserID": newuuid
         },
       });
-      const loginresult = await Auth.signIn(
+
+      await pushNewUserGuid(newuuid)
+      await Auth.signIn(
         userInfo.username,
         userInfo.password
       );
-
-      const newuuid = uuidv4();
-      // const createGQLUserResult = await API.graphql(
-      //   graphqlOperation(createUser, {
-      //     createUserInput: { guid: newuuid },
-      //   })
-      // );
-      const currentUser = await Auth.currentAuthenticatedUser();
-      Auth.updateUserAttributes(currentUser, {
-        "custom:GQLuserID": newuuid,
-      });
       Auth.currentSession().then((data) => {
         auth.logIn(data);
       });
