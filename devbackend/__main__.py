@@ -69,6 +69,11 @@ def fetch_hidden_actions():
     return get_response(request.args, queries.fetchHiddenActions(request.args['userGuid']))
 
 
+@app.route('/fetchCompletedActions', methods=['POST'])
+def fetch_completed_actions():
+    return get_response(request.args, queries.fetchCompletedActions(request.args['userGuid']))
+
+
 @app.route('/fetchMyActions', methods=['POST'])
 def fetch_my_actions():
     return get_response(request.args, queries.fetchMyActions(request.args['userGuid']))

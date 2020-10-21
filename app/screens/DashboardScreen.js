@@ -7,6 +7,7 @@ import AppButton from "../components/AppButton";
 import ActionList from "../components/ActionList"
 import fetchDashboardListings from "../data/fetchDashboardListings"
 import useAuth from "../auth/useAuth";
+import routes from "../navigation/routes";
 
 import debug from "../utility/debug"
 
@@ -28,6 +29,9 @@ function DashboardScreen({ navigation }) {
           itemList={actions}
           navigation={navigation}
           doOnRefresh={() => fetchDashboardListings(setActions, user.attributes["custom:GQLuserID"])}/>
+                  <AppButton
+          title={"Completed Actions"}
+          onPress={() => navigation.navigate(routes.COMPLETEDACTIONS)} />
       </Screen>
   );
 }
