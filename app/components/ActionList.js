@@ -8,7 +8,8 @@ import routes from "../navigation/routes";
 function ActionList({ 
     itemList,
     navigation,
-    doOnRefresh
+    doOnRefresh,
+    refreshParentFunction
  }) {
   const [refreshing, setRefreshing] = React.useState(false);
   const wait = (timeout) => {

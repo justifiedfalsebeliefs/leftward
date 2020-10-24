@@ -120,3 +120,68 @@ def deleteUserAction(userActionId):
     return """
     DELETE FROM userAction where userActionId = {}
     """.format(userActionId)
+
+def fetchUserExperience(guid):
+    return """
+    SELECT
+        level,
+        nextLevel,
+        previousLevel,
+        exp,
+        EnvActions,
+        EcoActions,
+        JustActions,
+        HealthActions,
+        totalActions
+    from user
+    WHERE guid = '{}'
+""".format(guid)
+
+def pushCalcExp(exp, level, nextLevel, totalActions, previousLevel, guid):
+    return"""
+    UPDATE user SET 
+        exp = {} ,
+        LEVEL = {},
+        nextLevel = {},
+        totalActions = {},
+        previousLevel = {}
+    WHERE guid = '{}';
+    """.format(exp, level, nextLevel, totalActions, previousLevel, guid)
+
+def fetchUserLevel(guid):
+    return"""
+    SELECT
+    (SELECT SUM(a.reward)
+            FROM userAction ua
+            INNER JOIN action a on a.actionId = ua.actionId
+            WHERE ua.userGuid = '{}'
+            AND ua.status = 'COMPLETE') as exp,
+    (SELECT MAX(levelNumber) from level l
+                WHERE expRequired <= (
+                    SELECT SUM(a.reward)
+                    FROM userAction ua
+                    INNER JOIN action a on a.actionId = ua.actionId
+                    WHERE ua.userGuid = '{}'
+                    AND ua.status = 'COMPLETE')) as level,
+    (SELECT expRequired from level WHERE levelNumber = (
+                    SELECT MAX(levelNumber) from level l
+                WHERE expRequired <= (
+                    SELECT SUM(a.reward)
+                    FROM userAction ua
+                    INNER JOIN action a on a.actionId = ua.actionId
+                    WHERE ua.userGuid = '{}'
+                    AND ua.status = 'COMPLETE'))+1) as nextLevel,
+        (SELECT expRequired from level WHERE levelNumber = (
+                    SELECT MAX(levelNumber) from level l
+                WHERE expRequired <= (
+                    SELECT SUM(a.reward)
+                    FROM userAction ua
+                    INNER JOIN action a on a.actionId = ua.actionId
+                    WHERE ua.userGuid = '{}'
+                    AND ua.status = 'COMPLETE'))) as previousLevel,
+    (SELECT COUNT(a.actionId)
+        FROM userAction ua
+        INNER JOIN action a on a.actionId = ua.actionId
+        WHERE ua.userGuid = '{}'
+        AND ua.status = 'COMPLETE') as totalActions;
+    """.format(guid, guid, guid, guid, guid)

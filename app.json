@@ -5,10 +5,14 @@
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./app/assets/icon.png",
+    "android": {
+      "package": "com.leftward.leftward",
+      "versionCode": 1
+    },
     "splash": {
-      "image": "./app/assets/WelcomeBackground.png",
+      "image": "./app/assets/left.png",
       "resizeMode": "contain",
-      "backgroundColor": "#e63c4b"
+      "backgroundColor": "#000000"
     },
     "updates": {
       "fallbackToCacheTimeout": 0

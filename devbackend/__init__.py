@@ -59,6 +59,11 @@ def push_record(request_args, query, return_as_records=False):
         return jsonify({'resp': 'Success'}), 200
 
 
+@app.route('/hello')
+def hello():
+    return 'hello!'
+
+
 @app.route('/fetchDashboardListings', methods=['POST'])
 def fetch_dashboard_listings():
     return get_response(request.args, queries.listActionsDashboard(request.args['userGuid']))
@@ -84,6 +89,25 @@ def push_new_user_guid():
     return push_record(request.args, queries.pushNewUserGuid(request.args['newGuid']))
 
 
+@app.route('/pushCalcExp', methods=['POST'])
+def push_calc_exp():
+    guid = request.args['userGuid']
+    objects = get_response(request.args, queries.fetchUserLevel(guid), return_as_records=True)
+    exp = objects[0]['exp']
+    level = objects[0]['level']
+    nextLevel = objects[0]['nextLevel']
+    totalActions = objects[0]['totalActions']
+    previousLevel = objects[0]['previousLevel']
+    return push_record(request.args, queries.pushCalcExp(exp, level, nextLevel, totalActions, previousLevel, guid))
+
+
+@app.route('/fetchUserExperience', methods=['POST'])
+def fetch_user_experience():
+    return get_response(request.args, queries.fetchUserExperience(request.args['userGuid']))
+
+
+
+
 @app.route('/pushActionStatus', methods=['POST'])
 def push_action_status():
     try:
@@ -107,10 +131,8 @@ def push_action_status():
             push_record(request.args, queries.deleteUserAction(id), return_as_records=True)
         return push_record(request.args, queries.pushActionStatus(user_guid, status, actionId))
     except Exception as e:
-        return jsonify({'resp':f"An Error Occured"}), 500
+        return jsonify({'resp':"An Error Occured"}), 500
 
 
-port = int(os.environ.get('PORT', 8080))
-app.debug = True
 if __name__ == '__main__':
-    app.run(threaded=True, host='0.0.0.0', port=port)
+    app.run()

@@ -6,6 +6,7 @@ import routes from "../navigation/routes";
 import AppButton from "../components/AppButton";
 import useAuth from "../auth/useAuth";
 import pushActionStatus from "../data/pushActionStatus"
+import pushCalcExp from "../data/pushCalcExp"
 
 function ActionDetailsScreen({ route, navigation }) {
   const { user, logOut } = useAuth();
@@ -23,8 +24,9 @@ function ActionDetailsScreen({ route, navigation }) {
     try {
       await pushActionStatus(user.attributes["custom:GQLuserID"], status, actionId)
       Alert.alert("Success!", "Status Updated.", [{ text: "OK" }]);
-      if (status == "HIDDEN") navigation.goBack();
-      if (status == "COMPLETE") navigation.goBack();
+      // if (status == "HIDDEN");
+      if (status == "COMPLETE") await pushCalcExp(user.attributes["custom:GQLuserID"]);
+      navigation.goBack()
     } catch (error) {
       console.log(error.message);
     }
