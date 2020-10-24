@@ -4,10 +4,30 @@ CREATE TABLE `user`
  `userId`   int NOT NULL AUTO_INCREMENT ,
  `createDT`     timestamp DEFAULT CURRENT_TIMESTAMP,
  `updateDT`     timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
- `ownerId`  varchar(45) NULL ,
  `guid`     varchar(36) NULL,
+ `level`    int NULL DEFAULT 1,
+ `nextLevel` int NULL DEFAULT 100,
+  `previousLevel` int NULL DEFAULT 0,
+ `exp`      int NULL DEFAULT 0,
+ `envActions` int NULL DEFAULT 0,
+ `ecoActions` int NULL DEFAULT 0,
+ `justActions` int NULL DEFAULT 0,
+ `healthActions` int NULL DEFAULT 0,
+ `totalActions` int NULL DEFAULT 0,
+
 
 PRIMARY KEY (`userId`)
+);
+
+CREATE TABLE `level`
+(
+ `levelId`   int NOT NULL AUTO_INCREMENT ,
+ `createDT`     timestamp DEFAULT CURRENT_TIMESTAMP,
+ `updateDT`     timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+ `levelNumber` int NOT NULL,
+ `expRequired` int NOT NULL,
+ `levelTitle` int NULL ,
+PRIMARY KEY (`levelId`)
 );
 
 CREATE TABLE `actionType`
@@ -15,7 +35,6 @@ CREATE TABLE `actionType`
  `actionTypeId` int NOT NULL AUTO_INCREMENT ,
  `createDT`     timestamp DEFAULT CURRENT_TIMESTAMP,
  `updateDT`     timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
- `ownerId`      varchar(45) NULL ,
  `title`        varchar(45) NOT NULL ,
  `description`  mediumtext NOT NULL ,
  `icon`         mediumtext NULL ,
@@ -28,7 +47,6 @@ CREATE TABLE `cause`
  `causeId`     int NOT NULL AUTO_INCREMENT ,
  `createDT`     timestamp DEFAULT CURRENT_TIMESTAMP,
  `updateDT`     timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
- `ownerId`     varchar(45) NULL ,
  `title`       varchar(45) NOT NULL ,
  `description` mediumtext NOT NULL ,
  `icon`        mediumtext NULL ,
@@ -41,7 +59,6 @@ CREATE TABLE `organization`
  `organizationId` int NOT NULL AUTO_INCREMENT ,
  `createDT`     timestamp DEFAULT CURRENT_TIMESTAMP,
  `updateDT`     timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
- `ownerId`        varchar(45) NULL ,
  `contact`        varchar(45) NOT NULL ,
  `title`          varchar(45) NOT NULL ,
  `description`    mediumtext NOT NULL ,
@@ -55,7 +72,6 @@ CREATE TABLE `organizationCause`
  `organizationCauseId` int NOT NULL AUTO_INCREMENT ,
  `createDT`     timestamp DEFAULT CURRENT_TIMESTAMP,
  `updateDT`     timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
- `ownerId`             varchar(45) NULL ,
  `organizationId`      int NOT NULL ,
  `causeId`             int NULL ,
  `rank`                int NULL ,
@@ -72,7 +88,6 @@ CREATE TABLE `campaign`
  `campaignId`     int NOT NULL AUTO_INCREMENT ,
  `createDT`     timestamp DEFAULT CURRENT_TIMESTAMP,
  `updateDT`     timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
- `ownerId`        varchar(45) NULL ,
  `organizationId` int NOT NULL ,
  `title`          varchar(45) NOT NULL ,
  `description`    mediumtext NOT NULL ,
@@ -90,7 +105,6 @@ CREATE TABLE `campaignCause`
  `campaignCauseId` int NOT NULL AUTO_INCREMENT ,
  `createDT`     timestamp DEFAULT CURRENT_TIMESTAMP,
  `updateDT`     timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
- `ownerId`         varchar(45) NULL ,
  `causeId`         int NOT NULL ,
  `rank`            int NULL ,
  `campaignId`      int NOT NULL ,
@@ -99,13 +113,11 @@ PRIMARY KEY (`campaignCauseId`)
 
 );
 
-
 CREATE TABLE `action`
 (
  `actionId`     int NOT NULL AUTO_INCREMENT ,
  `createDT`     timestamp DEFAULT CURRENT_TIMESTAMP,
  `updateDT`     timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
- `ownerId`      varchar(45) NULL ,
  `actionTypeId` int NOT NULL ,
  `campaignId`   int NOT NULL ,
  `title`        varchar(45) NOT NULL ,
@@ -122,20 +134,11 @@ KEY `fkIdx_53` (`campaignId`),
 CONSTRAINT `FK_53` FOREIGN KEY `fkIdx_53` (`campaignId`) REFERENCES `campaign` (`campaignId`)
 );
 
-
-
-
-
-
-
-
-
 CREATE TABLE `userAction`
 (
  `userActionId` int NOT NULL AUTO_INCREMENT ,
  `createDT`     timestamp DEFAULT CURRENT_TIMESTAMP,
  `updateDT`     timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
- `ownerId`      varchar(45) NULL ,
  `userGuid`     varchar(45) NOT NULL ,
  `status`       varchar(45) NOT NULL ,
  `actionId`     int NOT NULL ,
@@ -150,7 +153,6 @@ CREATE TABLE `userActionType`
  `userActionTypeId` int NOT NULL AUTO_INCREMENT ,
  `createDT`     timestamp DEFAULT CURRENT_TIMESTAMP,
  `updateDT`     timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
- `ownerId`          varchar(45) NULL ,
  `userGuid`     varchar(45) NOT NULL ,
  `actionTypeId`     int NOT NULL ,
  `isActive`         bit NOT NULL ,
@@ -165,7 +167,6 @@ CREATE TABLE `userCause`
  `userCauseId` int NOT NULL AUTO_INCREMENT ,
  `createDT`     timestamp DEFAULT CURRENT_TIMESTAMP,
  `updateDT`     timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
- `ownerId`     varchar(45) NULL ,
  `userGuid`     varchar(45) NOT NULL ,
  `causeId`     int NOT NULL ,
  `rank`        int NOT NULL ,

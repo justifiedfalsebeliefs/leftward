@@ -133,3 +133,18 @@ INSERT INTO action (actionTypeId, campaignId, title, description, reward) VALUES
 	"This is an Action description. An Action is a specific thing a user can do. It's associated with a campaign.",
 	100);
 	
+INSERT INTO level (levelNumber, expRequired) VALUES(1,0);
+INSERT INTO level (levelNumber, expRequired) VALUES(2,100);
+INSERT INTO level (levelNumber, expRequired) VALUES(3,200);
+INSERT INTO level (levelNumber, expRequired) VALUES(4,300);
+INSERT INTO level (levelNumber, expRequired) VALUES(5,500);
+INSERT INTO level (levelNumber, expRequired) VALUES(6,800);
+INSERT INTO level (levelNumber, expRequired) VALUES(7,1300);
+INSERT INTO level (levelNumber, expRequired) VALUES(8,2100);
+INSERT INTO level (levelNumber, expRequired) VALUES(9,3400);
+INSERT INTO level (levelNumber, expRequired) VALUES(10,5500);
+INSERT INTO level (levelNumber, expRequired) VALUES(11,8900);
+INSERT INTO level (levelNumber, expRequired) VALUES(12,14400);
+INSERT INTO level (levelNumber, expRequired) VALUES(13,23300);
+INSERT INTO level (levelNumber, expRequired) VALUES(14,37700);
+INSERT INTO level (levelNumber, expRequired) VALUES(15,61000);
