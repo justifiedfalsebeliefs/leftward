@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Screen from "../components/Screen";
 import AppButton from "../components/AppButton";
 import routes from "../navigation/routes";
@@ -9,6 +9,11 @@ import { Auth } from "aws-amplify";
 import * as Amplitude from 'expo-analytics-amplitude';
 
 function UpdateCauseScreen({ navigation }) {
+  // Analytics
+  const useMountEffect = (fun) => useEffect(fun, [])
+  useMountEffect(() => {Amplitude.logEvent('ViewUpdateCause')});
+  /////
+  
   const [causes, setCauses] = useState(initialCauses);
   renderItem = ({ item, id, drag, isActive }) => {
     // Update colors to cascading rainbow
@@ -31,7 +36,7 @@ function UpdateCauseScreen({ navigation }) {
     Auth.updateUserAttributes(currentUser, { "custom:causes": causesOut });
     navigation.goBack();
   };
-  Amplitude.logEvent('ViewUpdateCause')
+  
   return (
     <>
       <Screen>

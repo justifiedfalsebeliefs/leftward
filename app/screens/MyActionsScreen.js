@@ -12,6 +12,11 @@ import * as Amplitude from 'expo-analytics-amplitude';
 
 
 function MyActionsScreen({ navigation }) {
+  // Analytics
+  const useMountEffect = (fun) => useEffect(fun, [])
+  useMountEffect(() => {Amplitude.logEvent('ViewMyActions')});
+  /////
+  
   const [actions, setActions] = useState();
   const { user, logOut } = useAuth();
 
@@ -27,7 +32,7 @@ function MyActionsScreen({ navigation }) {
       return refresh
     });
   }, [navigation]);
-  Amplitude.logEvent('ViewMyActions')
+  
   return (
       <Screen style={styles.screen}>
         <ActionList

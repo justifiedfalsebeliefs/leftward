@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { View, StyleSheet } from "react-native";
 import colors from "../config/colors";
 import Text from "../components/Text";
@@ -7,8 +7,13 @@ import * as Amplitude from 'expo-analytics-amplitude';
 
 
 function CampaignDetailsScreen({ route, navigation }) {
+  // Analytics
+  const useMountEffect = (fun) => useEffect(fun, [])
+  useMountEffect(() => {Amplitude.logEvent('ViewCampaignDetails')});
+  /////
+
   const campaign = route.params;
-  Amplitude.logEvent('ViewCampaignDetails')
+  
   return (
     <View>
       {/* <Image

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { View, StyleSheet, Linking } from "react-native";
 import colors from "../config/colors";
 import Text from "../components/Text";
@@ -13,6 +13,11 @@ import * as Amplitude from 'expo-analytics-amplitude';
 function ActionDetailsScreen({ route, navigation }) {
   const { user, logOut } = useAuth();
   const action = route.params;
+  // Analytics
+  const useMountEffect = (fun) => useEffect(fun, [])
+  useMountEffect(() => {Amplitude.logEventWithProperties('ViewActionDetails', {actionId: action.actionId, actionTitle: action.actionTitle})});
+  /////
+
   const campaign = {
     title: action.campaignTitle,
     description: action.campaignDescription,
@@ -23,9 +28,10 @@ function ActionDetailsScreen({ route, navigation }) {
     }};
     
     function loadInBrowser() {
+      Amplitude.logEventWithProperties('PressOpenActionURL', {actionId: action.actionId, actionTitle: action.actionTitle})
       Linking.openURL(action.url).catch(err => console.error("Couldn't load page", err));
     };
-    Amplitude.logEventWithProperties('ViewActionDetails', {actionId: action.actionId, actionTitle: action.title})
+    
   const handleStatusPress = async (status, actionId) => {
     try {
       Amplitude.logEventWithProperties('PressStatusUpdate', {status: status, actionId: actionId})

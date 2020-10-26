@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { View, StyleSheet, Switch } from "react-native";
 import Screen from "../components/Screen";
 import AppText from "../components/AppText";
@@ -9,6 +9,11 @@ import routes from "../navigation/routes";
 import * as Amplitude from 'expo-analytics-amplitude';
 
 function RegisterActScreen({ route, navigation }) {
+  // Analytics
+  const useMountEffect = (fun) => useEffect(fun, [])
+  useMountEffect(() => {Amplitude.logEvent('ViewRegisterAct')});
+  /////
+
   const [phoneValue, setphoneValue] = useState(false);
   const [writeValue, setwriteValue] = useState(false);
   const [marchValue, setmarchValue] = useState(false);
@@ -41,7 +46,7 @@ function RegisterActScreen({ route, navigation }) {
   const toggleshareSwitch = (value) => {
     setshareValue(value);
   };
-  Amplitude.logEvent('ViewRegisterAct')
+  
   return (
     <Screen>
       <View style={styles.switchZone}>

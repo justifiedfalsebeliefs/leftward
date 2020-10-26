@@ -12,13 +12,18 @@ import * as Amplitude from 'expo-analytics-amplitude';
 
 
 function CompletedActionsScreen({ navigation }) {
+  // Analytics
+  const useMountEffect = (fun) => useEffect(fun, [])
+  useMountEffect(() => {Amplitude.logEvent('ViewCompletedActions')});
+  /////
+
   const [actions, setActions] = useState();
   const { user, logOut } = useAuth();
 
   useEffect(() => {
     fetchCompletedActions(setActions, user.attributes["custom:GQLuserID"]);
   }, []);
-  Amplitude.logEvent('ViewCompletedActions')
+  
   return (
       <Screen style={styles.screen}>
         <ActionList
