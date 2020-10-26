@@ -6,6 +6,8 @@ import DraggableFlatListItem from "../components/DraggableFlatListItem";
 import DraggableFlatListPicker from "../components/DraggableFlatListPicker";
 import initialCauses from "../data/initialCauses";
 
+import * as Amplitude from 'expo-analytics-amplitude';
+
 function RegisterCauseScreen({ navigation }) {
   const [causes, setCauses] = useState(initialCauses);
   renderItem = ({ item, id, drag, isActive }) => {
@@ -17,7 +19,7 @@ function RegisterCauseScreen({ navigation }) {
       ></DraggableFlatListItem>
     );
   };
-
+  Amplitude.logEvent('ViewRegisterCause')
   return (
     <>
       <Screen>

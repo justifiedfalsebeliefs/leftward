@@ -5,7 +5,10 @@ import Button from "../components/Button";
 import routes from "../navigation/routes";
 import { AntDesign } from "@expo/vector-icons";
 
+import * as Amplitude from 'expo-analytics-amplitude';
+
 function WelcomeScreen({ navigation }) {
+  Amplitude.logEvent('ViewWelcomeScreen')
   return (
     <ImageBackground
       blurRadius={1.5}

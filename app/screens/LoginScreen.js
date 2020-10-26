@@ -7,10 +7,12 @@ import { Auth } from "aws-amplify";
 import useAuth from "../auth/useAuth";
 import AppButton from "../components/AppButton";
 
+import * as Amplitude from 'expo-analytics-amplitude';
+
 function LoginScreen({ navigation }) {
   const auth = useAuth();
   const [error, setError] = useState();
-
+  Amplitude.logEvent('ViewLogin')
   const handleSubmit = async (userInfo) => {
     try {
       const result = await Auth.signIn(userInfo.username, userInfo.password);

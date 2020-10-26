@@ -3,9 +3,12 @@ import { View, StyleSheet } from "react-native";
 
 import colors from "../config/colors";
 import Text from "../components/Text";
+import * as Amplitude from 'expo-analytics-amplitude';
+
 
 function OrganizationDetailsScreen({ route, navigation }) {
   const organization = route.params;
+  Amplitude.logEvent('ViewOrganizationDetails')
   return (
     <View>
       {/* <Image

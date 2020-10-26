@@ -7,6 +7,8 @@ import Screen from "../components/Screen";
 import ActionList from "../components/ActionList"
 import fetchCompletedActions from "../data/fetchCompletedActions"
 import useAuth from "../auth/useAuth";
+import * as Amplitude from 'expo-analytics-amplitude';
+
 
 
 function CompletedActionsScreen({ navigation }) {
@@ -16,7 +18,7 @@ function CompletedActionsScreen({ navigation }) {
   useEffect(() => {
     fetchCompletedActions(setActions, user.attributes["custom:GQLuserID"]);
   }, []);
-
+  Amplitude.logEvent('ViewCompletedActions')
   return (
       <Screen style={styles.screen}>
         <ActionList

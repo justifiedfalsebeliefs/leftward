@@ -5,6 +5,8 @@ import AuthForm from "../components/AuthForm";
 import Screen from "../components/Screen";
 import { Auth } from "aws-amplify";
 import useAuth from "../auth/useAuth";
+import * as Amplitude from 'expo-analytics-amplitude';
+
 
 function ConfirmRecoverPasswordScreen({ navigation }) {
   const auth = useAuth();
@@ -25,7 +27,7 @@ function ConfirmRecoverPasswordScreen({ navigation }) {
       setError(error.message);
     }
   };
-
+  Amplitude.logEvent('ViewConfirmRecoverPassword')
   return (
     <>
       <Screen style={styles.container}>

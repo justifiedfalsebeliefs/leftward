@@ -6,6 +6,7 @@ import DraggableFlatListItem from "../components/DraggableFlatListItem";
 import DraggableFlatListPicker from "../components/DraggableFlatListPicker";
 import initialCauses from "../data/initialCauses";
 import { Auth } from "aws-amplify";
+import * as Amplitude from 'expo-analytics-amplitude';
 
 function UpdateCauseScreen({ navigation }) {
   const [causes, setCauses] = useState(initialCauses);
@@ -30,7 +31,7 @@ function UpdateCauseScreen({ navigation }) {
     Auth.updateUserAttributes(currentUser, { "custom:causes": causesOut });
     navigation.goBack();
   };
-
+  Amplitude.logEvent('ViewUpdateCause')
   return (
     <>
       <Screen>

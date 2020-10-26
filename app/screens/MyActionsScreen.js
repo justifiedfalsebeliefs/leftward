@@ -7,22 +7,33 @@ import Screen from "../components/Screen";
 import ActionList from "../components/ActionList"
 import fetchMyActions from "../data/fetchMyActions"
 import useAuth from "../auth/useAuth";
+import * as Amplitude from 'expo-analytics-amplitude';
+
 
 
 function MyActionsScreen({ navigation }) {
   const [actions, setActions] = useState();
   const { user, logOut } = useAuth();
 
-  useEffect(() => {
-    fetchMyActions(setActions, user.attributes["custom:GQLuserID"]);
-  }, []);
+  async function getListings(){
+    const listings = await fetchMyActions(user.attributes["custom:GQLuserID"]);
+    setActions(listings);
+  }
 
+
+  useEffect(() => {
+    const refresh = navigation.addListener("focus", () =>{
+      getListings()
+      return refresh
+    });
+  }, [navigation]);
+  Amplitude.logEvent('ViewMyActions')
   return (
       <Screen style={styles.screen}>
         <ActionList
           itemList={actions}
           navigation={navigation}
-          doOnRefresh={() => fetchMyActions(setActions, user.attributes["custom:GQLuserID"])}/>
+          doOnRefresh={() => getListings()}/>
       </Screen>
   );
 }

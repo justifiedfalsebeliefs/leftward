@@ -1,5 +1,5 @@
 import React from "react";
-import { View, StyleSheet, Alert } from "react-native";
+import { View, StyleSheet, Linking } from "react-native";
 import colors from "../config/colors";
 import Text from "../components/Text";
 import routes from "../navigation/routes";
@@ -7,6 +7,8 @@ import AppButton from "../components/AppButton";
 import useAuth from "../auth/useAuth";
 import pushActionStatus from "../data/pushActionStatus"
 import pushCalcExp from "../data/pushCalcExp"
+
+import * as Amplitude from 'expo-analytics-amplitude';
 
 function ActionDetailsScreen({ route, navigation }) {
   const { user, logOut } = useAuth();
@@ -19,12 +21,15 @@ function ActionDetailsScreen({ route, navigation }) {
       title: action.organizationTitle,
       description: action.organizationDescription,
     }};
-
+    
+    function loadInBrowser() {
+      Linking.openURL(action.url).catch(err => console.error("Couldn't load page", err));
+    };
+    Amplitude.logEventWithProperties('ViewActionDetails', {actionId: action.actionId, actionTitle: action.title})
   const handleStatusPress = async (status, actionId) => {
     try {
+      Amplitude.logEventWithProperties('PressStatusUpdate', {status: status, actionId: actionId})
       await pushActionStatus(user.attributes["custom:GQLuserID"], status, actionId)
-      Alert.alert("Success!", "Status Updated.", [{ text: "OK" }]);
-      // if (status == "HIDDEN");
       if (status == "COMPLETE") await pushCalcExp(user.attributes["custom:GQLuserID"]);
       navigation.goBack()
     } catch (error) {
@@ -52,15 +57,11 @@ function ActionDetailsScreen({ route, navigation }) {
         >
           Campaign: {action.campaignTitle}
         </Text>
+        <AppButton title="Open in Browser" onPress={() => loadInBrowser()} />
 
         { action.sourceList != "myActions" && (<AppButton
           title={"Add to my in progress actions"}
           onPress={() => handleStatusPress("INPROGRESS", action.actionId)}
-        ></AppButton>)}
-
-        { action.sourceList != "hidden" && (<AppButton
-          title={"Hide from actions list"}
-          onPress={() => handleStatusPress("HIDDEN", action.actionId)}
         ></AppButton>)}
 
         { action.sourceList == "myActions" && (<AppButton

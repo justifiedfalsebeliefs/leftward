@@ -12,7 +12,7 @@ function CauseIcon({
   backgroundColor = "rgba(52, 52, 52, 0.1)",
 }) {
   switch (cause) {
-    case "environment":
+    case "Environment Protection":
       return (
         <View
           style={{
@@ -27,7 +27,7 @@ function CauseIcon({
           <AntDesign name="earth" color="green" size={size * 0.5} />
         </View>
       );
-    case "justice":
+    case "Criminal Justice Reform":
       return (
         <View
           style={{

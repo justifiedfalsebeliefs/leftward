@@ -4,6 +4,8 @@ import Screen from "../components/Screen";
 import AuthForm from "../components/AuthForm";
 import { Auth } from "aws-amplify";
 import AppButton from "../components/AppButton";
+import * as Amplitude from 'expo-analytics-amplitude';
+
 
 function AccountSettingsScreen({ navigation }) {
   const { user, logOut } = useAuth();
@@ -44,7 +46,7 @@ function AccountSettingsScreen({ navigation }) {
       console.log(error);
     }
   };
-
+  Amplitude.logEvent('ViewAccountSettings')
   return (
     <>
       <Screen style={styles.container}>

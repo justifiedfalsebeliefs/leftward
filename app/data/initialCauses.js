@@ -2,7 +2,7 @@ export default initialCauses = [
   {
     id: 1,
     label: "Environment",
-    cause: "environment",
+    cause: "Environment Protection",
   },
   {
     id: 2,
@@ -12,7 +12,7 @@ export default initialCauses = [
   {
     id: 3,
     label: "Justice",
-    cause: "justice",
+    cause: "Criminal Justice Reform",
   },
   {
     id: 4,

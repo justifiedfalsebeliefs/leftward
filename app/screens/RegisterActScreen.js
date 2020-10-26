@@ -6,6 +6,8 @@ import AppButton from "../components/AppButton";
 import colors from "../config/colors";
 import routes from "../navigation/routes";
 
+import * as Amplitude from 'expo-analytics-amplitude';
+
 function RegisterActScreen({ route, navigation }) {
   const [phoneValue, setphoneValue] = useState(false);
   const [writeValue, setwriteValue] = useState(false);
@@ -39,6 +41,7 @@ function RegisterActScreen({ route, navigation }) {
   const toggleshareSwitch = (value) => {
     setshareValue(value);
   };
+  Amplitude.logEvent('ViewRegisterAct')
   return (
     <Screen>
       <View style={styles.switchZone}>
