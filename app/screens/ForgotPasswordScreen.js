@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { StyleSheet } from "react-native";
 import routes from "../navigation/routes";
 import Screen from "../components/Screen";
@@ -9,6 +9,11 @@ import * as Amplitude from 'expo-analytics-amplitude';
 
 
 function ForgotPasswordScreen({ navigation }) {
+  // Analytics
+  const useMountEffect = (fun) => useEffect(fun, [])
+  useMountEffect(() => {Amplitude.logEvent('ViewForgotPassword')});
+  /////
+
   const auth = useAuth();
   const [error, setError] = useState();
 
@@ -20,7 +25,7 @@ function ForgotPasswordScreen({ navigation }) {
       setError(error.message);
     }
   };
-  Amplitude.logEvent('ViewForgotPassword')
+  
   return (
     <>
       <Screen style={styles.container}>

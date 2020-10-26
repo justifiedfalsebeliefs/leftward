@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { StyleSheet, View, FlatList } from "react-native";
 
 import { ListItem, ListItemSeparator } from "../components/lists";
@@ -47,8 +47,12 @@ const menuItems = [
 ];
 
 function AccountScreen({ navigation }) {
+  // Analytics
+  const useMountEffect = (fun) => useEffect(fun, [])
+  useMountEffect(() => {Amplitude.logEvent('ViewAccount')});
+  /////
   const { user, logOut } = useAuth();
-  Amplitude.logEvent('ViewAccount')
+  
   return (
     <Screen style={styles.screen}>
       <AppText style={styles.username}>{user.username}</AppText>

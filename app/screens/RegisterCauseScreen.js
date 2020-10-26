@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Screen from "../components/Screen";
 import AppButton from "../components/AppButton";
 import routes from "../navigation/routes";
@@ -9,7 +9,13 @@ import initialCauses from "../data/initialCauses";
 import * as Amplitude from 'expo-analytics-amplitude';
 
 function RegisterCauseScreen({ navigation }) {
+  // Analytics
+  const useMountEffect = (fun) => useEffect(fun, [])
+  useMountEffect(() => {Amplitude.logEvent('ViewRegisterCause')});
+  /////
+
   const [causes, setCauses] = useState(initialCauses);
+
   renderItem = ({ item, id, drag, isActive }) => {
     return (
       <DraggableFlatListItem
@@ -19,7 +25,7 @@ function RegisterCauseScreen({ navigation }) {
       ></DraggableFlatListItem>
     );
   };
-  Amplitude.logEvent('ViewRegisterCause')
+
   return (
     <>
       <Screen>

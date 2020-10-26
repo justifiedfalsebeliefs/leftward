@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { StyleSheet, Alert } from "react-native";
 import routes from "../navigation/routes";
 import AuthForm from "../components/AuthForm";
@@ -9,6 +9,11 @@ import * as Amplitude from 'expo-analytics-amplitude';
 
 
 function ConfirmRecoverPasswordScreen({ navigation }) {
+  // Analytics
+  const useMountEffect = (fun) => useEffect(fun, [])
+  useMountEffect(() => {Amplitude.logEvent('ViewConfirmRecoverPassword')});
+  /////
+
   const auth = useAuth();
   const [error, setError] = useState();
 
@@ -27,7 +32,7 @@ function ConfirmRecoverPasswordScreen({ navigation }) {
       setError(error.message);
     }
   };
-  Amplitude.logEvent('ViewConfirmRecoverPassword')
+  
   return (
     <>
       <Screen style={styles.container}>

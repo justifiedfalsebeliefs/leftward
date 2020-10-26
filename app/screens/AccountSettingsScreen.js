@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { StyleSheet, Alert } from "react-native";
 import Screen from "../components/Screen";
 import AuthForm from "../components/AuthForm";
@@ -8,6 +8,10 @@ import * as Amplitude from 'expo-analytics-amplitude';
 
 
 function AccountSettingsScreen({ navigation }) {
+  // Analytics
+  const useMountEffect = (fun) => useEffect(fun, [])
+  useMountEffect(() => {Amplitude.logEvent('ViewAccountSettings')});
+  /////
   const { user, logOut } = useAuth();
   const [error, setError] = useState();
   const [emailVerified, setEmailVerified] = useState();
@@ -46,7 +50,7 @@ function AccountSettingsScreen({ navigation }) {
       console.log(error);
     }
   };
-  Amplitude.logEvent('ViewAccountSettings')
+  
   return (
     <>
       <Screen style={styles.container}>

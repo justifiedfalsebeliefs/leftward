@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { View, StyleSheet } from "react-native";
 
 import colors from "../config/colors";
@@ -7,8 +7,12 @@ import * as Amplitude from 'expo-analytics-amplitude';
 
 
 function OrganizationDetailsScreen({ route, navigation }) {
+  // Analytics
+  const useMountEffect = (fun) => useEffect(fun, [])
+  useMountEffect(() => {Amplitude.logEvent('ViewOrganizationDetails')});
+  /////
+  
   const organization = route.params;
-  Amplitude.logEvent('ViewOrganizationDetails')
   return (
     <View>
       {/* <Image

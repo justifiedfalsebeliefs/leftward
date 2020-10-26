@@ -12,13 +12,18 @@ import * as Amplitude from 'expo-analytics-amplitude';
 
 
 function HiddenActionsScreen({ navigation }) {
+  // Analytics
+  const useMountEffect = (fun) => useEffect(fun, [])
+  useMountEffect(() => {Amplitude.logEvent('ViewHiddenActions')});
+  /////
+
   const [actions, setActions] = useState();
   const { user, logOut } = useAuth();
 
   useEffect(() => {
     fetchHiddenActions(setActions, user.attributes["custom:GQLuserID"]);
   }, []);
-  Amplitude.logEvent('ViewHiddenActions')
+  
   return (
       <Screen style={styles.screen}>
         <ActionList

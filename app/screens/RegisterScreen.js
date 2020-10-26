@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { StyleSheet } from "react-native";
 import AuthForm from "../components/AuthForm";
 import useAuth from "../auth/useAuth";
@@ -6,10 +6,15 @@ import Screen from "../components/Screen";
 import { Auth } from "aws-amplify";
 import uuidv4 from "../utility/uuid";
 import pushNewUserGuid from "../data/pushNewUserGuid"
+import getWeekNumber from "../utility/getWeekNumber"
 
 import * as Amplitude from 'expo-analytics-amplitude';
 
 function RegisterScreen({ route, navigation }) {
+  // Analytics
+  const useMountEffect = (fun) => useEffect(fun, [])
+  useMountEffect(() => {Amplitude.logEvent('ViewRegister')});
+  /////
   const [error, setError] = useState();
   const auth = useAuth();
 
@@ -65,6 +70,9 @@ function RegisterScreen({ route, navigation }) {
         userInfo.username,
         userInfo.password
       );
+      Amplitude.setUserId(newuuid)
+      Amplitude.setUserProperties({cohortId: getWeekNumber(new Date())})
+      Amplitude.logEvent('PressRegister')
       Auth.currentSession().then((data) => {
         auth.logIn(data);
       });
@@ -72,7 +80,7 @@ function RegisterScreen({ route, navigation }) {
       setError(error.message);
     }
   };
-  Amplitude.logEvent('ViewRegister')
+  
   return (
     <>
       <Screen style={styles.container}>

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { StyleSheet } from "react-native";
 import routes from "../navigation/routes";
 import AuthForm from "../components/AuthForm";
@@ -10,9 +10,14 @@ import AppButton from "../components/AppButton";
 import * as Amplitude from 'expo-analytics-amplitude';
 
 function LoginScreen({ navigation }) {
+  // Analytics
+  const useMountEffect = (fun) => useEffect(fun, [])
+  useMountEffect(() => {Amplitude.logEvent('ViewLogin')});
+  /////
+
   const auth = useAuth();
   const [error, setError] = useState();
-  Amplitude.logEvent('ViewLogin')
+  
   const handleSubmit = async (userInfo) => {
     try {
       const result = await Auth.signIn(userInfo.username, userInfo.password);

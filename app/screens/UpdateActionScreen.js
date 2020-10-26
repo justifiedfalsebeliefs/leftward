@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { View, StyleSheet, Switch } from "react-native";
 import Screen from "../components/Screen";
 import AppText from "../components/AppText";
@@ -10,6 +10,10 @@ import * as Amplitude from 'expo-analytics-amplitude';
 
 
 function UpdateActionScreen({ route, navigation }) {
+  // Analytics
+  const useMountEffect = (fun) => useEffect(fun, [])
+  useMountEffect(() => {Amplitude.logEvent('ViewUpdateAction')});
+  /////
   const [phoneValue, setphoneValue] = useState(false);
   const [writeValue, setwriteValue] = useState(false);
   const [marchValue, setmarchValue] = useState(false);
@@ -54,7 +58,7 @@ function UpdateActionScreen({ route, navigation }) {
     Auth.updateUserAttributes(currentUser, { "custom:actions": actionsOut });
     navigation.goBack();
   };
-  Amplitude.logEvent('ViewUpdateAction')
+  
   return (
     <Screen>
       <View style={styles.switchZone}>
