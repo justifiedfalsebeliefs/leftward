@@ -1,4 +1,5 @@
-USE leftwarddb;
+Create Database LFT;
+USE LFT;
 CREATE TABLE `user`
 (
  `userId`   int NOT NULL AUTO_INCREMENT ,
@@ -26,7 +27,7 @@ CREATE TABLE `level`
  `updateDT`     timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
  `levelNumber` int NOT NULL,
  `expRequired` int NOT NULL,
- `levelTitle` int NULL ,
+ `levelTitle` varchar(200) NULL ,
 PRIMARY KEY (`levelId`)
 );
 
@@ -35,7 +36,7 @@ CREATE TABLE `actionType`
  `actionTypeId` int NOT NULL AUTO_INCREMENT ,
  `createDT`     timestamp DEFAULT CURRENT_TIMESTAMP,
  `updateDT`     timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
- `title`        varchar(45) NOT NULL ,
+ `title`        varchar(200) NOT NULL ,
  `description`  mediumtext NOT NULL ,
  `icon`         mediumtext NULL ,
 
@@ -47,7 +48,7 @@ CREATE TABLE `cause`
  `causeId`     int NOT NULL AUTO_INCREMENT ,
  `createDT`     timestamp DEFAULT CURRENT_TIMESTAMP,
  `updateDT`     timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
- `title`       varchar(45) NOT NULL ,
+ `title`       varchar(200) NOT NULL ,
  `description` mediumtext NOT NULL ,
  `icon`        mediumtext NULL ,
 
@@ -60,9 +61,10 @@ CREATE TABLE `organization`
  `createDT`     timestamp DEFAULT CURRENT_TIMESTAMP,
  `updateDT`     timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
  `contact`        varchar(45) NOT NULL ,
- `title`          varchar(45) NOT NULL ,
+ `title`          varchar(200) NOT NULL ,
  `description`    mediumtext NOT NULL ,
  `imageURL`       mediumtext NULL ,
+  `url`          mediumtext NULL ,
 
 PRIMARY KEY (`organizationId`)
 );
@@ -89,7 +91,7 @@ CREATE TABLE `campaign`
  `createDT`     timestamp DEFAULT CURRENT_TIMESTAMP,
  `updateDT`     timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
  `organizationId` int NOT NULL ,
- `title`          varchar(45) NOT NULL ,
+ `title`          varchar(200) NOT NULL ,
  `description`    mediumtext NOT NULL ,
  `liveDT`         timestamp NULL ,
  `expireDT`       timestamp NULL ,
@@ -120,12 +122,13 @@ CREATE TABLE `action`
  `updateDT`     timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
  `actionTypeId` int NOT NULL ,
  `campaignId`   int NOT NULL ,
- `title`        varchar(45) NOT NULL ,
+ `title`        varchar(200) NOT NULL ,
  `description`  mediumtext NOT NULL ,
  `reward`       int NOT NULL ,
  `imageURL`     mediumtext NULL ,
  `liveDT`       timestamp NULL ,
  `expireDT`     timestamp NULL ,
+ `url`          mediumtext NULL ,
 
 PRIMARY KEY (`actionId`),
 KEY `fkIdx_42` (`actionTypeId`),

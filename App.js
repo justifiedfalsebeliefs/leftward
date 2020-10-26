@@ -4,6 +4,7 @@ import { AppLoading } from "expo";
 
 import Amplify from "aws-amplify";
 import config from "./aws-exports";
+import amplitudekey from "./app/data/amplitudeconfig";
 import { Auth } from "aws-amplify";
 
 import navigationTheme from "./app/navigation/navigationTheme";
@@ -12,8 +13,11 @@ import AuthNavigator from "./app/navigation/AuthNavigator";
 import AuthContext from "./app/auth/context";
 import authStorage from "./app/auth/storage";
 
+import * as Amplitude from 'expo-analytics-amplitude';
+
 
 Amplify.configure(config);
+Amplitude.initialize(amplitudekey())
 
 export default function App() {
   const [user, setUser] = useState();

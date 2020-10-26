@@ -8,6 +8,8 @@ import Icon from "../components/Icon";
 import routes from "../navigation/routes";
 import Screen from "../components/Screen";
 import useAuth from "../auth/useAuth";
+import * as Amplitude from 'expo-analytics-amplitude';
+
 
 const menuItems = [
   {
@@ -46,7 +48,7 @@ const menuItems = [
 
 function AccountScreen({ navigation }) {
   const { user, logOut } = useAuth();
-
+  Amplitude.logEvent('ViewAccount')
   return (
     <Screen style={styles.screen}>
       <AppText style={styles.username}>{user.username}</AppText>

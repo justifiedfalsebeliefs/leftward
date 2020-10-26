@@ -1,9 +1,10 @@
 import React from "react";
-import { View, StyleSheet, TouchableWithoutFeedback } from "react-native";
+import { View, StyleSheet, TouchableWithoutFeedback, ImageBackground} from "react-native";
 import { Image } from "react-native-expo-image-cache";
 import Text from "./Text";
 import colors from "../config/colors";
 import CauseIcon from "./CauseIcon";
+import Swipeable from "react-native-gesture-handler/Swipeable";
 
 function ActionCard({
   title,
@@ -14,50 +15,65 @@ function ActionCard({
   reward,
   actionType,
   organization,
-  thumbnailUrl
+  renderRightActions
 }) {
   return (
-    <TouchableWithoutFeedback onPress={onPress}>
-      <View style={styles.card}>
-        {/* <Image
-          style={styles.image}
-          tint="light"
-          preview={{ uri: thumbnailUrl }}
-          uri={imageUrl}
-        /> */}
+    <Swipeable renderRightActions={renderRightActions}>
+      <TouchableWithoutFeedback onPress={onPress}>
+        <View style={styles.card}>
+              <Text style={styles.title} numberOfLines={1}>
+                {title}
+              </Text>
+              <View style={styles.orgContainer}>
+                <Text style={styles.organization}>{organization}</Text>
+                <CauseIcon style={styles.icon} cause={cause} size={35}></CauseIcon>
+              </View>
+              <Text style={styles.tagline} numberOfLines={3}>
+                {description}
+              </Text>
 
-        <Text style={styles.title} numberOfLines={1}>
-          {title}
-        </Text>
-
-        <View style={styles.orgContainer}>
-          <Text style={styles.organization}>{organization}</Text>
-
-          {/* <CauseIcon style={styles.icon} cause={cause}></CauseIcon> */}
+              <View style={styles.rewardContainer}>
+                <Text style={styles.actionType}>{actionType}</Text>
+                <Text style={styles.reward}>{`Reward: ${reward} points`}</Text>
+              </View>
         </View>
-        <View style={styles.rewardContainer}>
-          <Text style={styles.actionType}>{actionType}</Text>
-          <Text style={styles.reward}>{reward}</Text>
-        </View>
-      </View>
-    </TouchableWithoutFeedback>
+      </TouchableWithoutFeedback>
+    </Swipeable>
   );
 }
 
 const styles = StyleSheet.create({
+  actionType:{
+    fontSize: 12,
+    fontStyle: 'italic'},
   card: {
     borderRadius: 15,
     backgroundColor: colors.white,
     marginBottom: 5,
     overflow: "hidden",
   },
+  image: {
+    flex: 1,
+    resizeMode: "cover",
+    justifyContent: "center"
+  },
+  icon:{
+
+  },
   detailsContainer: {
     padding: 20,
   },
+  imagefilter:{
+    backgroundColor: colors.black,
+    opacity: 0.5,
+    flex: 1
+  },
   orgContainer: {
     flexDirection: "row",
-    justifyContent: "flex-end",
-    paddingEnd: 20,
+    justifyContent: "space-between",
+    paddingStart: 20,
+    paddingEnd: 10,
+    padding: 2,
   },
   rewardContainer: {
     flexDirection: "row",
@@ -74,6 +90,7 @@ const styles = StyleSheet.create({
     color: colors.primary,
     fontWeight: "bold",
     textAlignVertical: "center",
+    fontSize: 16,
     paddingEnd: 20,
   },
   reward: {
@@ -87,9 +104,16 @@ const styles = StyleSheet.create({
     fontSize: 12,
   },
   title: {
-    paddingTop: 10,
-    paddingHorizontal: 10,
+    paddingTop: 7,
+    paddingHorizontal: 7,
+    fontSize: 16,
+    color: colors.black,
+    fontWeight: "bold"
   },
+  tagline:{
+    paddingHorizontal: 7,
+    fontSize: 12,
+  }
 });
 
 export default ActionCard;

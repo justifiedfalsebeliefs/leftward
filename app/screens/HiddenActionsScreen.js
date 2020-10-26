@@ -7,6 +7,8 @@ import Screen from "../components/Screen";
 import ActionList from "../components/ActionList"
 import fetchHiddenActions from "../data/fetchHiddenActions"
 import useAuth from "../auth/useAuth";
+import * as Amplitude from 'expo-analytics-amplitude';
+
 
 
 function HiddenActionsScreen({ navigation }) {
@@ -16,7 +18,7 @@ function HiddenActionsScreen({ navigation }) {
   useEffect(() => {
     fetchHiddenActions(setActions, user.attributes["custom:GQLuserID"]);
   }, []);
-
+  Amplitude.logEvent('ViewHiddenActions')
   return (
       <Screen style={styles.screen}>
         <ActionList

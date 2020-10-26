@@ -7,6 +7,8 @@ import { Auth } from "aws-amplify";
 import uuidv4 from "../utility/uuid";
 import pushNewUserGuid from "../data/pushNewUserGuid"
 
+import * as Amplitude from 'expo-analytics-amplitude';
+
 function RegisterScreen({ route, navigation }) {
   const [error, setError] = useState();
   const auth = useAuth();
@@ -70,7 +72,7 @@ function RegisterScreen({ route, navigation }) {
       setError(error.message);
     }
   };
-
+  Amplitude.logEvent('ViewRegister')
   return (
     <>
       <Screen style={styles.container}>

@@ -3,9 +3,12 @@ import { View, StyleSheet } from "react-native";
 import colors from "../config/colors";
 import Text from "../components/Text";
 import routes from "../navigation/routes";
+import * as Amplitude from 'expo-analytics-amplitude';
+
 
 function CampaignDetailsScreen({ route, navigation }) {
   const campaign = route.params;
+  Amplitude.logEvent('ViewCampaignDetails')
   return (
     <View>
       {/* <Image

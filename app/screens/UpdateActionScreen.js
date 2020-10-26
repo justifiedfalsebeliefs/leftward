@@ -6,6 +6,8 @@ import AppButton from "../components/AppButton";
 import colors from "../config/colors";
 import { Auth } from "aws-amplify";
 import routes from "../navigation/routes";
+import * as Amplitude from 'expo-analytics-amplitude';
+
 
 function UpdateActionScreen({ route, navigation }) {
   const [phoneValue, setphoneValue] = useState(false);
@@ -52,7 +54,7 @@ function UpdateActionScreen({ route, navigation }) {
     Auth.updateUserAttributes(currentUser, { "custom:actions": actionsOut });
     navigation.goBack();
   };
-
+  Amplitude.logEvent('ViewUpdateAction')
   return (
     <Screen>
       <View style={styles.switchZone}>

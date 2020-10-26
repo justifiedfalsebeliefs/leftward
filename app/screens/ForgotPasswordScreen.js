@@ -5,6 +5,8 @@ import Screen from "../components/Screen";
 import { Auth } from "aws-amplify";
 import AuthForm from "../components/AuthForm";
 import useAuth from "../auth/useAuth";
+import * as Amplitude from 'expo-analytics-amplitude';
+
 
 function ForgotPasswordScreen({ navigation }) {
   const auth = useAuth();
@@ -18,7 +20,7 @@ function ForgotPasswordScreen({ navigation }) {
       setError(error.message);
     }
   };
-
+  Amplitude.logEvent('ViewForgotPassword')
   return (
     <>
       <Screen style={styles.container}>
