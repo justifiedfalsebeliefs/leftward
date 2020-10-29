@@ -20,7 +20,7 @@ function AuthForm({ fields, onSubmit, submitTitle, error }) {
             autoCorrect={false}
             icon="account"
             name="username"
-            placeholder="Username"
+            placeholder="Username                                              "
           />
         );
         break;
@@ -36,7 +36,7 @@ function AuthForm({ fields, onSubmit, submitTitle, error }) {
             autoCorrect={false}
             icon="lock"
             name="password"
-            placeholder="Password"
+            placeholder="Password                                              "
             secureTextEntry
             textContentType="password"
           />
@@ -54,7 +54,7 @@ function AuthForm({ fields, onSubmit, submitTitle, error }) {
             autoCorrect={false}
             icon="lock"
             name="passwordConfirmation"
-            placeholder="Confirm"
+            placeholder="Confirm                                              "
             secureTextEntry
             textContentType="password"
           />
@@ -73,7 +73,7 @@ function AuthForm({ fields, onSubmit, submitTitle, error }) {
             icon="email"
             keyboardType="email-address"
             name="email"
-            placeholder="Email"
+            placeholder="Email                                              "
             textContentType="emailAddress"
           />
         );
@@ -90,7 +90,7 @@ function AuthForm({ fields, onSubmit, submitTitle, error }) {
             autoCorrect={false}
             icon="lock"
             name="code"
-            placeholder="Confirmation Code"
+            placeholder="Confirmation Code                                              "
           />
         );
         break;
@@ -106,7 +106,7 @@ function AuthForm({ fields, onSubmit, submitTitle, error }) {
             autoCorrect={false}
             icon="lock"
             name="newPassword"
-            placeholder="New Password"
+            placeholder="New Password                       "
             secureTextEntry
             textContentType="password"
           />
@@ -124,7 +124,7 @@ function AuthForm({ fields, onSubmit, submitTitle, error }) {
             autoCorrect={false}
             icon="lock"
             name="newPasswordConfirmation"
-            placeholder="Confirm"
+            placeholder="Confirm                       "
             secureTextEntry
             textContentType="password"
           />

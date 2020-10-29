@@ -19,6 +19,7 @@
     "aws-amplify": "^3.3.3",
     "aws-amplify-react-native": "^4.2.7",
     "expo": "~39.0.2",
+    "expo-analytics-amplitude": "~8.3.1",
     "expo-blur": "^8.2.0",
     "expo-constants": "^9.2.0",
     "expo-image-picker": "^9.1.1",
@@ -37,6 +38,7 @@
     "react-native-draggable-flatlist": "^2.4.0",
     "react-native-expo-image-cache": "^4.1.0",
     "react-native-gesture-handler": "^1.8.0",
+    "react-native-paper": "^4.2.0",
     "react-native-progress": "^4.1.2",
     "react-native-reanimated": "^1.13.1",
     "react-native-safe-area-context": "^3.1.8",
@@ -47,8 +49,7 @@
     "react-native-web": "^0.13.18",
     "uuid": "^8.3.1",
     "yarn": "^1.22.10",
-    "yup": "^0.29.3",
-    "expo-analytics-amplitude": "~8.3.1"
+    "yup": "^0.29.3"
   },
   "devDependencies": {
     "@babel/core": "~7.9.0",

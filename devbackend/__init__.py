@@ -1,5 +1,6 @@
 import os
 from flask import Flask, request, jsonify
+import datetime as dt
 import config
 import mysql.connector
 import queries
@@ -66,7 +67,76 @@ def hello():
 
 @app.route('/fetchDashboardListings', methods=['POST'])
 def fetch_dashboard_listings():
-    return get_response(request.args, queries.listActionsDashboard(request.args['userGuid']))
+    def deactivate_actions(args, actions, guid):
+        actions_to_deactivate = []
+        for action in actions:
+            if action['active']:
+                if      action['expireDT'] < dt.datetime.now() or \
+                        action['firstPresentedDT'] < dt.datetime.now() - dt.timedelta(days=14) or \
+                        action['status']:
+                    actions_to_deactivate.append(action['actionId'])
+                    action['active'] = 0
+        if actions_to_deactivate:
+            push_record(args, queries.pushDeactivateActions(actions_to_deactivate, guid), return_as_records=False)
+        return actions
+
+    def get_more_actions(args, actions, user_cause, guid):
+        appropriate_cause_count = 0
+        previous_actionIds = []
+        new_actionIds = []
+        exclude_list = []
+        while len(new_actionIds + previous_actionIds) < 4:
+            easy_action = False
+            if actions:
+                exclude_list = [action['actionId'] for action in actions]
+                for action in actions:
+                    if action['active']:
+                        previous_actionIds.append(action['actionId'])
+                        if action['reward'] < 50:
+                            easy_action = True
+                        if action['causeTitle'] == user_cause:
+                            appropriate_cause_count += 1
+            if len(new_actionIds + previous_actionIds) >= 4:
+                break
+            if not easy_action:
+                response = get_response(args, queries.getEasyAction(exclude_list, guid),
+                                        return_as_records=True)
+                if response:
+                    id = response[0]['actionId']
+                    new_actionIds.append(id)
+                    exclude_list.append(id)
+            while appropriate_cause_count < 2:
+                response = get_response(args, queries.getUserCausePrefAction(exclude_list, guid, user_cause),
+                                        return_as_records=True)
+                if response:
+                    id = response[0]['actionId']
+                    new_actionIds.append(id)
+                    exclude_list.append(id)
+                appropriate_cause_count += 1
+
+            response = get_response(args, queries.getRandomAction(exclude_list, guid), return_as_records=True)
+            if response:
+                id = response[0]['actionId']
+                new_actionIds.append(id)
+                exclude_list.append(id)
+        return previous_actionIds, new_actionIds
+
+    def flag_actions_active(args, previous_actionIds, new_actionIds, guid):
+        if previous_actionIds:
+            push_record(args, queries.updateUserDashActionsStatus(previous_actionIds, dt.datetime.now(), guid))
+        for action_Id in new_actionIds:
+            push_record(args, queries.pushUserDashActionsStatus(action_Id, dt.datetime.now(), guid))
+
+    guid = request.args['userGuid']
+    user_cause = request.args['userCause']
+
+    actions = get_response(request.args, queries.getDashboardActionsForAlgorithm(guid), return_as_records=True)
+    actions = deactivate_actions(request.args, actions, guid)
+    previous_actionIds, new_actionIds = get_more_actions(request.args, actions, user_cause, guid)
+    flag_actions_active(request.args, previous_actionIds, new_actionIds, guid)
+    return get_response(request.args, queries.listActionsDashboard(previous_actionIds + new_actionIds))
+
+
 
 
 @app.route('/fetchHiddenActions', methods=['POST'])

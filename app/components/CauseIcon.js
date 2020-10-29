@@ -57,7 +57,7 @@ function CauseIcon({
           <MaterialCommunityIcons name="vote" color="blue" size={size * 0.5} />
         </View>
       );
-    case "labor":
+    case "Economic Justice":
       return (
         <View
           style={{

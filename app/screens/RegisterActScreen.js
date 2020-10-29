@@ -5,6 +5,7 @@ import AppText from "../components/AppText";
 import AppButton from "../components/AppButton";
 import colors from "../config/colors";
 import routes from "../navigation/routes";
+import { ProgressBar, Colors } from 'react-native-paper';
 
 import * as Amplitude from 'expo-analytics-amplitude';
 
@@ -48,7 +49,8 @@ function RegisterActScreen({ route, navigation }) {
   };
   
   return (
-    <Screen>
+    <Screen style={styles.container}>
+      <ProgressBar progress={0.66} color={"green"} height={20} />
       <View style={styles.switchZone}>
         <AppText>{actions.phoneBank}</AppText>
         <Switch
@@ -115,6 +117,11 @@ const styles = StyleSheet.create({
   switch: {
     padding: 20,
   },
+  container: {
+    padding: 10,
+    paddingTop: 30,
+    justifyContent: "space-between"
+  }
 });
 
 export default RegisterActScreen;

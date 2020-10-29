@@ -7,6 +7,7 @@ import { Auth } from "aws-amplify";
 import uuidv4 from "../utility/uuid";
 import pushNewUserGuid from "../data/pushNewUserGuid"
 import getWeekNumber from "../utility/getWeekNumber"
+import { ProgressBar, Colors } from 'react-native-paper';
 
 import * as Amplitude from 'expo-analytics-amplitude';
 
@@ -18,39 +19,6 @@ function RegisterScreen({ route, navigation }) {
   const [error, setError] = useState();
   const auth = useAuth();
 
-  var causesOut = "";
-  var actionsOut = "";
-  for (var i = 0; i < route.params.causes.length; i++) {
-    causesOut = causesOut.concat(route.params.causes[i].cause);
-    causesOut = causesOut.concat(",");
-  }
-
-  actionsOut = actionsOut.concat(
-    "donate:",
-    route.params.actions.donateValue.toString(),
-    ","
-  );
-  actionsOut = actionsOut.concat(
-    "march:",
-    route.params.actions.marchValue.toString(),
-    ","
-  );
-  actionsOut = actionsOut.concat(
-    "phone:",
-    route.params.actions.phoneValue.toString(),
-    ","
-  );
-  actionsOut = actionsOut.concat(
-    "share:",
-    route.params.actions.shareValue.toString(),
-    ","
-  );
-  actionsOut = actionsOut.concat(
-    "write:",
-    route.params.actions.writeValue.toString(),
-    ","
-  );
-
   const handleSubmit = async (userInfo) => {
     try {
       const newuuid = uuidv4();
@@ -59,8 +27,7 @@ function RegisterScreen({ route, navigation }) {
         password: userInfo.password,
         attributes: {
           email: userInfo.email,
-          "custom:causes": causesOut,
-          "custom:actions": actionsOut,
+          "custom:causes": route.params.causes,
           "custom:GQLuserID": newuuid
         },
       });
@@ -84,6 +51,7 @@ function RegisterScreen({ route, navigation }) {
   return (
     <>
       <Screen style={styles.container}>
+      <ProgressBar progress={1} color={"green"} height={20} />
         <AuthForm
           fields={["username", "email", "password", "passwordConfirmation"]}
           onSubmit={handleSubmit}
@@ -97,6 +65,7 @@ function RegisterScreen({ route, navigation }) {
 
 const styles = StyleSheet.create({
   container: {
+    paddingTop: 30,
     padding: 10,
   },
 });

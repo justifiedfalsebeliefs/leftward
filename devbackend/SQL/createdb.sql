@@ -178,3 +178,18 @@ PRIMARY KEY (`userCauseId`),
 KEY `fkIdx_50` (`causeId`),
 CONSTRAINT `FK_50` FOREIGN KEY `fkIdx_50` (`causeId`) REFERENCES `cause` (`causeId`)
 );
+
+CREATE TABLE `userDashboardActions`
+(
+ `userDashboardActionsId` int NOT NULL AUTO_INCREMENT ,
+ `createDT`     timestamp DEFAULT CURRENT_TIMESTAMP,
+ `updateDT`     timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+ `actionId`     int NOT NULL ,
+ `userGuid`     varchar(45) NOT NULL ,
+ `active`      bit  NULL ,
+ `lastPresentedDT`     timestamp,
+ `firstPresentedDT`     timestamp,
+
+PRIMARY KEY (`userDashboardActionsId`)
+
+);
