@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet } from "react-native";
+import { StyleSheet, View } from "react-native";
 import routes from "../navigation/routes";
 import AuthForm from "../components/AuthForm";
 import Screen from "../components/Screen";
@@ -32,13 +32,16 @@ function LoginScreen({ navigation }) {
   return (
     <>
       <Screen style={styles.container}>
-        <AuthForm
-          fields={["username", "password"]}
-          onSubmit={handleSubmit}
-          submitTitle={"Log In"}
-          error={error}
-        ></AuthForm>
+        <View>
+          <AuthForm
+            fields={["username", "password"]}
+            onSubmit={handleSubmit}
+            submitTitle={"Log In"}
+            error={error}
+          ></AuthForm>
+         </View>
         <AppButton
+          style={styles.forgot}
           title="Forgot Password?"
           onPress={() => navigation.navigate(routes.RECOVERPASSWORD)}
         ></AppButton>
@@ -50,7 +53,11 @@ function LoginScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     padding: 10,
+    justifyContent: "space-between"
   },
+  forgot: {
+    alignSelf: "flex-end",
+  }
 });
 
 export default LoginScreen;

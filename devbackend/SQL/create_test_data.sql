@@ -34,12 +34,6 @@ INSERT INTO organizationCause (organizationId, causeId) VALUES(
 	(SELECT organizationId from organization WHERE title = "350"),
 	(SELECT causeId from cause WHERE title = "Environment Protection"));
 INSERT INTO organizationCause (organizationId, causeId) VALUES(
-	(SELECT organizationId from organization WHERE title = "HealthReform"),
-	(SELECT causeId from cause WHERE title = "Healthcare Reform"));
-INSERT INTO organizationCause (organizationId, causeId) VALUES(
-	(SELECT organizationId from organization WHERE title = "Crim Roberts for Senator"),
-	(SELECT causeId from cause WHERE title = "Economic Justice"));
-INSERT INTO organizationCause (organizationId, causeId) VALUES(
 	(SELECT organizationId from organization WHERE title = "ACLU"),
 	(SELECT causeId from cause WHERE title = "Racial Justice"));
 INSERT INTO organizationCause (organizationId, causeId) VALUES(

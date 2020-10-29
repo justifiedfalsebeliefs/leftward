@@ -1,4 +1,4 @@
-def listActionsDashboard(guid):
+def listActionsDashboard(ids):
     return """
     SELECT
         a.actionId, a.title as 'actionTitle',
@@ -18,11 +18,80 @@ def listActionsDashboard(guid):
         INNER JOIN campaignCause cc on cc.campaignId = c.campaignId
         INNER JOIN cause ca on ca.causeId = cc.causeId
         INNER JOIN organization o on o.organizationId = c.organizationId
-        WHERE ( NOW() between a.liveDT and a.expireDT )
-        AND a.actionId NOT IN (
-            SELECT DISTINCT actionId from userAction 
-            WHERE userGuid = '{}')
-        """.format(guid)
+        WHERE a.actionId IN ({})
+        LIMIT 5;""".format(str(ids)[1:-1])
+
+
+def getDashboardActionsForAlgorithm(guid):
+    return """SELECT 
+            uda.actionId, 
+            uda.active,
+            uda.lastPresentedDT,
+            uda.firstPresentedDT,
+            a.expireDT,
+            a.reward,
+            ua.status,
+            ca.title as 'causeTitle'
+            from userDashboardActions uda
+        INNER JOIN action a on a.actionId = uda.actionId
+        LEFT JOIN (SELECT actionId, status from userAction WHERE userGuid = '{}') ua on ua.actionId = a.actionId
+        INNER JOIN campaign c on c.campaignId = a.campaignId
+        INNER JOIN campaignCause cc on cc.campaignId = c.campaignId
+        INNER JOIN cause ca on ca.causeId = cc.causeId
+        WHERE uda.userGuid = '{}';""".format(guid, guid)
+
+def pushDeactivateActions(actionIds, guid):
+    if not actionIds:
+        exclude_list = '--11'
+    return """UPDATE userDashboardActions SET active = 0 WHERE actionId in ({}) and userGuid = '{}'
+        """.format(str(actionIds)[1:-1], guid)
+
+def getEasyAction(exclude_list, guid):
+    if not exclude_list:
+        exclude_list = '--11'
+    return """SELECT actionId from action WHERE
+                    actionId not in ({}) AND
+                    actionId not in (SELECT actionId from userAction where userGuid = '{}') AND
+                    reward < 50
+                    ORDER BY RAND()
+                    LIMIT 1
+                    """.format(str(exclude_list)[1:-1], guid)
+
+def getUserCausePrefAction(exclude_list, guid, user_cause):
+    if not exclude_list:
+        exclude_list = '--11'
+    return """SELECT actionId from action a
+                    INNER JOIN campaign c on c.campaignId = a.campaignId
+                    INNER JOIN campaignCause cc on cc.campaignId = c.campaignId
+                    INNER JOIN cause ca on ca.causeId = cc.causeId
+                WHERE
+                actionId not in ({}) AND
+                actionId not in (SELECT actionId from userAction where userGuid = '{}') AND
+                c.title = '{}'
+                ORDER BY RAND()
+                LIMIT 1
+                """.format(str(exclude_list)[1:-1], guid, user_cause)
+
+def getRandomAction(exclude_list, guid):
+    if not exclude_list:
+        exclude_list = '--11'
+    return """SELECT actionId from action WHERE
+            actionId not in ({}) AND
+            actionId not in (SELECT actionId from userAction where userGuid = '{}')
+            ORDER BY RAND()
+            LIMIT 1""".format(str(exclude_list)[1:-1], guid)
+
+def updateUserDashActionsStatus(action_ids, dt, guid):
+    if not action_ids:
+        action_ids = '--11'
+    return """
+    UPDATE userDashboardActions SET active = 1, lastPresentedDT = '{}' WHERE actionId in ({}) AND userGuid = '{}'
+    """.format(dt, str(action_ids)[1:-1], guid)
+
+
+def pushUserDashActionsStatus(action_id, dt, guid):
+    return """ INSERT INTO userDashboardActions (actionId, active, lastPresentedDT, firstPresentedDT, userGuid)
+     VALUES ({}, 1, '{}', '{}', '{}')""".format(action_id, dt, dt, guid)
 
 def pushNewUserGuid(guid):
     return """

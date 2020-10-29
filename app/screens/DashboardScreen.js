@@ -15,13 +15,7 @@ import routes from "../navigation/routes";
 import * as Amplitude from 'expo-analytics-amplitude';
 
 function DashboardScreen({ navigation }) {
-  // Analytics
-  const useMountEffect = (fun) => useEffect(fun, [])
-  useMountEffect(() => {
-    Amplitude.setUserId(user.attributes["custom:GQLuserID"]);
-    Amplitude.logEvent('ViewDashboard');
-  });
-  /////
+
 
   const { user, logOut } = useAuth();
   const [userExperience, setUserExperience] = useState();
@@ -33,7 +27,7 @@ function DashboardScreen({ navigation }) {
   }
 
   async function getListings(){
-    const listings = await fetchDashboardListings(user.attributes["custom:GQLuserID"]);
+    const listings = await fetchDashboardListings(user.attributes["custom:GQLuserID"], user.attributes["custom:causes"]);
     setActions(listings);
   }
 
@@ -45,6 +39,13 @@ function DashboardScreen({ navigation }) {
     });
   }, [navigation]);
 
+  // Analytics
+  const useMountEffect = (fun) => useEffect(fun, [])
+  useMountEffect(() => {
+    Amplitude.setUserId(user.attributes["custom:GQLuserID"]);
+    Amplitude.logEvent('ViewDashboard');
+  });
+  /////
 
   function refreshFunction() {
     getListings()

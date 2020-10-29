@@ -25,7 +25,6 @@ function DraggableFlatListItem({
 const styles = StyleSheet.create({
   button: {
     backgroundColor: colors.primary,
-    borderRadius: 25,
     flexDirection: "row",
     justifyContent: "flex-end",
     alignItems: "center",

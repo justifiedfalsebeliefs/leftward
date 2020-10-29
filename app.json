@@ -2,12 +2,12 @@
   "expo": {
     "name": "LeftwardMVP",
     "slug": "Leftward",
-    "version": "1.0.2",
+    "version": "1.0.3",
     "orientation": "portrait",
     "icon": "./app/assets/icon.png",
     "android": {
       "package": "com.leftward.leftward",
-      "versionCode": 3
+      "versionCode": 4
     },
     "splash": {
       "image": "./app/assets/left.png",
