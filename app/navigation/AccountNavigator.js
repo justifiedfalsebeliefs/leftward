@@ -12,9 +12,9 @@ const AccountNavigator = () => (
   <Stack.Navigator>
     <Stack.Screen name="Account" component={AccountScreen} />
     <Stack.Screen name="Settings" component={AccountSettingsScreen} />
-    <Stack.Screen name="UpdateCause" component={UpdateCauseScreen} />
+    <Stack.Screen name="Update Cause" component={UpdateCauseScreen} />
     {/* <Stack.Screen name="UpdateAction" component={UpdateActionScreen} /> */}
-    <Stack.Screen name="HiddenActions" component={HiddenActionsScreen} />
+    <Stack.Screen name="Hidden Actions" component={HiddenActionsScreen} />
   </Stack.Navigator>
 );
 

@@ -168,7 +168,14 @@ def push_calc_exp():
     nextLevel = objects[0]['nextLevel']
     totalActions = objects[0]['totalActions']
     previousLevel = objects[0]['previousLevel']
-    return push_record(request.args, queries.pushCalcExp(exp, level, nextLevel, totalActions, previousLevel, guid))
+    EcoActions = objects[0]['EcoActions']
+    EnvActions = objects[0]['EnvActions']
+    JustActions = objects[0]['JustActions']
+    EcoExp = objects[0]['EcoExp']
+    EnvExp = objects[0]['EnvExp']
+    JustExp = objects[0]['JustExp']
+    return push_record(request.args, queries.pushCalcExp(exp, level, nextLevel, totalActions, previousLevel, guid,
+                            EcoActions, EnvActions, JustActions))
 
 
 @app.route('/fetchUserExperience', methods=['POST'])

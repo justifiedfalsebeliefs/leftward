@@ -28,9 +28,9 @@ function ActionCard({
                 <Text style={styles.organization}>{organization}</Text>
                 <CauseIcon style={styles.icon} cause={cause} size={35}></CauseIcon>
               </View>
-              <Text style={styles.tagline} numberOfLines={3}>
+              {/* <Text style={styles.tagline} numberOfLines={3}>
                 {description}
-              </Text>
+              </Text> */}
 
               <View style={styles.rewardContainer}>
                 <Text style={styles.actionType}>{actionType}</Text>

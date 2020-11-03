@@ -8,12 +8,12 @@ import MyActionsScreen from "../screens/MyActionsScreen";
 const Stack = createStackNavigator();
 
 const MyActionsNavigator = () => (
-  <Stack.Navigator mode="modal" screenOptions={{ headerShown: false }}>
-    <Stack.Screen name="MyActions" component={MyActionsScreen} />
-    <Stack.Screen name="ActionDetails" component={ActionDetailsScreen} />
-    <Stack.Screen name="CampaignDetails" component={CampaignDetailsScreen} />
+  <Stack.Navigator mode="modal" >
+    <Stack.Screen name="My Actions" component={MyActionsScreen} />
+    <Stack.Screen name="Action Details" component={ActionDetailsScreen} />
+    <Stack.Screen name="Campaign Details" component={CampaignDetailsScreen} />
     <Stack.Screen
-      name="OrganizationDetails"
+      name="Organization Details"
       component={OrganizationDetailsScreen}
     />
   </Stack.Navigator>

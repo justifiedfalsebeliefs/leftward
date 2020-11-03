@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { StyleSheet } from "react-native";
+import { StyleSheet, Text} from "react-native";
 
 import colors from "../config/colors";
 
@@ -17,7 +17,7 @@ function HiddenActionsScreen({ navigation }) {
   useMountEffect(() => {Amplitude.logEvent('ViewHiddenActions')});
   /////
 
-  const [actions, setActions] = useState();
+  const [actions, setActions] = useState([]);
   const { user, logOut } = useAuth();
 
   useEffect(() => {
@@ -26,6 +26,8 @@ function HiddenActionsScreen({ navigation }) {
   
   return (
       <Screen style={styles.screen}>
+        {!actions.length  && ( <Text>Actions you hide from the dashboard will show up here.</Text> )}
+
         <ActionList
           itemList={actions}
           navigation={navigation}

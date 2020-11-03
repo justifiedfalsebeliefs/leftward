@@ -7,12 +7,14 @@ import AppButton from "../components/AppButton";
 import ActionList from "../components/ActionList"
 import LevelWidget from "../components/widgets/LevelWidget"
 import CauseExpBreakdownWidget from "../components/widgets/CauseExpBreakdownWidget"
+import CauseActionBreakdownWidget from "../components/widgets/CauseActionBreakdownWidget";
 import fetchDashboardListings from "../data/fetchDashboardListings"
 import fetchUserExperience from "../data/fetchUserExperience"
 import useAuth from "../auth/useAuth";
 import routes from "../navigation/routes";
 
 import * as Amplitude from 'expo-analytics-amplitude';
+
 
 function DashboardScreen({ navigation }) {
 
@@ -51,11 +53,11 @@ function DashboardScreen({ navigation }) {
     getListings()
     getExperience()
   }
-
+  
   return (
       <Screen style={styles.screen}>
-        <Text>{"Dashboard"}</Text>
         <LevelWidget userExperience={userExperience} navigation={navigation}/>
+        <CauseActionBreakdownWidget userExperience={userExperience} navigation={navigation}/>
         <ActionList
           itemList={actions}
           navigation={navigation}
@@ -67,9 +69,9 @@ function DashboardScreen({ navigation }) {
 
 const styles = StyleSheet.create({
   screen: {
-    padding: 10,
+    paddingHorizontal: 10,
     backgroundColor: colors.light,
-  },
+  }
 });
 
 export default DashboardScreen;
