@@ -19,19 +19,7 @@ if(typeof userExperience !== 'undefined'){
                     width:`${progress}%`}}></View>
         <View style={styles.levelbarRemain}></View>
   </View>
-  <Text style={styles.levelText}>{`Total points: ${userExperience.exp}`}</Text>
-  <Text style={styles.levelText}>{`Next level: ${userExperience.nextLevel}`}</Text>
-  <ListItem
-              title={`Actions Completed: ${userExperience.totalActions}`}
-              IconComponent={
-                <Icon
-                  name={"playlist-check"}
-                  backgroundColor={"green"}
-                />
-              }
-              onPress={() => navigation.navigate(routes.COMPLETEDACTIONS)}
-            />
-            <View style={styles.separator} />
+  <Text style={styles.expBreakdownText}>{`Total points: ${userExperience.exp}`}    {`Next level: ${userExperience.nextLevel}`}</Text>
   </View>
   
     );
@@ -44,15 +32,14 @@ if(typeof userExperience !== 'undefined'){
 const styles = StyleSheet.create({
     levelContainer: {
         flexDirection: "row",
-        padding: 20,
         overflow: "hidden",
       },
-      levelText: { paddingHorizontal: 10 },
-
+      levelText: { padding: 5,},
       levelbarRemain: {
         backgroundColor: "lightblue",
         width: "100%",
       },
+      expBreakdownText:{paddingBottom: 15},
       separator: {
         width: "100%",
         height: 1,

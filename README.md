@@ -7,9 +7,13 @@ Complete the following before cloning the repo. This process is a bit jank and I
 
 Complete the steps on this page - only the first page: https://docs.amplify.aws/start/getting-started/installation/q/integration/react-native
 
+In the folder you want do manage the project in (create a project directory):
+
 `npm install -g expo-cli `
 
 `expo init RNAmplify`
+
+- blank managed workflow
 
 `cd RNAmplify`
 
@@ -83,7 +87,13 @@ Now in the RNAmplify folder, we need to configure the NPM environment:
 `npm i`
 
 (you might have to install expo here too?)
-Configure an android virtual device - follow Mosh's instructions at 18 minutes: https://www.youtube.com/watch?v=0-S5a0eXPoc&t=1490s
+Configure an android virtual device:
+download Android Studio
+Install it using defaults. Run it. Don't import settings.
+When it's done, run it and click configure > SDK manager
+
+- do stuff
+  To run a virtual device, do configure > AVD manager. Set up a phone and launch it.
 
 To run the app, open the AVD
 

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { StyleSheet } from "react-native";
+import { StyleSheet, Text} from "react-native";
 
 import colors from "../config/colors";
 
@@ -17,7 +17,7 @@ function MyActionsScreen({ navigation }) {
   useMountEffect(() => {Amplitude.logEvent('ViewMyActions')});
   /////
   
-  const [actions, setActions] = useState();
+  const [actions, setActions] = useState([]);
   const { user, logOut } = useAuth();
 
   async function getListings(){
@@ -32,9 +32,10 @@ function MyActionsScreen({ navigation }) {
       return refresh
     });
   }, [navigation]);
-  
   return (
       <Screen style={styles.screen}>
+        {!actions.length  && ( <Text>Your in progress actions will show up here! {"\n"} Add some from the dashboard screen.</Text> )}
+
         <ActionList
           itemList={actions}
           navigation={navigation}

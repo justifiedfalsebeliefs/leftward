@@ -1,5 +1,5 @@
 export default Object.freeze({
-  ACTION_DETAILS: "ActionDetails",
+  ACTION_DETAILS: "Action Details",
   LISTING_EDIT: "ListingEdit",
   LOGIN: "Login",
   MESSAGES: "Messages",
@@ -10,11 +10,10 @@ export default Object.freeze({
   CAMPAIGN: "Campaign",
   RECOVERPASSWORD: "RecoverPassword",
   CONFIRMRECOVERPASSWORD: "ConfirmRecoverPassword",
-  UPDATECAUSE: "UpdateCause",
-  UPDATEACTION: "UpdateAction",
-  CAMPAIGN_DETAILS: "CampaignDetails",
-  ORGANIZATION_DETAILS: "OrganizationDetails",
-  MYACTIONS: "MyActions",
-  HIDDENACTIONS: "HiddenActions",
-  COMPLETEDACTIONS: "CompletedActions"
+  UPDATECAUSE: "Update Cause",
+  CAMPAIGN_DETAILS: "Campaign Details",
+  ORGANIZATION_DETAILS: "Organization Details",
+  MYACTIONS: "My Actions",
+  HIDDENACTIONS: "Hidden Actions",
+  COMPLETEDACTIONS: "Completed Actions"
 });

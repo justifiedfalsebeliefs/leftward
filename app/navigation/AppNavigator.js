@@ -17,7 +17,7 @@ const AppNavigator = () => (
       component={DashboardNavigator}
       options={{
         tabBarIcon: ({ color, size }) => (
-          <MaterialCommunityIcons name="home" color={color} size={size} />
+          <MaterialCommunityIcons name="view-dashboard" color={color} size={size} />
         ),
       }}
     />
@@ -26,7 +26,7 @@ const AppNavigator = () => (
       component={MyActionsNavigator}
       options={{
         tabBarIcon: ({ color, size }) => (
-          <MaterialCommunityIcons name="home" color={color} size={size} />
+          <MaterialCommunityIcons name="format-list-bulleted" color={color} size={size} />
         ),
       }}
     />

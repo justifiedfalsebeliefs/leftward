@@ -210,16 +210,19 @@ def fetchUserExperience(guid):
     WHERE guid = '{}'
 """.format(guid)
 
-def pushCalcExp(exp, level, nextLevel, totalActions, previousLevel, guid):
+def pushCalcExp(exp, level, nextLevel, totalActions, previousLevel, guid, EcoActions, EnvActions, JustActions):
     return"""
     UPDATE user SET 
         exp = {} ,
         LEVEL = {},
         nextLevel = {},
         totalActions = {},
-        previousLevel = {}
+        previousLevel = {},
+        EcoActions = {},
+        EnvActions = {},
+        JustActions = {}
     WHERE guid = '{}';
-    """.format(exp, level, nextLevel, totalActions, previousLevel, guid)
+    """.format(exp, level, nextLevel, totalActions, previousLevel, EcoActions, EnvActions, JustActions, guid)
 
 def fetchUserLevel(guid):
     return"""
@@ -256,5 +259,69 @@ def fetchUserLevel(guid):
         FROM userAction ua
         INNER JOIN action a on a.actionId = ua.actionId
         WHERE ua.userGuid = '{}'
-        AND ua.status = 'COMPLETE') as totalActions;
-    """.format(guid, guid, guid, guid, guid)
+        AND ua.status = 'COMPLETE') as totalActions,
+    
+        (SELECT COUNT(a.actionId)
+        FROM userAction ua
+        INNER JOIN action a on a.actionId = ua.actionId
+        INNER JOIN campaign c on c.campaignId = a.campaignId
+        INNER JOIN campaignCause cc on c.campaignId = cc.campaignId
+        INNER JOIN cause c2 on c2.causeId = cc.causeId
+        WHERE ua.userGuid = '{}'
+        AND ua.status = 'COMPLETE'
+        AND c2.title = 'Environment Protection'
+        ) as EnvActions,
+                (SELECT SUM(a.reward)
+        FROM userAction ua
+        INNER JOIN action a on a.actionId = ua.actionId
+        INNER JOIN campaign c on c.campaignId = a.campaignId
+        INNER JOIN campaignCause cc on c.campaignId = cc.campaignId
+        INNER JOIN cause c2 on c2.causeId = cc.causeId
+        WHERE ua.userGuid = '{}'
+        AND ua.status = 'COMPLETE'
+        AND c2.title = 'Environment Protection'
+        ) as EnvExp,
+        
+        (SELECT COUNT(a.actionId)
+        FROM userAction ua
+        INNER JOIN action a on a.actionId = ua.actionId
+        INNER JOIN campaign c on c.campaignId = a.campaignId
+        INNER JOIN campaignCause cc on c.campaignId = cc.campaignId
+        INNER JOIN cause c2 on c2.causeId = cc.causeId
+        WHERE ua.userGuid = '{}'
+        AND ua.status = 'COMPLETE'
+        AND c2.title = 'Economic Justice'
+        ) as EcoActions,
+                        (SELECT SUM(a.reward)
+        FROM userAction ua
+        INNER JOIN action a on a.actionId = ua.actionId
+        INNER JOIN campaign c on c.campaignId = a.campaignId
+        INNER JOIN campaignCause cc on c.campaignId = cc.campaignId
+        INNER JOIN cause c2 on c2.causeId = cc.causeId
+        WHERE ua.userGuid = '{}'
+        AND ua.status = 'COMPLETE'
+        AND c2.title = 'Economic Justice'
+        ) as EcoExp,
+        
+        (SELECT COUNT(a.actionId)
+        FROM userAction ua
+        INNER JOIN action a on a.actionId = ua.actionId
+        INNER JOIN campaign c on c.campaignId = a.campaignId
+        INNER JOIN campaignCause cc on c.campaignId = cc.campaignId
+        INNER JOIN cause c2 on c2.causeId = cc.causeId
+        WHERE ua.userGuid = '{}'
+        AND ua.status = 'COMPLETE'
+        AND c2.title = 'Criminal Justice Reform'
+        ) as JustActions,
+                        (SELECT SUM(a.reward)
+        FROM userAction ua
+        INNER JOIN action a on a.actionId = ua.actionId
+        INNER JOIN campaign c on c.campaignId = a.campaignId
+        INNER JOIN campaignCause cc on c.campaignId = cc.campaignId
+        INNER JOIN cause c2 on c2.causeId = cc.causeId
+        WHERE ua.userGuid = '{}'
+        AND ua.status = 'COMPLETE'
+        AND c2.title = 'Criminal Justice Reform'
+        ) as JustExp
+        ;
+    """.format(guid, guid, guid, guid, guid, guid, guid, guid, guid, guid, guid)

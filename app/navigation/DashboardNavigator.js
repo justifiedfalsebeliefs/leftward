@@ -9,15 +9,17 @@ import CompletedActionsScreen from "../screens/CompletedActionsScreen";
 const Stack = createStackNavigator();
 
 const DashboardNavigator = () => (
-  <Stack.Navigator mode="modal" screenOptions={{ headerShown: false }}>
+  <Stack.Navigator mode="modal" 
+  // screenOptions={{ headerShown: false }}
+  >
     <Stack.Screen name="Dashboard" component={DashboardScreen} />
-    <Stack.Screen name="ActionDetails" component={ActionDetailsScreen} />
-    <Stack.Screen name="CampaignDetails" component={CampaignDetailsScreen} />
+    <Stack.Screen name="Action Details" component={ActionDetailsScreen} />
+    <Stack.Screen name="Campaign Details" component={CampaignDetailsScreen} />
     <Stack.Screen
-      name="OrganizationDetails"
+      name="Organization Details"
       component={OrganizationDetailsScreen}
     />
-    <Stack.Screen name="CompletedActions" component={CompletedActionsScreen} />
+    <Stack.Screen name="Completed Actions" component={CompletedActionsScreen} />
   </Stack.Navigator>
 );
 
