@@ -15,9 +15,16 @@ if(typeof userExperience !== 'undefined'){
       <View>
   <View style={styles.levelContainer}>
       <Text style={styles.levelText}>{`Level ${userExperience.level}`}</Text>
-      <View style={{backgroundColor:"blue",
-                    width:`${progress}%`}}></View>
-        <View style={styles.levelbarRemain}></View>
+      <View style={{backgroundColor:"#311847",
+                    width:`${progress}%`,
+                    borderTopLeftRadius: 15,
+                    borderBottomLeftRadius: 15}}></View>
+        <View style={ {
+        backgroundColor: "#A676D0",
+        width: `${80-progress}%`,
+        borderTopRightRadius: 15,
+        borderBottomRightRadius: 15
+      }}></View>
   </View>
   <Text style={styles.expBreakdownText}>{`Total points: ${userExperience.exp}`}    {`Next level: ${userExperience.nextLevel}`}</Text>
   </View>
@@ -35,10 +42,6 @@ const styles = StyleSheet.create({
         overflow: "hidden",
       },
       levelText: { padding: 5,},
-      levelbarRemain: {
-        backgroundColor: "lightblue",
-        width: "100%",
-      },
       expBreakdownText:{paddingBottom: 15},
       separator: {
         width: "100%",

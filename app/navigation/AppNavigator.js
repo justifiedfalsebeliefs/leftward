@@ -11,7 +11,7 @@ const Tab = createBottomTabNavigator();
 
 const AppNavigator = () => (
   
-  <Tab.Navigator>
+  <Tab.Navigator >
         <Tab.Screen
       name="Dashboard"
       component={DashboardNavigator}

@@ -4,14 +4,12 @@ import Screen from "../components/Screen";
 import AuthForm from "../components/AuthForm";
 import { Auth } from "aws-amplify";
 import AppButton from "../components/AppButton";
-import * as Amplitude from 'expo-analytics-amplitude';
+import logAmplitudeEventOnMount from "../utility/logAmplitudeEventOnMount"
 
 
 function AccountSettingsScreen({ navigation }) {
-  // Analytics
-  const useMountEffect = (fun) => useEffect(fun, [])
-  useMountEffect(() => {Amplitude.logEvent('ViewAccountSettings')});
-  /////
+  logAmplitudeEventOnMount('ViewAccountSettings')
+  
   const { user, logOut } = useAuth();
   const [error, setError] = useState();
   const [emailVerified, setEmailVerified] = useState();

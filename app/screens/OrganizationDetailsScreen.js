@@ -3,14 +3,11 @@ import { View, StyleSheet } from "react-native";
 
 import colors from "../config/colors";
 import Text from "../components/Text";
-import * as Amplitude from 'expo-analytics-amplitude';
+import logAmplitudeEventOnMount from "../utility/logAmplitudeEventOnMount"
 
 
 function OrganizationDetailsScreen({ route, navigation }) {
-  // Analytics
-  const useMountEffect = (fun) => useEffect(fun, [])
-  useMountEffect(() => {Amplitude.logEvent('ViewOrganizationDetails')});
-  /////
+  logAmplitudeEventOnMount('ViewOrganizationDetails')
   
   const organization = route.params;
   return (

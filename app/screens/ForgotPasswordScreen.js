@@ -5,14 +5,11 @@ import Screen from "../components/Screen";
 import { Auth } from "aws-amplify";
 import AuthForm from "../components/AuthForm";
 import useAuth from "../auth/useAuth";
-import * as Amplitude from 'expo-analytics-amplitude';
+import logAmplitudeEventOnMount from "../utility/logAmplitudeEventOnMount"
 
 
 function ForgotPasswordScreen({ navigation }) {
-  // Analytics
-  const useMountEffect = (fun) => useEffect(fun, [])
-  useMountEffect(() => {Amplitude.logEvent('ViewForgotPassword')});
-  /////
+  logAmplitudeEventOnMount('ViewForgotPassword')
 
   const auth = useAuth();
   const [error, setError] = useState();
