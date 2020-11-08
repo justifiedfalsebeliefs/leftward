@@ -9,18 +9,18 @@ import logAmplitudeEventOnMount from "../utility/logAmplitudeEventOnMount"
 
 function AccountSettingsScreen({ navigation }) {
   logAmplitudeEventOnMount('ViewAccountSettings')
-  
+
   const { user, logOut } = useAuth();
   const [error, setError] = useState();
   const [emailVerified, setEmailVerified] = useState();
-
+  const [cognitoUser, setCognitoUser] = useState();
+  const useMountEffect = (fun) => useEffect(fun, [])
   const checkVerification = async () => {
-    const isverified = await Auth.currentAuthenticatedUser();
-    setEmailVerified(
-      isverified.signInUserSession.idToken.payload.email_verified
-    );
+    const response = await Auth.currentAuthenticatedUser()
+    setCognitoUser(response);
+    setEmailVerified(response.signInUserSession.idToken.payload.email_verified);
   };
-  checkVerification();
+  useMountEffect(() => {checkVerification()})
 
   const handleSubmit = async (userInfo) => {
     try {
@@ -36,16 +36,11 @@ function AccountSettingsScreen({ navigation }) {
 
   const handleSubmitPassword = async (userInfo) => {
     try {
-      const cognitoUser = await Auth.currentAuthenticatedUser();
-      await Auth.changePassword({
-        user: cognitoUser,
-        oldPassword: userInfo.password,
-        newPassword: userInfo.newPassword,
-      });
+      await Auth.changePassword(cognitoUser, userInfo.password, userInfo.newPassword);
       Alert.alert("Success!", "Password Changed.", [{ text: "OK" }]);
     } catch (error) {
-      setError(error.message);
       console.log(error);
+      setError(error.message);
     }
   };
   
