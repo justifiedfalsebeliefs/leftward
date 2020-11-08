@@ -7,15 +7,12 @@ import Screen from "../components/Screen";
 import ActionList from "../components/ActionList"
 import fetchMyActions from "../data/fetchMyActions"
 import useAuth from "../auth/useAuth";
-import * as Amplitude from 'expo-analytics-amplitude';
+import logAmplitudeEventOnMount from "../utility/logAmplitudeEventOnMount"
 
 
 
 function MyActionsScreen({ navigation }) {
-  // Analytics
-  const useMountEffect = (fun) => useEffect(fun, [])
-  useMountEffect(() => {Amplitude.logEvent('ViewMyActions')});
-  /////
+  logAmplitudeEventOnMount('ViewMyActions')
   
   const [actions, setActions] = useState([]);
   const { user, logOut } = useAuth();

@@ -1,18 +1,15 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { StyleSheet, View, Text } from "react-native";
 import Screen from "../components/Screen";
 import AppButton from "../components/AppButton";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import initialCauses from "../data/initialCauses";
 import { Auth } from "aws-amplify";
-import * as Amplitude from 'expo-analytics-amplitude';
 import colors from "../config/colors"
+import logAmplitudeEventOnMount from "../utility/logAmplitudeEventOnMount"
 
 function UpdateCauseScreen({ navigation }) {
-  // Analytics
-  const useMountEffect = (fun) => useEffect(fun, [])
-  useMountEffect(() => {Amplitude.logEvent('ViewUpdateCause')});
-  /////
+  logAmplitudeEventOnMount('ViewUpdateCause')
   
   const [causes, setCauses] = useState(initialCauses);
   const [envColor, setEnvColor] = useState("lightblue");

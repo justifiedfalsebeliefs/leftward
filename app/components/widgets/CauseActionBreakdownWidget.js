@@ -20,10 +20,10 @@ if(typeof userExperience !== 'undefined'){
               <View style={styles.allActionsContainer}>
               <Icon
                   name={"trophy-variant"}
-                  backgroundColor={"gold"}/>
+                  backgroundColor={"#F7B32B"}/>
           <Icon
                   name={"playlist-check"}
-                  backgroundColor={"green"}/>
+                  backgroundColor={"#605B56"}/>
 
           <Text style={styles.titleText}>{`Actions Completed: ${userExperience.totalActions}`}</Text>
           </View>
@@ -55,7 +55,7 @@ if(typeof userExperience !== 'undefined'){
 }
 
 const styles = StyleSheet.create({
-    background:{ backgroundColor:"lightgray", borderRadius:15, padding:3, marginBottom: 15},
+    background:{ backgroundColor:"white", borderRadius:15, padding:3, marginBottom: 15},
   actionBreakdownContainer:{
     flexDirection: "row",
     justifyContent: "space-evenly",

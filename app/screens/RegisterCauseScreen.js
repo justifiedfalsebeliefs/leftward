@@ -6,20 +6,24 @@ import routes from "../navigation/routes";
 import initialCauses from "../data/initialCauses";
 import { ProgressBar } from 'react-native-paper';
 import colors from "../config/colors"
-
-import * as Amplitude from 'expo-analytics-amplitude';
 import { TouchableOpacity } from "react-native-gesture-handler";
+import uuidv4 from "../utility/uuid";
+import getWeekNumber from "../utility/getWeekNumber"
+import * as Amplitude from 'expo-analytics-amplitude';
 
 function RegisterCauseScreen({ navigation }) {
-  // Analytics
-  const useMountEffect = (fun) => useEffect(fun, [])
-  useMountEffect(() => {Amplitude.logEvent('ViewRegisterCause')});
-  /////
 
   const [causes, setCauses] = useState(initialCauses);
   const [envColor, setEnvColor] = useState("lightblue");
   const [crimColor, setCrimColor] = useState("lightblue");
   const [econColor, setEconColor] = useState("lightblue");
+  const [uuid, setUuid] = useState();
+  const useMountEffect = (fun) => useEffect(fun, [])
+  useMountEffect(() => {
+    setUuid(uuidv4());
+    Amplitude.setUserId(uuid)
+    Amplitude.setUserProperties({cohortId: getWeekNumber(new Date())})
+    Amplitude.logEvent('ViewRegisterCause')})
 
   function handleEnvPress(){
     setCrimColor('lightblue')
@@ -88,8 +92,8 @@ function RegisterCauseScreen({ navigation }) {
         <AppButton
         style={styles.nextButton}
           title="Next"
-          onPress={() =>
-            navigation.navigate(routes.REGISTER, { causes: causes })
+          onPress={() =>{
+            navigation.navigate(routes.REGISTER, { causes: causes, guid: uuid })}
           }
         ></AppButton>
       </Screen>

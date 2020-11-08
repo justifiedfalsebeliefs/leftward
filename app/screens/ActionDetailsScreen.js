@@ -52,7 +52,7 @@ function ActionDetailsScreen({ route, navigation }) {
         uri={action.images[0].url}
       /> */}
       <View style={styles.detailsContainer}>
-        <Text style={styles.points}>Points{action.reward}</Text>
+        <Text style={styles.points}>Points: {action.reward}</Text>
         <Text style={styles.title}>{action.actionTitle}</Text>
 
         <Text style={styles.description}>{action.actionDescription}</Text>

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { StyleSheet, View, FlatList } from "react-native";
 
 import { ListItem, ListItemSeparator } from "../components/lists";
@@ -8,7 +8,7 @@ import Icon from "../components/Icon";
 import routes from "../navigation/routes";
 import Screen from "../components/Screen";
 import useAuth from "../auth/useAuth";
-import * as Amplitude from 'expo-analytics-amplitude';
+import logAmplitudeEventOnMount from "../utility/logAmplitudeEventOnMount"
 
 
 const menuItems = [
@@ -35,22 +35,12 @@ const menuItems = [
       backgroundColor: colors.secondary,
     },
     targetScreen: routes.UPDATECAUSE,
-  },
-  // {
-  //   title: "Update Action Preferences",
-  //   icon: {
-  //     name: "account-settings",
-  //     backgroundColor: colors.secondary,
-  //   },
-  //   targetScreen: routes.UPDATEACTION,
-  // },
+  }
 ];
 
 function AccountScreen({ navigation }) {
-  // Analytics
-  const useMountEffect = (fun) => useEffect(fun, [])
-  useMountEffect(() => {Amplitude.logEvent('ViewAccount')});
-  /////
+  logAmplitudeEventOnMount('ViewAccount')
+
   const { user, logOut } = useAuth();
   
   return (

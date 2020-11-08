@@ -1,17 +1,14 @@
-import React, { useState, useEffect } from "react";
-import { ImageBackground, StyleSheet, View, Image, Text } from "react-native";
+import React from "react";
+import { ImageBackground, StyleSheet, View, Text } from "react-native";
 
 import Button from "../components/Button";
 import routes from "../navigation/routes";
 import { AntDesign } from "@expo/vector-icons";
 
-import * as Amplitude from 'expo-analytics-amplitude';
+import logAmplitudeEventOnMount from "../utility/logAmplitudeEventOnMount"
 
 function WelcomeScreen({ navigation }) {
-  // Analytics
-  const useMountEffect = (fun) => useEffect(fun, [])
-  useMountEffect(() => {Amplitude.logEvent('ViewWelcomeScreen')});
-  /////
+  logAmplitudeEventOnMount('ViewWelcomeScreen')
   
   return (
     <ImageBackground
