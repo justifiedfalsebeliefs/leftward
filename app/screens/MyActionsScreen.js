@@ -39,8 +39,6 @@ function MyActionsScreen({ navigation }) {
   }, [navigation]);
   return (
       <Screen title={"My Actions"} >
-        {!actionsInProgress.length  && ( <Text>Your in progress actions will show up here! {"\n"} Add some from the dashboard screen.</Text> )}
-
         <ActionList
           itemList={actionsInProgress}
           navigation={navigation}

@@ -23,8 +23,6 @@ function HiddenActionsScreen({ navigation }) {
   
   return (
       <Screen >
-        {!actions.length  && ( <Text>Actions you hide from the dashboard will show up here.</Text> )}
-
         <ActionList
           itemList={actions}
           navigation={navigation}

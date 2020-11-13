@@ -1,62 +1,88 @@
-import React, { useEffect } from "react";
-import { View, StyleSheet } from "react-native";
+import React from "react";
+import { View, StyleSheet, ScrollView, TouchableOpacity, Linking} from "react-native";
 
+import Screen from "../components/Screen"
 import colors from "../config/colors";
+import fonts from "../config/fonts"
 import Text from "../components/Text";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 import logAmplitudeEventOnMount from "../utility/logAmplitudeEventOnMount"
-
+import * as Amplitude from 'expo-analytics-amplitude';
 
 function OrganizationDetailsScreen({ route, navigation }) {
   logAmplitudeEventOnMount('ViewOrganizationDetails')
   
+  function loadInBrowser() {
+    Amplitude.logEventWithProperties('PressOpenOrganizationURL', {organizationId: organization.title})
+    Linking.openURL(organization.url).catch(err => console.error("Couldn't load page", err));
+  };
+
   const organization = route.params;
   return (
-    <View>
-      {/* <Image
-        style={styles.image}
-        preview={{ uri: listing.images[0].thumbnailUrl }}
-        tint="light"
-        uri={listing.images[0].url}
-      /> */}
-      <View style={styles.detailsContainer}>
-        <Text style={styles.title}>Organization Details Screen</Text>
-        <Text style={styles.org}>{organization.title}</Text>
-
-        <Text style={styles.description}>{organization.description}</Text>
-        <Text style={styles.description}>{organization.contact}</Text>
-        <View style={styles.userContainer}></View>
-      </View>
-    </View>
+    <Screen title={"Organization"} back={true} navigation={navigation}>
+      <ScrollView  style={styles.textContainer}>
+        <Text style={styles.actionTitle}>{organization.title}</Text>
+        <Text style={styles.descriptionText}>{organization.description}</Text>
+        <Text style={styles.descriptionText}>{organization.contact}</Text>
+      </ScrollView >
+      <View style={{height:20}}></View>
+      <TouchableOpacity style={styles.openActionButton} onPress={() => loadInBrowser()}>
+        <MaterialCommunityIcons name={"link"} color={"black"} size={30} />
+        <Text style={styles.buttonText}>    Organization Website</Text>
+      </TouchableOpacity>
+    </Screen>
   );
 }
 
 const styles = StyleSheet.create({
-  detailsContainer: {
-    padding: 20,
-  },
-  image: {
-    width: "100%",
+  textContainer:{
+    backgroundColor:"white",
+    borderRadius:15,
+    paddingHorizontal:15,
+    shadowColor: "#000",
     height: 300,
+  shadowOffset: {
+    width: 0,
+    height: 5,
   },
-  price: {
-    color: colors.secondary,
+  shadowOpacity: 0.26,
+  shadowRadius: 6.68,
+  elevation: 4,
+  },
+  actionTitle:{
+    fontFamily: fonts.componentTitle,
     fontWeight: "bold",
-    fontSize: 20,
-    marginVertical: 10,
+    paddingVertical: 15,
+    fontSize: 22,
+    lineHeight: 30
   },
-  title: {
-    fontSize: 36,
-    fontWeight: "500",
+  descriptionText:{
+    fontFamily: fonts.body,
+    fontSize: 14,
+    lineHeight: 16,
+    paddingBottom: 15
   },
-  org: {
-    fontSize: 20,
+  openActionButton:{
+    backgroundColor: "white",
+    borderRadius: 15,
+    padding: 8,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-around",
+    alignSelf: "center",
+    width: "70%",
+    shadowOffset: {
+      width: 0,
+      height: 5,
+    },
+    shadowOpacity: 0.26,
+    shadowRadius: 6.68,
+    elevation: 4,
   },
-  description: {
-    fontSize: 12,
-    fontWeight: "500",
-  },
-  userContainer: {
-    marginVertical: 40,
+  buttonText:{
+    fontFamily: fonts.subTitle,
+    fontSize: 16,
+    width: "80%"
   },
 });
 
