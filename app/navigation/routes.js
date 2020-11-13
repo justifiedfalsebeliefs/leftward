@@ -14,6 +14,5 @@ export default Object.freeze({
   CAMPAIGN_DETAILS: "Campaign Details",
   ORGANIZATION_DETAILS: "Organization Details",
   MYACTIONS: "My Actions",
-  HIDDENACTIONS: "Hidden Actions",
-  COMPLETEDACTIONS: "Completed Actions"
+  HIDDENACTIONS: "Hidden Actions"
 });

@@ -9,7 +9,8 @@ import HiddenActionsScreen from "../screens/HiddenActionsScreen";
 const Stack = createStackNavigator();
 
 const AccountNavigator = () => (
-  <Stack.Navigator>
+  <Stack.Navigator
+  screenOptions={{headerShown: false}}>
     <Stack.Screen name="Account" component={AccountScreen} />
     <Stack.Screen name="Settings" component={AccountSettingsScreen} />
     <Stack.Screen name="Update Cause" component={UpdateCauseScreen} />

@@ -1,9 +1,8 @@
 import React from "react";
-import { ImageBackground, StyleSheet, View, Text } from "react-native";
+import { ImageBackground, StyleSheet, View, Image } from "react-native";
 
 import Button from "../components/Button";
 import routes from "../navigation/routes";
-import { AntDesign } from "@expo/vector-icons";
 
 import logAmplitudeEventOnMount from "../utility/logAmplitudeEventOnMount"
 
@@ -17,8 +16,7 @@ function WelcomeScreen({ navigation }) {
       source={require("../assets/WelcomeBackground.png")}
     >
       <View style={styles.logoContainer}>
-        <AntDesign name="leftcircle" size={110} color="black" />
-        <Text style={styles.tagline}>Make a difference</Text>
+        <Image source={require("../assets/leftward_logo.png")} style={{width: 300, height: 150, resizeMode: 'contain'}}></Image>
       </View>
       <View style={styles.buttonsContainer}>
         <Button

@@ -3,7 +3,7 @@ import { StyleSheet, Alert } from "react-native";
 import Screen from "../components/Screen";
 import AuthForm from "../components/AuthForm";
 import { Auth } from "aws-amplify";
-import AppButton from "../components/AppButton";
+import Button from "../components/Button";
 import logAmplitudeEventOnMount from "../utility/logAmplitudeEventOnMount"
 
 
@@ -56,10 +56,10 @@ function AccountSettingsScreen({ navigation }) {
           ></AuthForm>
         )}
 
-        {!emailVerified &&  (<AppButton
+        {!emailVerified &&  (<Button
           title="Send Confirmation Code"
           onPress={() => Auth.verifyCurrentUserAttribute("email")}
-        ></AppButton>)}
+        ></Button>)}
 
         <AuthForm
           fields={["password", "newPassword", "newPasswordConfirmation"]}

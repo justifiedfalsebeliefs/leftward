@@ -5,7 +5,7 @@ import AuthForm from "../components/AuthForm";
 import Screen from "../components/Screen";
 import { Auth } from "aws-amplify";
 import useAuth from "../auth/useAuth";
-import AppButton from "../components/AppButton";
+import Button from "../components/Button";
 import logAmplitudeEventOnMount from "../utility/logAmplitudeEventOnMount"
 
 function LoginScreen({ navigation }) {
@@ -36,11 +36,11 @@ function LoginScreen({ navigation }) {
             error={error}
           ></AuthForm>
          </View>
-        <AppButton
+        <Button
           style={styles.forgot}
           title="Forgot Password?"
           onPress={() => navigation.navigate(routes.RECOVERPASSWORD)}
-        ></AppButton>
+        ></Button>
       </Screen>
     </>
   );

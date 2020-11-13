@@ -22,7 +22,7 @@ function HiddenActionsScreen({ navigation }) {
   }, []);
   
   return (
-      <Screen style={styles.screen}>
+      <Screen >
         {!actions.length  && ( <Text>Actions you hide from the dashboard will show up here.</Text> )}
 
         <ActionList
@@ -34,10 +34,7 @@ function HiddenActionsScreen({ navigation }) {
 }
 
 const styles = StyleSheet.create({
-  screen: {
-    padding: 20,
-    backgroundColor: colors.light,
-  },
+
 });
 
 export default HiddenActionsScreen;

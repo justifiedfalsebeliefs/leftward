@@ -1,14 +1,19 @@
 import React, { useState, useEffect } from "react";
-import { View, StyleSheet, Linking } from "react-native";
+import { View, StyleSheet, Linking, ScrollView  } from "react-native";
 import colors from "../config/colors";
+import fonts from "../config/fonts"
 import Text from "../components/Text";
 import routes from "../navigation/routes";
-import AppButton from "../components/AppButton";
 import useAuth from "../auth/useAuth";
 import pushActionStatus from "../data/pushActionStatus"
 import pushCalcExp from "../data/pushCalcExp"
+import Screen from "../components/Screen"
+import CauseIcon from "../components/CauseIcon"
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 import * as Amplitude from 'expo-analytics-amplitude';
+import { TouchableWithoutFeedback, TouchableOpacity } from "react-native-gesture-handler";
+import Icon from "../components/Icon";
 
 function ActionDetailsScreen({ route, navigation }) {
   const { user, logOut } = useAuth();
@@ -44,70 +49,164 @@ function ActionDetailsScreen({ route, navigation }) {
   }
   ;
   return (
-    <View>
-      {/* <Image
-        style={styles.image}
-        preview={{ uri: action.images[0].thumbnailUrl }}
-        tint="light"
-        uri={action.images[0].url}
-      /> */}
-      <View style={styles.detailsContainer}>
-        <Text style={styles.points}>Points: {action.reward}</Text>
-        <Text style={styles.title}>{action.actionTitle}</Text>
-
-        <Text style={styles.description}>{action.actionDescription}</Text>
-        <Text style={styles.description}>{action.actionType}</Text>
-        <Text
-          style={styles.org}
-          onPress={() => navigation.navigate(routes.CAMPAIGN_DETAILS, campaign)}
-        >
-          Campaign: {action.campaignTitle}
-        </Text>
-        <AppButton title="Open in Browser" onPress={() => loadInBrowser()} />
-
-        { action.sourceList != "myActions" && (<AppButton
-          title={"Add to my in progress actions"}
-          onPress={() => handleStatusPress("INPROGRESS", action.actionId)}
-        ></AppButton>)}
-
-        { action.sourceList == "myActions" && (<AppButton
-          title={"Complete action"}
-          onPress={() => handleStatusPress("COMPLETE", action.actionId)}
-        ></AppButton>)}
-        <View style={styles.userContainer}></View>
+    <Screen title={"Details"} back={true} navigation={navigation}>
+      <ScrollView  style={styles.textContainer}>
+        <Text style={styles.actionTitle}>{action.actionTitle}</Text>
+        <Text style={styles.descriptionText}>{action.actionDescription}</Text>
+      </ScrollView >
+      <View style={{height:20}}></View>
+      <TouchableWithoutFeedback style={styles.detailsContainer} onPress={() => navigation.navigate(routes.CAMPAIGN_DETAILS, campaign)}>
+        <View style={styles.navDivider}>
+          <View style={{width:"80%", justifyContent: "space-around"}}>
+            <View style={styles.titleBar}>
+                <CauseIcon style={styles.icon} cause={action.causeTitle} size={35}></CauseIcon>
+                <Text style={styles.actionTypeText}>{action.actionType}</Text>
+                <Text style={styles.rewardText}>{`${action.reward} pts`}</Text>
+            </View>
+            <Text style={styles.orgTitle}>{campaign.organization.title}</Text>
+          </View>
+          <Icon name="chevron-right" size={80}></Icon>
+        </View>
+      </TouchableWithoutFeedback>
+      <View style={{height:20}}></View>
+      <View style={styles.titleBar}>
       </View>
-    </View>
+
+      <TouchableOpacity style={styles.openActionButton} onPress={() => loadInBrowser()}>
+        <MaterialCommunityIcons name={"link"} color={"black"} size={30} />
+        <Text style={styles.buttonText}>    Complete in Browser</Text>
+      </TouchableOpacity>
+      <View style={{height:20}}></View>
+
+      <View style={styles.actionButtonContainer}>
+      { action.sourceList != "myActions" && (
+      <TouchableOpacity style={styles.actionButton} onPress={() => handleStatusPress("INPROGRESS", action.actionId)}>
+        <MaterialCommunityIcons name={"plus"} color={"black"} size={30} style={{paddingRight:15}}/>
+        <Text style={styles.buttonText}>Add to My Actions</Text>
+      </TouchableOpacity> )}
+
+      { action.sourceList != "complete" && (
+      <TouchableOpacity style={styles.actionButton} onPress={() => handleStatusPress("COMPLETE", action.actionId)}>
+        <MaterialCommunityIcons name={"check-bold"} color={"black"} size={30} style={{paddingRight:15}} />
+        <Text style={styles.buttonText}>Mark action completed</Text>
+      </TouchableOpacity> )}
+      </View>
+    </Screen>
   );
 }
 
 const styles = StyleSheet.create({
-  detailsContainer: {
-    padding: 20,
-  },
-  image: {
-    width: "100%",
+  textContainer:{
+    backgroundColor:"white",
+    borderRadius:15,
+    paddingHorizontal:15,
+    shadowColor: "#000",
     height: 300,
+  shadowOffset: {
+    width: 0,
+    height: 5,
   },
-  points: {
-    color: colors.secondary,
+  shadowOpacity: 0.26,
+  shadowRadius: 6.68,
+  elevation: 4,
+  },
+  actionTitle:{
+    fontFamily: fonts.componentTitle,
     fontWeight: "bold",
-    fontSize: 20,
-    marginVertical: 10,
+    paddingVertical: 15,
+    fontSize: 22,
+    lineHeight: 30
   },
-  title: {
-    fontSize: 36,
-    fontWeight: "500",
+  descriptionText:{
+    fontFamily: fonts.body,
+    fontSize: 14,
+    lineHeight: 16,
+    paddingBottom: 15
   },
-  org: {
-    fontSize: 20,
+  detailsContainer:{
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    borderRadius:15,
+    shadowOffset: {
+      width: 0,
+      height: 5,
+    },
+    shadowOpacity: 0.26,
+    shadowRadius: 6.68,
+    elevation: 4,
+    backgroundColor: "white",
   },
-  description: {
+  navDivider:{
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  titleBar:{
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  actionTypeText:{
     fontSize: 12,
-    fontWeight: "500",
+    textTransform: "uppercase",
+    paddingHorizontal: 10,
+    fontFamily: fonts.type
   },
-  userContainer: {
-    marginVertical: 40,
+  rewardText: {
+      color: colors.dark,
+      fontWeight: "bold",
+      fontSize: 12,
+      marginLeft: "auto",
+      paddingHorizontal: 5,
+      fontFamily: fonts.type
   },
+  orgTitle:{
+    paddingHorizontal: 5,
+    fontFamily: fonts.subTitle,
+  },
+  openActionButton:{
+    backgroundColor: "white",
+    borderRadius: 15,
+    padding: 8,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-around",
+    alignSelf: "center",
+    width: "70%",
+    shadowOffset: {
+      width: 0,
+      height: 5,
+    },
+    shadowOpacity: 0.26,
+    shadowRadius: 6.68,
+    elevation: 4,
+  },
+  buttonText:{
+    fontFamily: fonts.subTitle,
+    fontSize: 16,
+    width: "80%"
+  },
+  actionButtonContainer:{
+    flexDirection: "row",
+    justifyContent: "space-between"
+  },
+  actionButton:{
+    backgroundColor: "white",
+    borderRadius: 15,
+    padding: 8,
+    flexDirection: "row",
+    alignItems: "center",
+    width: 160,
+    height: 70,
+    justifyContent: "space-between",
+    shadowOffset: {
+      width: 0,
+      height: 5,
+    },
+    shadowOpacity: 0.26,
+    shadowRadius: 6.68,
+    elevation: 4,
+  },
+
+
 });
 
 export default ActionDetailsScreen;

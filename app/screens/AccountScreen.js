@@ -1,38 +1,35 @@
 import React from "react";
-import { StyleSheet, View, FlatList } from "react-native";
+import { StyleSheet, View, FlatList, Text} from "react-native";
 
 import { ListItem, ListItemSeparator } from "../components/lists";
-import AppText from "../components/AppText";
 import colors from "../config/colors";
 import Icon from "../components/Icon";
 import routes from "../navigation/routes";
 import Screen from "../components/Screen";
 import useAuth from "../auth/useAuth";
 import logAmplitudeEventOnMount from "../utility/logAmplitudeEventOnMount"
+import fonts from "../config/fonts";
 
 
 const menuItems = [
   {
     title: "Hidden Actions",
     icon: {
-      name: "format-list-bulleted",
-      backgroundColor: colors.primary
+      name: "format-list-bulleted"
     },
     targetScreen: routes.HIDDENACTIONS,
   },
   {
     title: "Manage Account",
     icon: {
-      name: "account-settings",
-      backgroundColor: colors.secondary,
+      name: "account-settings"
     },
     targetScreen: routes.SETTINGS,
   },
   {
     title: "Update Cause Preferences",
     icon: {
-      name: "account-settings",
-      backgroundColor: colors.secondary,
+      name: "selection-ellipse-arrow-inside"
     },
     targetScreen: routes.UPDATECAUSE,
   }
@@ -44,45 +41,59 @@ function AccountScreen({ navigation }) {
   const { user, logOut } = useAuth();
   
   return (
-    <Screen style={styles.screen}>
-      <AppText style={styles.username}>{user.username}</AppText>
-
-      <View style={styles.container}>
-        <FlatList
+    <Screen title="Account">
+      <Text style={styles.username}>{user.username}</Text>
+      <View style={{height:20}}></View>
+      <View style={{
+      backgroundColor: colors.componentBackground,
+      borderRadius: 15,
+      padding: 12,
+      shadowColor: "#000",
+      shadowOffset: {
+        width: 0,
+        height: 5,
+      },
+      shadowOpacity: 0.26,
+      shadowRadius: 6.68,
+      elevation: 4,
+    }}>
+      <FlatList
           data={menuItems}
           keyExtractor={(menuItem) => menuItem.title}
-          ItemSeparatorComponent={ListItemSeparator}
           renderItem={({ item }) => (
             <ListItem
-              title={item.title}
-              IconComponent={
-                <Icon
-                  name={item.icon.name}
-                  backgroundColor={item.icon.backgroundColor}
-                />
-              }
-              onPress={() => navigation.navigate(item.targetScreen)}
-            />
-          )}
-        />
-      </View>
-      <ListItem
+            title={item.title}
+            IconComponent={
+              <Icon
+                name={item.icon.name}
+                backgroundColor={item.icon.backgroundColor}
+              />
+            }
+            onPress={() => navigation.navigate(item.targetScreen)}
+          />
+        )}
+      />
+      <View style={{height:40}}></View>
+          <ListItem
         title="Log Out"
-        IconComponent={<Icon name="logout" backgroundColor="#ffe66d" />}
+        IconComponent={<Icon name="logout" backgroundColor={colors.danger} />}
         onPress={() => logOut()}
       />
+    </View>
+
     </Screen>
   );
 }
 
 const styles = StyleSheet.create({
-  screen: {
-    backgroundColor: colors.light,
+  viewContainer:{
+    
+alignSelf: "flex-end"
   },
   container: {
     marginVertical: 20,
   },
-  username: { marginHorizontal: 20 },
+  username: { marginHorizontal: 20, fontFamily: fonts.componentTitle, fontSize:20 },
 });
 
 export default AccountScreen;
