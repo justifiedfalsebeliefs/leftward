@@ -39,6 +39,7 @@ function LoginScreen({ navigation }) {
         <Button
           style={styles.forgot}
           title="Forgot Password?"
+          color="secondary"
           onPress={() => navigation.navigate(routes.RECOVERPASSWORD)}
         ></Button>
       </Screen>

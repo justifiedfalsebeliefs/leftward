@@ -14,7 +14,6 @@ const AccountNavigator = () => (
     <Stack.Screen name="Account" component={AccountScreen} />
     <Stack.Screen name="Settings" component={AccountSettingsScreen} />
     <Stack.Screen name="Update Cause" component={UpdateCauseScreen} />
-    {/* <Stack.Screen name="UpdateAction" component={UpdateActionScreen} /> */}
     <Stack.Screen name="Hidden Actions" component={HiddenActionsScreen} />
   </Stack.Navigator>
 );

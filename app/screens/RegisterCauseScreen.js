@@ -18,6 +18,7 @@ function RegisterCauseScreen({ navigation }) {
   const [crimColor, setCrimColor] = useState(colors.levelBarBackground);
   const [econColor, setEconColor] = useState(colors.levelBarBackground);
   const [uuid, setUuid] = useState();
+  
   const useMountEffect = (fun) => useEffect(fun, [])
   useMountEffect(() => {
     setUuid(uuidv4());

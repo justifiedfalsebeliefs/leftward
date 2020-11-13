@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { View, StyleSheet, Linking, ScrollView  } from "react-native";
 import colors from "../config/colors";
 import fonts from "../config/fonts"
@@ -55,7 +55,7 @@ function ActionDetailsScreen({ route, navigation }) {
         <Text style={styles.descriptionText}>{action.actionDescription}</Text>
       </ScrollView >
       <View style={{height:20}}></View>
-      <TouchableWithoutFeedback style={styles.detailsContainer} onPress={() => navigation.navigate(routes.CAMPAIGN_DETAILS, campaign)}>
+      <TouchableWithoutFeedback style={styles.detailsContainer} onPress={() => navigation.navigate(routes.ORGANIZATION_DETAILS, campaign.organization)}>
         <View style={styles.navDivider}>
           <View style={{width:"80%", justifyContent: "space-around"}}>
             <View style={styles.titleBar}>

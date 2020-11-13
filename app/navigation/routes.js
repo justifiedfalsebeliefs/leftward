@@ -11,7 +11,6 @@ export default Object.freeze({
   RECOVERPASSWORD: "RecoverPassword",
   CONFIRMRECOVERPASSWORD: "ConfirmRecoverPassword",
   UPDATECAUSE: "Update Cause",
-  CAMPAIGN_DETAILS: "Campaign Details",
   ORGANIZATION_DETAILS: "Organization Details",
   MYACTIONS: "My Actions",
   HIDDENACTIONS: "Hidden Actions"

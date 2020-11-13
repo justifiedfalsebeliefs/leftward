@@ -59,6 +59,7 @@ function AccountSettingsScreen({ navigation }) {
         {!emailVerified &&  (<Button
           title="Send Confirmation Code"
           onPress={() => Auth.verifyCurrentUserAttribute("email")}
+          color="secondary"
         ></Button>)}
 
         <AuthForm
