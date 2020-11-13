@@ -1,9 +1,7 @@
 import React, { useEffect, useState} from "react";
 import { StyleSheet, View, Text } from "react-native";
-import colors from "../config/colors";
 
 import Screen from "../components/Screen";
-import AppButton from "../components/AppButton";
 import ActionList from "../components/ActionList"
 import LevelWidget from "../components/widgets/LevelWidget"
 import CauseExpBreakdownWidget from "../components/widgets/CauseExpBreakdownWidget"
@@ -55,22 +53,24 @@ function DashboardScreen({ navigation }) {
   }
   
   return (
-      <Screen style={styles.screen}>
+      <Screen style={styles.screen} title="Dashboard">
         <LevelWidget userExperience={userExperience} navigation={navigation}/>
+        <View style={{height:20}}></View>
         <CauseActionBreakdownWidget userExperience={userExperience} navigation={navigation}/>
+        <View style={{height:20}}></View>
         <ActionList
           itemList={actions}
           navigation={navigation}
-          doOnRefresh={() => refreshFunction()}/>
+          doOnRefresh={() => refreshFunction()}
+          title={"Actions"}/>
       {/* <CauseExpBreakdownWidget userExperience={userExperience} navigation={navigation}/> */}
       </Screen>
   );
 }
 
 const styles = StyleSheet.create({
-  screen: {
-    paddingHorizontal: 10,
-    backgroundColor: colors.light,
+  screen:{
+    flex: 1
   }
 });
 

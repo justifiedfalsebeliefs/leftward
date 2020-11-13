@@ -9,7 +9,7 @@ import { View } from "react-native";
 function CauseIcon({
   cause = "default",
   size = 40,
-  backgroundColor = "rgba(52, 52, 52, 0.1)",
+  backgroundColor = "rgba(52, 52, 52, 0.0)",
 }) {
   switch (cause) {
     case "Environment Protection":
@@ -24,7 +24,7 @@ function CauseIcon({
             alignItems: "center",
           }}
         >
-          <AntDesign name="earth" color="green" size={size * 0.5} />
+          <MaterialCommunityIcons name="leaf" color="black" size={size * 0.5} />
         </View>
       );
     case "Criminal Justice Reform":
@@ -54,7 +54,7 @@ function CauseIcon({
             alignItems: "center",
           }}
         >
-          <MaterialCommunityIcons name="vote" color="blue" size={size * 0.5} />
+          <MaterialCommunityIcons name="vote" color="black" size={size * 0.5} />
         </View>
       );
     case "Economic Justice":
@@ -71,7 +71,7 @@ function CauseIcon({
         >
           <MaterialCommunityIcons
             name="worker"
-            color="blue"
+            color="black"
             size={size * 0.5}
           />
         </View>
@@ -88,7 +88,7 @@ function CauseIcon({
             alignItems: "center",
           }}
         >
-          <FontAwesome5 name="peace" color="blue" size={size * 0.5} />
+          <FontAwesome5 name="peace" color="black" size={size * 0.5} />
         </View>
       );
     case "default":

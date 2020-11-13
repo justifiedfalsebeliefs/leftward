@@ -1,8 +1,8 @@
 import React from "react";
-import { View, StyleSheet, TouchableWithoutFeedback, ImageBackground} from "react-native";
-import { Image } from "react-native-expo-image-cache";
+import { View, StyleSheet, TouchableWithoutFeedback} from "react-native";
 import Text from "./Text";
 import colors from "../config/colors";
+import fonts from "../config/fonts"
 import CauseIcon from "./CauseIcon";
 import Swipeable from "react-native-gesture-handler/Swipeable";
 
@@ -20,22 +20,16 @@ function ActionCard({
   return (
     <Swipeable renderRightActions={renderRightActions}>
       <TouchableWithoutFeedback onPress={onPress}>
-        <View style={styles.card}>
-              <Text style={styles.title} numberOfLines={1}>
-                {title}
-              </Text>
-              <View style={styles.orgContainer}>
-                <Text style={styles.organization}>{organization}</Text>
-                <CauseIcon style={styles.icon} cause={cause} size={35}></CauseIcon>
-              </View>
-              {/* <Text style={styles.tagline} numberOfLines={3}>
-                {description}
-              </Text> */}
-
-              <View style={styles.rewardContainer}>
-                <Text style={styles.actionType}>{actionType}</Text>
-                <Text style={styles.reward}>{`Reward: ${reward} points`}</Text>
-              </View>
+        <View style={styles.cardContainer}>
+          <View style={styles.titleBar}>
+            <CauseIcon style={styles.icon} cause={cause} size={35}></CauseIcon>
+            <Text style={styles.actionTypeText}>{actionType}</Text>
+            <Text style={styles.rewardText}>{`${reward} pts`}</Text>
+          </View>
+          <View style={styles.contentContainer}>
+            <Text style={styles.orgText}>{organization}</Text>
+            <Text style={styles.titleText}>{title}</Text>
+          </View>
         </View>
       </TouchableWithoutFeedback>
     </Swipeable>
@@ -43,77 +37,55 @@ function ActionCard({
 }
 
 const styles = StyleSheet.create({
-  actionType:{
-    fontSize: 12,
-    fontStyle: 'italic'},
-  card: {
+  cardContainer: {
     borderRadius: 15,
-    backgroundColor: colors.white,
-    marginBottom: 5,
+    borderColor: colors.subComponentBorder,
+    borderWidth: 1.5,
+    backgroundColor: colors.subComponentBackground,
+    marginBottom: 13,
     overflow: "hidden",
   },
-  image: {
-    flex: 1,
-    resizeMode: "cover",
-    justifyContent: "center"
+  titleBar:{
+    backgroundColor: colors.componentHighlightBackground,
+    flexDirection: "row",
+    alignItems: "center",
+    padding: 5
   },
-  icon:{
+  actionTypeText:{
+    fontSize: 12,
+    textTransform: "uppercase",
+    paddingHorizontal: 10,
+    fontFamily: fonts.type
+  },
+  rewardText: {
+      color: colors.dark,
+      fontWeight: "bold",
+      fontSize: 12,
+      marginLeft: "auto",
+      paddingHorizontal: 5,
+      fontFamily: fonts.type
 
   },
-  detailsContainer: {
-    padding: 20,
+  contentContainer:{
+    padding: 10
   },
-  imagefilter:{
-    backgroundColor: colors.black,
-    opacity: 0.5,
-    flex: 1
-  },
-  orgContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    paddingStart: 20,
-    paddingEnd: 10,
-    padding: 2,
-  },
-  rewardContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    paddingHorizontal: 20,
-    paddingVertical: 2,
-  },
-  image: {
-    width: "100%",
-    height: 100,
-  },
-
-  organization: {
-    color: colors.primary,
+  orgText: {
     fontWeight: "bold",
     textAlignVertical: "center",
+    fontSize: 12,
+    paddingBottom: 5,
+    fontFamily: fonts.subTitle
+  },
+
+  titleText: {
+    flex: 1,
+    flexWrap: "wrap",
     fontSize: 16,
-    paddingEnd: 20,
+    fontFamily: fonts.condensed
   },
-  reward: {
-    color: colors.dark,
-    fontWeight: "bold",
-    fontSize: 12,
-  },
-  opportunityType: {
-    alignSelf: "flex-start",
-    color: colors.secondary,
-    fontSize: 12,
-  },
-  title: {
-    paddingTop: 7,
-    paddingHorizontal: 7,
-    fontSize: 16,
-    color: colors.black,
-    fontWeight: "bold"
-  },
-  tagline:{
-    paddingHorizontal: 7,
-    fontSize: 12,
-  }
+
+
+
 });
 
 export default ActionCard;

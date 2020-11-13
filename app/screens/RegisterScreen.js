@@ -1,11 +1,11 @@
 import React, { useState } from "react";
-import { StyleSheet } from "react-native";
+import { StyleSheet, View} from "react-native";
 import AuthForm from "../components/AuthForm";
 import useAuth from "../auth/useAuth";
 import Screen from "../components/Screen";
 import { Auth } from "aws-amplify";
+import colors from "../config/colors"
 import pushNewUserGuid from "../data/pushNewUserGuid"
-import { ProgressBar, Colors } from 'react-native-paper';
 import logAmplitudeEventOnMount from "../utility/logAmplitudeEventOnMount"
 import * as Amplitude from 'expo-analytics-amplitude';
 
@@ -42,7 +42,10 @@ function RegisterScreen({ route, navigation }) {
   return (
     <>
       <Screen style={styles.container}>
-      <ProgressBar progress={1} color={"green"} height={20} />
+      <View style={styles.progressBackground}>
+            <View style={styles.progressFill}></View>
+          </View>
+          <View style={{height:20}}></View>
         <AuthForm
           fields={["username", "email", "password", "passwordConfirmation"]}
           onSubmit={handleSubmit}
@@ -57,7 +60,17 @@ function RegisterScreen({ route, navigation }) {
 const styles = StyleSheet.create({
   container: {
     paddingTop: 30,
-    padding: 10,
+  },
+  progressBackground:{
+    backgroundColor: colors.levelBarBackground,
+    height: 20,
+    borderRadius: 12,
+  },
+  progressFill:{
+      backgroundColor: colors.levelBarFill,
+      borderRadius: 12,
+      flex: 1,
+      width: `100%`,
   },
 });
 

@@ -1,53 +1,74 @@
 import React from "react";
 import { StyleSheet, View, Text } from "react-native";
-import routes from "../../navigation/routes";
-import ListItem from "../lists/ListItem"
-import Icon from "../Icon"
 import colors from "../../config/colors"
+import fonts from "../../config/fonts"
 
 function LevelWidget({
-    userExperience,
-    navigation
+    userExperience
 }) {
 if(typeof userExperience !== 'undefined'){
     const progress = ((userExperience.exp-userExperience.previousLevel)/(userExperience.nextLevel-userExperience.previousLevel)) * 100
-  return (
-      <View>
-  <View style={styles.levelContainer}>
-      <Text style={styles.levelText}>{`Level ${userExperience.level}`}</Text>
-      <View style={{backgroundColor:"#311847",
-                    width:`${progress}%`,
-                    borderTopLeftRadius: 15,
-                    borderBottomLeftRadius: 15}}></View>
-        <View style={ {
-        backgroundColor: "#A676D0",
-        width: `${80-progress}%`,
-        borderTopRightRadius: 15,
-        borderBottomRightRadius: 15
-      }}></View>
-  </View>
-  <Text style={styles.expBreakdownText}>{`Total points: ${userExperience.exp}`}    {`Next level: ${userExperience.nextLevel}`}</Text>
-  </View>
+    return (
+      <View style={styles.widgetContainer}>
+        <Text style={styles.levelText}>{`Level ${userExperience.level}`}</Text>
+        <View style={styles.levelBarBackground}>
+          <View style={{
+            backgroundColor: colors.levelBarFill,
+            borderRadius: 12,
+            flex: 1,
+            width: `${progress}%`,
+            }}>
+          </View>
+            <Text style={styles.expCurrent}>{`${userExperience.exp} pts`}</Text>
+            <Text style={styles.expGoal}>{`${userExperience.nextLevel}`}</Text>
+        </View>
+    </View>
   
     );
 }else return (<View style={styles.levelContainer}>
-    <Text style={styles.levelText}>{`Loading`}</Text>
+    <Text style={styles.loadingText}>{`Loading`}</Text>
 </View>)
 
 }
 
 const styles = StyleSheet.create({
-    levelContainer: {
-        flexDirection: "row",
-        overflow: "hidden",
-      },
-      levelText: { padding: 5,},
-      expBreakdownText:{paddingBottom: 15},
-      separator: {
-        width: "100%",
-        height: 1,
-        backgroundColor: colors.light,
-      },
+  widgetContainer: {marginHorizontal: 10},
+  levelText: {
+    fontSize: 12,
+    paddingHorizontal: 20,
+    paddingBottom: 4,
+    fontFamily: fonts.subTitle
+  },
+  levelBarBackground: {
+    backgroundColor: colors.levelBarBackground,
+    height: 30,
+    borderRadius: 12,
+  },
+  expCurrent: {
+    color: colors.contrastTextDarkBG,
+    fontSize: 12,
+    fontWeight: "bold",
+    position: "absolute",
+    top: 6,
+    left: 20,
+    fontFamily: fonts.type
+  },
+  expGoal: {
+    color: colors.contrastTextDarkBG,
+    fontSize: 12,
+    fontWeight: "bold",
+    position: "absolute",
+    top: 6,
+    right: 20,
+    fontFamily: fonts.type
+  },
+  levelBarFill: {
+    backgroundColor: colors.levelBarFill,
+    borderRadius: 15,
+    flex: 1,
+    width: "50%"
+  },
+  loadingText: {},
 });
 
 export default LevelWidget;

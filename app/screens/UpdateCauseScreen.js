@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { StyleSheet, View, Text } from "react-native";
 import Screen from "../components/Screen";
-import AppButton from "../components/AppButton";
+import Button from "../components/Button";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import initialCauses from "../data/initialCauses";
 import { Auth } from "aws-amplify";
@@ -84,7 +84,7 @@ function UpdateCauseScreen({ navigation }) {
       </TouchableOpacity>
       <Text style={styles.note}>You'll see more actions for this cause at first.{"\n"}You can always change this later. {"\n"}{"\n"}{"\n"}We're adding causes as we grow!</Text>
       </View>
-        <AppButton title="Update Causes" onPress={handleSubmit}></AppButton>
+        <Button title="Update Causes" onPress={handleSubmit}></Button>
       </Screen>
     </>
   );

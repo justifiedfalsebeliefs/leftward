@@ -4,13 +4,12 @@ import ActionDetailsScreen from "../screens/ActionDetailsScreen";
 import CampaignDetailsScreen from "../screens/CampaignDetailsScreen";
 import OrganizationDetailsScreen from "../screens/OrganizationDetailsScreen";
 import DashboardScreen from "../screens/DashboardScreen";
-import CompletedActionsScreen from "../screens/CompletedActionsScreen";
 
 const Stack = createStackNavigator();
 
 const DashboardNavigator = () => (
   <Stack.Navigator mode="modal" 
-  // screenOptions={{ headerShown: false }}
+   screenOptions={{ headerShown: false }}
   >
     <Stack.Screen name="Dashboard" component={DashboardScreen} />
     <Stack.Screen name="Action Details" component={ActionDetailsScreen} />
@@ -19,7 +18,6 @@ const DashboardNavigator = () => (
       name="Organization Details"
       component={OrganizationDetailsScreen}
     />
-    <Stack.Screen name="Completed Actions" component={CompletedActionsScreen} />
   </Stack.Navigator>
 );
 
