@@ -1,12 +1,25 @@
 import os
 from flask import Flask, request, jsonify
+from flask_cognito import CognitoAuth
 import datetime as dt
 import config
 import mysql.connector
 import queries
 
+
 app = Flask(__name__)
 
+app.config.extend({
+    'COGNITO_REGION': '',
+    'COGNITO_USERPOOL_ID': '',
+
+    # optional# client ID you wish to verify user is authenticated against
+    'COGNITO_CHECK_TOKEN_EXPIRATION': True,  # disable token expiration checking for testing purposes
+    'COGNITO_JWT_HEADER_NAME': 'Authorization',
+    'COGNITO_JWT_HEADER_PREFIX': 'Bearer',
+})
+
+auth = CognitoAuth(app)
 
 class APIReceiver:
     def __init__(self, request_args):
