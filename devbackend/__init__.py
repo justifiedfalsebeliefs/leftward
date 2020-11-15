@@ -1,5 +1,6 @@
 import os
 from flask import Flask, request, jsonify
+from flask_awscognito import AWSCognitoAuthentication 
 import datetime as dt
 import config
 import mysql.connector
@@ -15,6 +16,7 @@ app.config['AWS_COGNITO_USER_POOL_CLIENT_ID'] = config.AWS_COGNITO_USER_POOL_CLI
 app.config['AWS_COGNITO_USER_POOL_CLIENT_SECRET'] = config.AWS_COGNITO_USER_POOL_CLIENT_SECRET
 
 aws_auth = AWSCognitoAuthentication(app)
+
 
 class APIReceiver:
     def __init__(self, request_args):
@@ -136,6 +138,7 @@ def fetch_dashboard_listings():
         for action_Id in new_actionIds:
             push_record(args, queries.pushUserDashActionsStatus(action_Id, dt.datetime.now(), guid))
 
+    #guid = aws_auth.claims['custom:GQLuserID']
     guid = request.args['userGuid']
     user_cause = request.args['userCause']
 
@@ -196,8 +199,6 @@ def push_calc_exp():
 @aws_auth.authentication_required
 def fetch_user_experience():
     return get_response(request.args, queries.fetchUserExperience(request.args['userGuid']))
-
-
 
 
 @app.route('/pushActionStatus', methods=['POST'])
