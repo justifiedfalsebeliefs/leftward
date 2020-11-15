@@ -1,6 +1,5 @@
 import os
 from flask import Flask, request, jsonify
-from flask_cognito import CognitoAuth
 import datetime as dt
 import config
 import mysql.connector
@@ -9,17 +8,11 @@ import queries
 
 app = Flask(__name__)
 
-app.config.extend({
-    'COGNITO_REGION': '',
-    'COGNITO_USERPOOL_ID': '',
-
-    # optional# client ID you wish to verify user is authenticated against
-    'COGNITO_CHECK_TOKEN_EXPIRATION': True,  # disable token expiration checking for testing purposes
-    'COGNITO_JWT_HEADER_NAME': 'Authorization',
-    'COGNITO_JWT_HEADER_PREFIX': 'Bearer',
-})
-
-auth = CognitoAuth(app)
+app.config['AWS_DEFAULT_REGION'] = config.AWS_DEFAULT_REGION
+app.config['AWS_COGNITO_DOMAIN'] = config.AWS_COGNITO_DOMAIN
+app.config['AWS_COGNITO_USER_POOL_ID'] = config.AWS_COGNITO_USER_POOL_ID
+app.config['AWS_COGNITO_USER_POOL_CLIENT_ID'] = config.AWS_COGNITO_USER_POOL_CLIENT_ID
+app.config['AWS_COGNITO_USER_POOL_CLIENT_SECRET'] = config.AWS_COGNITO_USER_POOL_CLIENT_SECRET
 
 class APIReceiver:
     def __init__(self, request_args):
@@ -29,10 +22,10 @@ class APIReceiver:
 
     def __enter__(self):
         self.conn = mysql.connector.connect(
-            host=config.mysql_host,
-            user=config.mysql_user,
-            password=config.mysql_password,
-            database=config.mysql_db
+            host=config.MYSQL_HOST,
+            user=config.MYSQL_USER,
+            password=config.MYSQL_PASSWORD,
+            database=config.MYSQL_DB
         )
         self.cursor = self.conn.cursor()
         return self
