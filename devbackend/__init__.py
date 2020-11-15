@@ -14,6 +14,8 @@ app.config['AWS_COGNITO_USER_POOL_ID'] = config.AWS_COGNITO_USER_POOL_ID
 app.config['AWS_COGNITO_USER_POOL_CLIENT_ID'] = config.AWS_COGNITO_USER_POOL_CLIENT_ID
 app.config['AWS_COGNITO_USER_POOL_CLIENT_SECRET'] = config.AWS_COGNITO_USER_POOL_CLIENT_SECRET
 
+aws_auth = AWSCognitoAuthentication(app)
+
 class APIReceiver:
     def __init__(self, request_args):
         self.authorization = False
@@ -72,6 +74,7 @@ def hello():
 
 
 @app.route('/fetchDashboardListings', methods=['POST'])
+@aws_auth.authentication_required
 def fetch_dashboard_listings():
     def deactivate_actions(args, actions, guid):
         actions_to_deactivate = []
@@ -146,26 +149,31 @@ def fetch_dashboard_listings():
 
 
 @app.route('/fetchHiddenActions', methods=['POST'])
+@aws_auth.authentication_required
 def fetch_hidden_actions():
     return get_response(request.args, queries.fetchHiddenActions(request.args['userGuid']))
 
 
 @app.route('/fetchCompletedActions', methods=['POST'])
+@aws_auth.authentication_required
 def fetch_completed_actions():
     return get_response(request.args, queries.fetchCompletedActions(request.args['userGuid']))
 
 
 @app.route('/fetchMyActions', methods=['POST'])
+@aws_auth.authentication_required
 def fetch_my_actions():
     return get_response(request.args, queries.fetchMyActions(request.args['userGuid']))
 
 
 @app.route('/pushNewUserGuid', methods=['POST'])
+@aws_auth.authentication_required
 def push_new_user_guid():
     return push_record(request.args, queries.pushNewUserGuid(request.args['newGuid']))
 
 
 @app.route('/pushCalcExp', methods=['POST'])
+@aws_auth.authentication_required
 def push_calc_exp():
     guid = request.args['userGuid']
     objects = get_response(request.args, queries.fetchUserLevel(guid), return_as_records=True)
@@ -185,6 +193,7 @@ def push_calc_exp():
 
 
 @app.route('/fetchUserExperience', methods=['POST'])
+@aws_auth.authentication_required
 def fetch_user_experience():
     return get_response(request.args, queries.fetchUserExperience(request.args['userGuid']))
 
@@ -192,6 +201,7 @@ def fetch_user_experience():
 
 
 @app.route('/pushActionStatus', methods=['POST'])
+@aws_auth.authentication_required
 def push_action_status():
     try:
         user_guid = request.args.get('userGuid')
