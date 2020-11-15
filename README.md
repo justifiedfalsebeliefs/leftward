@@ -5,9 +5,35 @@ Make the world more equal
 Development environment setup
 Complete the following before cloning the repo. This process is a bit jank and I'm not sure how to do it better. For now:
 
-Complete the steps on this page - only the first page: https://docs.amplify.aws/start/getting-started/installation/q/integration/react-native
-
 In the folder you want do manage the project in (create a project directory):
+
+`npm install -g @aws-amplify/cli`
+
+`amplify configure`
+
+Once you’re signed in, Amplify CLI will ask you to create an IAM user.
+
+```
+Specify the AWS Region
+? region:  # Your preferred region
+Specify the username of the new IAM user:
+? user name:  # User name for Amplify IAM user
+Complete the user creation using the AWS console
+```
+
+Create a user with AdministratorAccess to your account to provision AWS resources for you like AppSync, Cognito etc.
+
+Once the user is created, Amplify CLI will ask you to provide the accessKeyId and the secretAccessKey to connect Amplify CLI with your newly created IAM user.
+
+```
+Enter the access key of the newly created user:
+? accessKeyId:  # YOUR_ACCESS_KEY_ID
+? secretAccessKey:  # YOUR_SECRET_ACCESS_KEY
+This would update/create the AWS Profile in your local machine
+? Profile Name:  # (default)
+
+Successfully set up the new user.
+```
 
 `npm install -g expo-cli `
 
