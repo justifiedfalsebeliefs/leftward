@@ -53,5 +53,4 @@ devbackend/venv
 devbackend/venv/*
 app/data/config.js
 *.pyc
-devbackend/config.py
 app/data/amplitudeconfig.js

@@ -1,25 +1,30 @@
 import os
 from flask import Flask, request, jsonify
+from flask_awscognito import AWSCognitoAuthentication 
 import datetime as dt
 import config
 import mysql.connector
 import queries
 
+
 app = Flask(__name__)
+
+app.config['AWS_DEFAULT_REGION'] = config.AWS_DEFAULT_REGION
+app.config['AWS_COGNITO_DOMAIN'] = config.AWS_COGNITO_DOMAIN
+app.config['AWS_COGNITO_USER_POOL_ID'] = config.AWS_COGNITO_USER_POOL_ID
+app.config['AWS_COGNITO_USER_POOL_CLIENT_ID'] = config.AWS_COGNITO_USER_POOL_CLIENT_ID
+app.config['AWS_COGNITO_USER_POOL_CLIENT_SECRET'] = config.AWS_COGNITO_USER_POOL_CLIENT_SECRET
+
+aws_auth = AWSCognitoAuthentication(app)
 
 
 class APIReceiver:
-    def __init__(self, request_args):
-        self.authorization = False
-        if config.api_key == request_args.get('apikey'):
-            self.authorization = True
-
     def __enter__(self):
         self.conn = mysql.connector.connect(
-            host=config.mysql_host,
-            user=config.mysql_user,
-            password=config.mysql_password,
-            database=config.mysql_db
+            host=config.MYSQL_HOST,
+            user=config.MYSQL_USER,
+            password=config.MYSQL_PASSWORD,
+            database=config.MYSQL_DB
         )
         self.cursor = self.conn.cursor()
         return self
@@ -42,8 +47,6 @@ class APIReceiver:
 
 def get_response(request_args, query, return_as_records=False):
     with APIReceiver(request_args) as api_manager:
-        if not api_manager.authorization:
-            return jsonify({'resp': 'UNAUTHORIZED'}), 401
         objects = api_manager.query_results(query)
         if return_as_records:
             return objects
@@ -52,8 +55,6 @@ def get_response(request_args, query, return_as_records=False):
 
 def push_record(request_args, query, return_as_records=False):
     with APIReceiver(request_args) as api_manager:
-        if not api_manager.authorization:
-            return jsonify({'resp': 'UNAUTHORIZED'}), 401
         api_manager.push_record(query)
         if return_as_records:
             return True
@@ -66,6 +67,7 @@ def hello():
 
 
 @app.route('/fetchDashboardListings', methods=['POST'])
+@aws_auth.authentication_required
 def fetch_dashboard_listings():
     def deactivate_actions(args, actions, guid):
         actions_to_deactivate = []
@@ -127,6 +129,7 @@ def fetch_dashboard_listings():
         for action_Id in new_actionIds:
             push_record(args, queries.pushUserDashActionsStatus(action_Id, dt.datetime.now(), guid))
 
+    #guid = aws_auth.claims['custom:GQLuserID']
     guid = request.args['userGuid']
     user_cause = request.args['userCause']
 
@@ -140,26 +143,31 @@ def fetch_dashboard_listings():
 
 
 @app.route('/fetchHiddenActions', methods=['POST'])
+@aws_auth.authentication_required
 def fetch_hidden_actions():
     return get_response(request.args, queries.fetchHiddenActions(request.args['userGuid']))
 
 
 @app.route('/fetchCompletedActions', methods=['POST'])
+@aws_auth.authentication_required
 def fetch_completed_actions():
     return get_response(request.args, queries.fetchCompletedActions(request.args['userGuid']))
 
 
 @app.route('/fetchMyActions', methods=['POST'])
+@aws_auth.authentication_required
 def fetch_my_actions():
     return get_response(request.args, queries.fetchMyActions(request.args['userGuid']))
 
 
 @app.route('/pushNewUserGuid', methods=['POST'])
+@aws_auth.authentication_required
 def push_new_user_guid():
     return push_record(request.args, queries.pushNewUserGuid(request.args['newGuid']))
 
 
 @app.route('/pushCalcExp', methods=['POST'])
+@aws_auth.authentication_required
 def push_calc_exp():
     guid = request.args['userGuid']
     objects = get_response(request.args, queries.fetchUserLevel(guid), return_as_records=True)
@@ -179,13 +187,13 @@ def push_calc_exp():
 
 
 @app.route('/fetchUserExperience', methods=['POST'])
+@aws_auth.authentication_required
 def fetch_user_experience():
     return get_response(request.args, queries.fetchUserExperience(request.args['userGuid']))
 
 
-
-
 @app.route('/pushActionStatus', methods=['POST'])
+@aws_auth.authentication_required
 def push_action_status():
     try:
         user_guid = request.args.get('userGuid')
