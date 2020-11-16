@@ -19,11 +19,6 @@ aws_auth = AWSCognitoAuthentication(app)
 
 
 class APIReceiver:
-    def __init__(self, request_args):
-        self.authorization = False
-        if config.api_key == request_args.get('apikey'):
-            self.authorization = True
-
     def __enter__(self):
         self.conn = mysql.connector.connect(
             host=config.MYSQL_HOST,
@@ -52,8 +47,6 @@ class APIReceiver:
 
 def get_response(request_args, query, return_as_records=False):
     with APIReceiver(request_args) as api_manager:
-        if not api_manager.authorization:
-            return jsonify({'resp': 'UNAUTHORIZED'}), 401
         objects = api_manager.query_results(query)
         if return_as_records:
             return objects
@@ -62,8 +55,6 @@ def get_response(request_args, query, return_as_records=False):
 
 def push_record(request_args, query, return_as_records=False):
     with APIReceiver(request_args) as api_manager:
-        if not api_manager.authorization:
-            return jsonify({'resp': 'UNAUTHORIZED'}), 401
         api_manager.push_record(query)
         if return_as_records:
             return True
