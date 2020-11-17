@@ -1,59 +1,39 @@
 import React, { useEffect, useState} from "react";
-import { StyleSheet, View, Text } from "react-native";
-
-import Screen from "../components/Screen";
-import ActionList from "../components/ActionList"
-import LevelWidget from "../components/widgets/LevelWidget"
-import CauseExpBreakdownWidget from "../components/widgets/CauseExpBreakdownWidget"
-import CauseActionBreakdownWidget from "../components/widgets/CauseActionBreakdownWidget";
-import fetchDashboardListings from "../data/fetchDashboardListings"
-import fetchUserExperience from "../data/fetchUserExperience"
+import { View } from "react-native";
 import useAuth from "../auth/useAuth";
-import routes from "../navigation/routes";
-
+import callApi from "../data/callApi";
 import * as Amplitude from 'expo-analytics-amplitude';
-
+import Screen from "../components/Screen";
+import ActionList from "../components/ActionList";
+import LevelWidget from "../components/widgets/LevelWidget";
+import CauseActionBreakdownWidget from "../components/widgets/CauseActionBreakdownWidget";
 
 function DashboardScreen({ navigation }) {
-
-
-  const { user, logOut } = useAuth();
+  const { user } = useAuth();
   const [userExperience, setUserExperience] = useState();
   const [actions, setActions] = useState();
+  const useMountEffect = (fun) => useEffect(fun, [])
 
-  async function getExperience(){
-    const exp = await fetchUserExperience(user.attributes["custom:GQLuserID"]);
-    setUserExperience(exp);
-  }
-
-  async function getListings(){
-    const listings = await fetchDashboardListings(user.attributes["custom:GQLuserID"], user.attributes["custom:causes"]);
-    setActions(listings);
-  }
+  async function refreshDashboard(){
+    const exp = await callApi(user, "fetchUserExperience");
+    const listings = await callApi(user, "fetchDashboardListings");
+    setUserExperience(exp[0]);
+    setActions(listings);}
 
   useEffect(() => {
     const refresh = navigation.addListener("focus", () =>{
-      getListings()
-      getExperience()
+      refreshDashboard()
       return refresh
     });
   }, [navigation]);
-
-  // Analytics
-  const useMountEffect = (fun) => useEffect(fun, [])
+  
   useMountEffect(() => {
-    Amplitude.setUserId(user.attributes["custom:GQLuserID"]);
+    Amplitude.setUserId(user.idToken.payload["custom:GQLuserID"]);
     Amplitude.logEvent('ViewDashboard');
   });
-  /////
 
-  function refreshFunction() {
-    getListings()
-    getExperience()
-  }
-  
   return (
-      <Screen style={styles.screen} title="Dashboard">
+      <Screen>
         <LevelWidget userExperience={userExperience} navigation={navigation}/>
         <View style={{height:20}}></View>
         <CauseActionBreakdownWidget userExperience={userExperience} navigation={navigation}/>
@@ -61,17 +41,10 @@ function DashboardScreen({ navigation }) {
         <ActionList
           itemList={actions}
           navigation={navigation}
-          doOnRefresh={() => refreshFunction()}
+          doOnRefresh={() => refreshDashboard()}
           title={"Actions"}/>
-      {/* <CauseExpBreakdownWidget userExperience={userExperience} navigation={navigation}/> */}
       </Screen>
   );
 }
-
-const styles = StyleSheet.create({
-  screen:{
-    flex: 1
-  }
-});
 
 export default DashboardScreen;

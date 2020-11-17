@@ -46,7 +46,7 @@ function AccountSettingsScreen({ navigation }) {
   
   return (
     <>
-      <Screen style={styles.container}>
+      <Screen>
         {!emailVerified && (
           <AuthForm
             fields={["code"]}
@@ -72,11 +72,5 @@ function AccountSettingsScreen({ navigation }) {
     </>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    padding: 10,
-  },
-});
 
 export default AccountSettingsScreen;

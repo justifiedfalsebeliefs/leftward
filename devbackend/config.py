@@ -1,6 +1,6 @@
 import os
 
-# database evnironment variables
+# database environment variables
 MYSQL_HOST = os.getenv('MYSQL_HOST')
 MYSQL_USER = os.getenv('MYSQL_USER')
 MYSQL_PASSWORD = os.getenv('MYSQL_PASSWORD')
@@ -12,3 +12,4 @@ AWS_COGNITO_DOMAIN = os.getenv('AWS_COGNITO_DOMAIN') # 'domain.com'
 AWS_COGNITO_USER_POOL_ID = os.getenv('AWS_COGNITO_USER_POOL_ID') # 'eu-west-1_XXX'
 AWS_COGNITO_USER_POOL_CLIENT_ID = os.getenv('AWS_COGNITO_USER_POOL_CLIENT_ID') # 'YYY'
 AWS_COGNITO_USER_POOL_CLIENT_SECRET = os.getenv('AWS_COGNITO_USER_POOL_CLIENT_SECRET') # 'ZZZZ'
+AWS_COGNITO_REDIRECT_URL = os.getenv('AWS_COGNITO_REDIRECT_URL')

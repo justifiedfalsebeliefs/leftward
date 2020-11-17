@@ -25,7 +25,7 @@ function ForgotPasswordScreen({ navigation }) {
   
   return (
     <>
-      <Screen style={styles.container}>
+      <Screen>
         <AuthForm
           fields={["username", "email"]}
           onSubmit={handleSubmit}
@@ -37,10 +37,5 @@ function ForgotPasswordScreen({ navigation }) {
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    padding: 10,
-  },
-});
 
 export default ForgotPasswordScreen;
