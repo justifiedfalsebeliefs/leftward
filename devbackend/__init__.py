@@ -1,11 +1,9 @@
-import os
 from flask import Flask, request, jsonify
 from flask_awscognito import AWSCognitoAuthentication 
 import datetime as dt
 import config
 import mysql.connector
 import queries
-
 
 app = Flask(__name__)
 
@@ -14,7 +12,7 @@ app.config['AWS_COGNITO_DOMAIN'] = config.AWS_COGNITO_DOMAIN
 app.config['AWS_COGNITO_USER_POOL_ID'] = config.AWS_COGNITO_USER_POOL_ID
 app.config['AWS_COGNITO_USER_POOL_CLIENT_ID'] = config.AWS_COGNITO_USER_POOL_CLIENT_ID
 app.config['AWS_COGNITO_USER_POOL_CLIENT_SECRET'] = config.AWS_COGNITO_USER_POOL_CLIENT_SECRET
-
+app.config['AWS_COGNITO_REDIRECT_URL'] = config.AWS_COGNITO_REDIRECT_URL
 aws_auth = AWSCognitoAuthentication(app)
 
 
@@ -24,52 +22,39 @@ class APIReceiver:
             host=config.MYSQL_HOST,
             user=config.MYSQL_USER,
             password=config.MYSQL_PASSWORD,
-            database=config.MYSQL_DB
-        )
+            database=config.MYSQL_DB)
         self.cursor = self.conn.cursor()
         return self
 
     def __exit__(self, etype, value, traceback):
         self.conn.close()
 
-    def query_results(self, query):
+    def query_results(self, query, query_type):
         self.cursor.execute(query)
+        if query_type == 'PUSH':
+            self.conn.commit()
+            return True
         records = self.cursor.fetchall()
         columns = self.cursor.column_names
         objects = [dict(zip(columns, record)) for record in records]
         return objects
 
-    def push_record(self, query):
-        self.cursor.execute(query)
-        self.conn.commit()
-        return
 
-
-def get_response(request_args, query, return_as_records=False):
-    with APIReceiver(request_args) as api_manager:
-        objects = api_manager.query_results(query)
-        if return_as_records:
-            return objects
-        return jsonify(objects), 200
-
-
-def push_record(request_args, query, return_as_records=False):
-    with APIReceiver(request_args) as api_manager:
-        api_manager.push_record(query)
-        if return_as_records:
-            return True
-        return jsonify({'resp': 'Success'}), 200
-
-
-@app.route('/hello')
-def hello():
-    return 'hello!'
+def get_response(query, query_type, return_as_records=False):
+    with APIReceiver() as api_manager:
+        objects = api_manager.query_results(query, query_type)
+        if query_type == 'GET':
+            if return_as_records:
+                return objects
+            return jsonify(objects), 200
+        if query_type == 'PUSH':
+            return jsonify({'resp': 'Success'}), 200
 
 
 @app.route('/fetchDashboardListings', methods=['POST'])
 @aws_auth.authentication_required
 def fetch_dashboard_listings():
-    def deactivate_actions(args, actions, guid):
+    def deactivate_actions(actions, guid):
         actions_to_deactivate = []
         for action in actions:
             if action['active']:
@@ -79,10 +64,10 @@ def fetch_dashboard_listings():
                     actions_to_deactivate.append(action['actionId'])
                     action['active'] = 0
         if actions_to_deactivate:
-            push_record(args, queries.pushDeactivateActions(actions_to_deactivate, guid), return_as_records=False)
+            get_response(queries.pushDeactivateActions(actions_to_deactivate, guid), "PUSH")
         return actions
 
-    def get_more_actions(args, actions, user_cause, guid):
+    def get_more_actions(actions, user_cause, guid):
         appropriate_cause_count = 0
         previous_actionIds = []
         new_actionIds = []
@@ -101,76 +86,71 @@ def fetch_dashboard_listings():
             if len(new_actionIds + previous_actionIds) >= 4:
                 break
             if not easy_action:
-                response = get_response(args, queries.getEasyAction(exclude_list, guid),
-                                        return_as_records=True)
+                response = get_response(queries.getEasyAction(exclude_list, guid), 'GET', return_as_records=True)
                 if response:
                     id = response[0]['actionId']
                     new_actionIds.append(id)
                     exclude_list.append(id)
             while appropriate_cause_count < 2:
-                response = get_response(args, queries.getUserCausePrefAction(exclude_list, guid, user_cause),
-                                        return_as_records=True)
+                response = get_response(queries.getUserCausePrefAction(exclude_list, guid, user_cause), 'GET', return_as_records=True)
                 if response:
                     id = response[0]['actionId']
                     new_actionIds.append(id)
                     exclude_list.append(id)
                 appropriate_cause_count += 1
 
-            response = get_response(args, queries.getRandomAction(exclude_list, guid), return_as_records=True)
+            response = get_response(queries.getRandomAction(exclude_list, guid), 'GET', return_as_records=True)
             if response:
                 id = response[0]['actionId']
                 new_actionIds.append(id)
                 exclude_list.append(id)
         return previous_actionIds, new_actionIds
 
-    def flag_actions_active(args, previous_actionIds, new_actionIds, guid):
+    def flag_actions_active(previous_actionIds, new_actionIds, guid):
         if previous_actionIds:
-            push_record(args, queries.updateUserDashActionsStatus(previous_actionIds, dt.datetime.now(), guid))
+            get_response(queries.updateUserDashActionsStatus(previous_actionIds, dt.datetime.now(), guid), "PUSH")
         for action_Id in new_actionIds:
-            push_record(args, queries.pushUserDashActionsStatus(action_Id, dt.datetime.now(), guid))
+            get_response(queries.pushUserDashActionsStatus(action_Id, dt.datetime.now(), guid), "PUSH")
 
-    #guid = aws_auth.claims['custom:GQLuserID']
-    guid = request.args['userGuid']
-    user_cause = request.args['userCause']
+    guid = aws_auth.claims['custom:GQLuserID']
+    user_cause = aws_auth.claims['custom:causes']
 
-    actions = get_response(request.args, queries.getDashboardActionsForAlgorithm(guid), return_as_records=True)
-    actions = deactivate_actions(request.args, actions, guid)
-    previous_actionIds, new_actionIds = get_more_actions(request.args, actions, user_cause, guid)
-    flag_actions_active(request.args, previous_actionIds, new_actionIds, guid)
-    return get_response(request.args, queries.listActionsDashboard(previous_actionIds + new_actionIds))
-
-
+    actions = get_response(queries.getDashboardActionsForAlgorithm(guid), 'GET', return_as_records=True)
+    actions = deactivate_actions(actions, guid)
+    previous_actionIds, new_actionIds = get_more_actions(actions, user_cause, guid)
+    flag_actions_active(previous_actionIds, new_actionIds, guid)
+    return get_response(queries.listActionsDashboard(previous_actionIds + new_actionIds), 'GET')
 
 
 @app.route('/fetchHiddenActions', methods=['POST'])
 @aws_auth.authentication_required
 def fetch_hidden_actions():
-    return get_response(request.args, queries.fetchHiddenActions(request.args['userGuid']))
+    return get_response(queries.fetchHiddenActions(aws_auth.claims['custom:GQLuserID']), 'GET')
 
 
 @app.route('/fetchCompletedActions', methods=['POST'])
 @aws_auth.authentication_required
 def fetch_completed_actions():
-    return get_response(request.args, queries.fetchCompletedActions(request.args['userGuid']))
+    return get_response(queries.fetchCompletedActions(aws_auth.claims['custom:GQLuserID']), 'GET')
 
 
 @app.route('/fetchMyActions', methods=['POST'])
 @aws_auth.authentication_required
 def fetch_my_actions():
-    return get_response(request.args, queries.fetchMyActions(request.args['userGuid']))
+    return get_response(queries.fetchMyActions(aws_auth.claims['custom:GQLuserID']), 'GET')
 
 
 @app.route('/pushNewUserGuid', methods=['POST'])
 @aws_auth.authentication_required
 def push_new_user_guid():
-    return push_record(request.args, queries.pushNewUserGuid(request.args['newGuid']))
+    return get_response(queries.pushNewUserGuid(aws_auth.claims['custom:GQLuserID']), "PUSH")
 
 
 @app.route('/pushCalcExp', methods=['POST'])
 @aws_auth.authentication_required
 def push_calc_exp():
-    guid = request.args['userGuid']
-    objects = get_response(request.args, queries.fetchUserLevel(guid), return_as_records=True)
+    guid = aws_auth.claims['custom:GQLuserID']
+    objects = get_response(queries.fetchUserLevel(guid), 'GET', return_as_records=True)
     exp = objects[0]['exp']
     level = objects[0]['level']
     nextLevel = objects[0]['nextLevel']
@@ -182,24 +162,24 @@ def push_calc_exp():
     EcoExp = objects[0]['EcoExp']
     EnvExp = objects[0]['EnvExp']
     JustExp = objects[0]['JustExp']
-    return push_record(request.args, queries.pushCalcExp(exp, level, nextLevel, totalActions, previousLevel, guid,
-                            EcoActions, EnvActions, JustActions))
+    return get_response(queries.pushCalcExp(exp, level, nextLevel, totalActions, previousLevel, guid,
+                            EcoActions, EnvActions, JustActions), "PUSH")
 
 
 @app.route('/fetchUserExperience', methods=['POST'])
 @aws_auth.authentication_required
 def fetch_user_experience():
-    return get_response(request.args, queries.fetchUserExperience(request.args['userGuid']))
+    return get_response(queries.fetchUserExperience(aws_auth.claims['custom:GQLuserID']), 'GET')
 
 
 @app.route('/pushActionStatus', methods=['POST'])
 @aws_auth.authentication_required
 def push_action_status():
     try:
-        user_guid = request.args.get('userGuid')
+        user_guid = aws_auth.claims['custom:GQLuserID']
         status = request.args.get('statusUpdate')
         actionId = request.args.get('actionId')
-        objects = get_response(request.args, queries.getUserActions(user_guid), return_as_records=True)
+        objects = get_response(queries.getUserActions(user_guid), 'GET', return_as_records=True)
         delete_id = []
 
         if status == 'INPROGRESS':
@@ -213,8 +193,8 @@ def push_action_status():
                 if record['status'] == 'INPROGRESS' and str(record['actionId']) == str(actionId):
                     delete_id.append(record['userActionId'])
         for id in delete_id:
-            push_record(request.args, queries.deleteUserAction(id), return_as_records=True)
-        return push_record(request.args, queries.pushActionStatus(user_guid, status, actionId))
+            get_response(queries.deleteUserAction(id), "PUSH")
+        return get_response(queries.pushActionStatus(user_guid, status, actionId), "PUSH")
     except Exception as e:
         return jsonify({'resp':"An Error Occured"}), 500
 

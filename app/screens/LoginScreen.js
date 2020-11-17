@@ -49,7 +49,6 @@ function LoginScreen({ navigation }) {
 
 const styles = StyleSheet.create({
   container: {
-    padding: 10,
     justifyContent: "space-between"
   },
   forgot: {

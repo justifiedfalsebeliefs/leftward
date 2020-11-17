@@ -51,6 +51,5 @@ devbackend/.idea
 devbackend/.idea/*
 devbackend/venv
 devbackend/venv/*
-app/data/config.js
 *.pyc
 app/data/amplitudeconfig.js

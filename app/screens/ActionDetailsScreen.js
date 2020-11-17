@@ -1,27 +1,21 @@
 import React, { useEffect } from "react";
 import { View, StyleSheet, Linking, ScrollView  } from "react-native";
+import callApi from "../data/callApi";
+import * as Amplitude from 'expo-analytics-amplitude';
+import routes from "../navigation/routes";
 import colors from "../config/colors";
 import fonts from "../config/fonts"
 import Text from "../components/Text";
-import routes from "../navigation/routes";
-import useAuth from "../auth/useAuth";
-import pushActionStatus from "../data/pushActionStatus"
-import pushCalcExp from "../data/pushCalcExp"
 import Screen from "../components/Screen"
 import CauseIcon from "../components/CauseIcon"
-import { MaterialCommunityIcons } from "@expo/vector-icons";
-
-import * as Amplitude from 'expo-analytics-amplitude';
 import { TouchableWithoutFeedback, TouchableOpacity } from "react-native-gesture-handler";
 import Icon from "../components/Icon";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 function ActionDetailsScreen({ route, navigation }) {
-  const { user, logOut } = useAuth();
   const action = route.params;
-  // Analytics
   const useMountEffect = (fun) => useEffect(fun, [])
   useMountEffect(() => {Amplitude.logEventWithProperties('ViewActionDetails', {actionId: action.actionId, actionTitle: action.actionTitle})});
-  /////
 
   const campaign = {
     title: action.campaignTitle,
@@ -38,16 +32,12 @@ function ActionDetailsScreen({ route, navigation }) {
     };
     
   const handleStatusPress = async (status, actionId) => {
-    try {
       Amplitude.logEventWithProperties('PressStatusUpdate', {status: status, actionId: actionId})
-      await pushActionStatus(user.attributes["custom:GQLuserID"], status, actionId)
-      if (status == "COMPLETE") await pushCalcExp(user.attributes["custom:GQLuserID"]);
+      await callApi("pushActionStatus", params = [{key:"statusUpdate", value:status}, {key:"actionId", value:actionId}])
+      if (status == "COMPLETE") await callApi("pushCalcExp");
       navigation.goBack()
-    } catch (error) {
-      console.log(error.message);
-    }
-  }
-  ;
+  };
+
   return (
     <Screen title={"Details"} back={true} navigation={navigation}>
       <ScrollView  style={styles.textContainer}>
@@ -77,14 +67,12 @@ function ActionDetailsScreen({ route, navigation }) {
         <Text style={styles.buttonText}>    Complete in Browser</Text>
       </TouchableOpacity>
       <View style={{height:20}}></View>
-
       <View style={styles.actionButtonContainer}>
       { action.sourceList != "myActions" && (
       <TouchableOpacity style={styles.actionButton} onPress={() => handleStatusPress("INPROGRESS", action.actionId)}>
         <MaterialCommunityIcons name={"plus"} color={"black"} size={30} style={{paddingRight:15}}/>
         <Text style={styles.buttonText}>Add to My Actions</Text>
       </TouchableOpacity> )}
-
       { action.sourceList != "complete" && (
       <TouchableOpacity style={styles.actionButton} onPress={() => handleStatusPress("COMPLETE", action.actionId)}>
         <MaterialCommunityIcons name={"check-bold"} color={"black"} size={30} style={{paddingRight:15}} />
@@ -205,8 +193,6 @@ const styles = StyleSheet.create({
     shadowRadius: 6.68,
     elevation: 4,
   },
-
-
 });
 
 export default ActionDetailsScreen;

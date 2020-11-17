@@ -1,11 +1,9 @@
 import React from "react";
-import Constants from 'expo-constants';
 import { FlatList, StyleSheet, RefreshControl, View, Text  } from "react-native";
 import ActionCard from "../components/ActionCard";
 import routes from "../navigation/routes";
 import ListItemDeleteAction from "../components/lists/ListItemDeleteAction"
-import pushActionStatus from "../data/pushActionStatus"
-import useAuth from "../auth/useAuth";
+import callApi from "../data/callApi";
 import colors from "../config/colors";
 import fonts from "../config/fonts"
 import Icon from "../components/Icon";
@@ -19,7 +17,6 @@ function ActionList({
     icon,
     height = 400
  }) {
-  const { user, logOut } = useAuth();
   const [refreshing, setRefreshing] = React.useState(false);
   const wait = (timeout) => {
     return new Promise(resolve => {
@@ -33,7 +30,7 @@ function ActionList({
   }, []);
 
   async function handleDelete(item) {
-    await pushActionStatus(user.attributes["custom:GQLuserID"], "HIDDEN", item.actionId)
+    await callApi("pushActionStatus", params = [{key:"statusUpdate", value:"HIDDEN"}, {key:"actionId", value:item.actionId}])
     doOnRefresh()
   };
 

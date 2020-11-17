@@ -3,7 +3,6 @@ import { StyleSheet, View, Text } from "react-native";
 import Screen from "../components/Screen";
 import Button from "../components/Button";
 import routes from "../navigation/routes";
-import initialCauses from "../data/initialCauses";
 import colors from "../config/colors"
 import { TouchableOpacity } from "react-native-gesture-handler";
 import uuidv4 from "../utility/uuid";
@@ -13,7 +12,7 @@ import fonts from "../config/fonts";
 
 function RegisterCauseScreen({ navigation }) {
 
-  const [causes, setCauses] = useState(initialCauses);
+  const [causes, setCauses] = useState();
   const [envColor, setEnvColor] = useState(colors.levelBarBackground);
   const [crimColor, setCrimColor] = useState(colors.levelBarBackground);
   const [econColor, setEconColor] = useState(colors.levelBarBackground);

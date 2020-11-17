@@ -37,11 +37,10 @@ const menuItems = [
 
 function AccountScreen({ navigation }) {
   logAmplitudeEventOnMount('ViewAccount')
-
   const { user, logOut } = useAuth();
   
   return (
-    <Screen title="Account">
+    <Screen>
       <Text style={styles.username}>{user.username}</Text>
       <View style={{height:20}}></View>
       <View style={{
@@ -80,15 +79,13 @@ function AccountScreen({ navigation }) {
         onPress={() => logOut()}
       />
     </View>
-
     </Screen>
   );
 }
 
 const styles = StyleSheet.create({
   viewContainer:{
-    
-alignSelf: "flex-end"
+    alignSelf: "flex-end"
   },
   container: {
     marginVertical: 20,
