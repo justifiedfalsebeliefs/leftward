@@ -9,14 +9,14 @@ import LevelWidget from "../components/widgets/LevelWidget";
 import CauseActionBreakdownWidget from "../components/widgets/CauseActionBreakdownWidget";
 
 function DashboardScreen({ navigation }) {
-  const { user, logOut } = useAuth();
+  const { user } = useAuth();
   const [userExperience, setUserExperience] = useState();
   const [actions, setActions] = useState();
   const useMountEffect = (fun) => useEffect(fun, [])
 
   async function refreshDashboard(){
-    const exp = await callApi("fetchUserExperience");
-    const listings = await callApi("fetchDashboardListings");
+    const exp = await callApi(user, "fetchUserExperience");
+    const listings = await callApi(user, "fetchDashboardListings");
     setUserExperience(exp[0]);
     setActions(listings);}
 
@@ -28,7 +28,7 @@ function DashboardScreen({ navigation }) {
   }, [navigation]);
   
   useMountEffect(() => {
-    Amplitude.setUserId(user.attributes["custom:GQLuserID"]);
+    Amplitude.setUserId(user.idToken.payload["custom:GQLuserID"]);
     Amplitude.logEvent('ViewDashboard');
   });
 

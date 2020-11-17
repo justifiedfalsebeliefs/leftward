@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { View } from "react-native";
+import useAuth from "../auth/useAuth";
 import callApi from "../data/callApi";
 import Screen from "../components/Screen";
 import ActionList from "../components/ActionList"
@@ -7,13 +8,14 @@ import BadgesWidget from "../components/widgets/BadgesWidget";
 import logAmplitudeEventOnMount from "../utility/logAmplitudeEventOnMount"
 
 function MyActionsScreen({ navigation }) {
+  const { user } = useAuth();
   logAmplitudeEventOnMount('ViewMyActions')
   const [actionsInProgress, setActionsInProgress] = useState([]);
   const [actionsCompleted, setActionsCompleted] = useState([]);
 
   async function refreshActions(){
-    const listingsInProgress = await callApi("fetchMyActions");
-    const listingsCompleted = await callApi("fetchCompletedActions");
+    const listingsInProgress = await callApi(user, "fetchMyActions");
+    const listingsCompleted = await callApi(user, "fetchCompletedActions");
     setActionsInProgress(listingsInProgress);
     setActionsCompleted(listingsCompleted);}
 

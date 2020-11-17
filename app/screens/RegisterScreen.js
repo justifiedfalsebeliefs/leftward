@@ -25,11 +25,13 @@ function RegisterScreen({ route, navigation }) {
           "custom:GQLuserID": route.params.guid
         },
       });
-      await callApi("pushNewUserGuid", params=[{key:"newGuid", value:route.params.guid}])
+      
       await Auth.signIn(
         userInfo.username,
         userInfo.password
       );
+      const user = await Auth.currentSession();
+      await callApi(user, "pushNewUserGuid", params=[{key:"newGuid", value:route.params.guid}])
       Amplitude.logEvent('PressRegister')
       Auth.currentSession().then((data) => {
         auth.logIn(data);
