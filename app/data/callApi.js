@@ -1,11 +1,6 @@
 import {getEndpoint, formatParams} from "./config"
-import { Auth } from "aws-amplify";
 
 export default async function callApi(user, endpoint, params = false) {
-    if (user.idToken.payload.exp <= Math.round(Date.now() / 1000)){
-        console.log("refreshing token")
-        user = await Auth.currentSession();
-    } 
     var url = getEndpoint(endpoint)
     if (params){
         url = url.concat(formatParams(params[0].key, params[0].value, true))
