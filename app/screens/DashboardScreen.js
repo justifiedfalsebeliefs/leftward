@@ -3,6 +3,7 @@ import { View } from "react-native";
 import useAuth from "../auth/useAuth";
 import callApi from "../data/callApi";
 import * as Amplitude from 'expo-analytics-amplitude';
+import refreshToken from '../auth/refreshToken'
 import Screen from "../components/Screen";
 import ActionList from "../components/ActionList";
 import LevelWidget from "../components/widgets/LevelWidget";
@@ -31,6 +32,8 @@ function DashboardScreen({ navigation }) {
     Amplitude.setUserId(user.idToken.payload["custom:GQLuserID"]);
     Amplitude.logEvent('ViewDashboard');
   });
+
+  refreshToken();
 
   return (
       <Screen>
