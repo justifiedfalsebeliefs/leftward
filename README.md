@@ -1,9 +1,15 @@
 # leftward
 
-Make the world more equal
+Values to Action
 
-Development environment setup
-Complete the following before cloning the repo. This process is a bit jank and I'm not sure how to do it better. For now:
+To provision a dev back end, here's the high level overview:
+
+- Configure Cognito and AWS Amplify, Configure an Android AVD, Clone the Repo
+- Build a Python Flask Server
+- Build a MySQL database
+- Point the app at your Flask server and dev amplitude
+
+**Configure Cognito and AWS Amplify, Configure an Android AVD, Clone the Repo.**
 
 In the folder you want do manage the project in (create a project directory):
 
@@ -112,21 +118,6 @@ Congrats! You've completely configured auth for the app! In the AWS console, Cog
 Now in the RNAmplify folder, we need to configure the NPM environment:
 `npm i`
 
-(you might have to install expo here too?)
-Configure an android virtual device:
-download Android Studio
-Install it using defaults. Run it. Don't import settings.
-When it's done, run it and click configure > SDK manager
-
-- do stuff
-  To run a virtual device, do configure > AVD manager. Set up a phone and launch it.
-
-To run the app, open the AVD
-
-`expo start`
-
-`a`
-
 As a final step, we need to implement a lambda function to auto-authorize users. This skips the step of needing to verify an email to log in.
 
 - Go to AWS console and open Lambda
@@ -144,7 +135,15 @@ Then go to your user pool on Cognito, click "Triggers" on the side, and set pre 
 
 Now, go to Cognito. Add three custom attributes: "causes", "attributes" and "GQLuserID". Keep other settings default.
 
-Now EVERYTHING should work and be hooked up to the back end! Woo!!!
+Configure an Android AVD
+Download Android Studio. Install it using defaults. Run it. Don't import settings.
+To run a virtual device, do configure > AVD manager. Set up a phone and launch it.
+
+To run the app, open the AVD
+
+`expo start`
+
+`a`
 
 Now how to clean up the git jank...
 
@@ -156,3 +155,17 @@ git reset origin/master
 git commit
 git push --set-upstream origin master
 ```
+
+**Build a MySQL database**
+Download and install MySQL Server https://dev.mysql.com/downloads/mysql/
+Set it up with defaults and get a server running on localhost (todo: add detail)
+in devbackend/sql, run createdb.sql then create_test_data.sql
+
+**Build a Python Flask Server**
+In the devbackend folder, pip install requirements.txt
+Update env variables to reflect config.py - replace all with your credentials. `setx MY_ENV_VAR "<some secret>"`
+run init.py
+
+**Point the app at your Flask server and dev amplitude**
+update slug in data/config.js to "http://10.0.2.2:5000/"
+todo: dev amplitude
