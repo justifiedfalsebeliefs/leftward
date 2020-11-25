@@ -48,8 +48,12 @@ amplify/team-provider-info.json
 babel.config.js
 
 devbackend/.idea
+backend/.idea/
+backend/.idea/*
 devbackend/.idea/*
 devbackend/venv
+backend/venv/
+backend/venv/*
 devbackend/venv/*
 *.pyc
 app/data/amplitudeconfig.js
