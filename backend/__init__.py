@@ -112,7 +112,7 @@ def fetch_dashboard_listings():
         for action_Id in new_actionIds:
             get_response(queries.pushUserDashActionsStatus(action_Id, dt.datetime.now(), guid), "PUSH")
 
-    guid = aws_auth.claims['custom:GQLuserID']
+    guid = aws_auth.claims['custom:userGuid']
     user_cause = aws_auth.claims['custom:causes']
 
     actions = get_response(queries.getDashboardActionsForAlgorithm(guid), 'GET', return_as_records=True)
@@ -125,31 +125,31 @@ def fetch_dashboard_listings():
 @app.route('/fetchHiddenActions', methods=['POST'])
 @aws_auth.authentication_required
 def fetch_hidden_actions():
-    return get_response(queries.fetchHiddenActions(aws_auth.claims['custom:GQLuserID']), 'GET')
+    return get_response(queries.fetchHiddenActions(aws_auth.claims['custom:userGuid']), 'GET')
 
 
 @app.route('/fetchCompletedActions', methods=['POST'])
 @aws_auth.authentication_required
 def fetch_completed_actions():
-    return get_response(queries.fetchCompletedActions(aws_auth.claims['custom:GQLuserID']), 'GET')
+    return get_response(queries.fetchCompletedActions(aws_auth.claims['custom:userGuid']), 'GET')
 
 
 @app.route('/fetchMyActions', methods=['POST'])
 @aws_auth.authentication_required
 def fetch_my_actions():
-    return get_response(queries.fetchMyActions(aws_auth.claims['custom:GQLuserID']), 'GET')
+    return get_response(queries.fetchMyActions(aws_auth.claims['custom:userGuid']), 'GET')
 
 
 @app.route('/pushNewUserGuid', methods=['POST'])
 @aws_auth.authentication_required
 def push_new_user_guid():
-    return get_response(queries.pushNewUserGuid(aws_auth.claims['custom:GQLuserID']), "PUSH")
+    return get_response(queries.pushNewUserGuid(aws_auth.claims['custom:userGuid']), "PUSH")
 
 
 @app.route('/pushCalcExp', methods=['POST'])
 @aws_auth.authentication_required
 def push_calc_exp():
-    guid = aws_auth.claims['custom:GQLuserID']
+    guid = aws_auth.claims['custom:userGuid']
     objects = get_response(queries.fetchUserLevel(guid), 'GET', return_as_records=True)
     exp = objects[0]['exp']
     level = objects[0]['level']
@@ -169,14 +169,14 @@ def push_calc_exp():
 @app.route('/fetchUserExperience', methods=['POST'])
 @aws_auth.authentication_required
 def fetch_user_experience():
-    return get_response(queries.fetchUserExperience(aws_auth.claims['custom:GQLuserID']), 'GET')
+    return get_response(queries.fetchUserExperience(aws_auth.claims['custom:userGuid']), 'GET')
 
 
 @app.route('/pushActionStatus', methods=['POST'])
 @aws_auth.authentication_required
 def push_action_status():
     try:
-        user_guid = aws_auth.claims['custom:GQLuserID']
+        user_guid = aws_auth.claims['custom:userGuid']
         status = request.args.get('statusUpdate')
         actionId = request.args.get('actionId')
         objects = get_response(queries.getUserActions(user_guid), 'GET', return_as_records=True)
