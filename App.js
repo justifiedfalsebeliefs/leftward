@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { AppLoading } from "expo";
 
-import Amplify from "aws-amplify";
-import config from "./aws-exports";
+import Amplify, { Auth } from 'aws-amplify';
+import amplifyConfig from "./app/auth/amplifyConfig";
 import amplitudekey from "./app/data/amplitudeconfig";
 
 import navigationTheme from "./app/navigation/navigationTheme";
@@ -14,7 +14,7 @@ import authStorage from "./app/auth/storage";
 
 import * as Amplitude from 'expo-analytics-amplitude';
 
-Amplify.configure(config);
+Amplify.configure(amplifyConfig);
 Amplitude.initialize(amplitudekey())
 
 export default function App() {
