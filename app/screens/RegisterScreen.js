@@ -22,7 +22,7 @@ function RegisterScreen({ route, navigation }) {
         attributes: {
           email: userInfo.email,
           "custom:causes": route.params.causes,
-          "custom:GQLuserID": route.params.guid
+          "custom:userGuid": route.params.guid
         },
       });
       

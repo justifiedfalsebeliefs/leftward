@@ -29,7 +29,7 @@ function DashboardScreen({ navigation }) {
   }, [navigation]);
   
   useMountEffect(() => {
-    Amplitude.setUserId(user.idToken.payload["custom:GQLuserID"]);
+    Amplitude.setUserId(user.idToken.payload["custom:userGuid"]);
     Amplitude.logEvent('ViewDashboard');
   });
 
