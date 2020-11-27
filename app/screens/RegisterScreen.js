@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { StyleSheet, View} from "react-native";
 import useAuth from "../auth/useAuth";
 import { Auth } from "aws-amplify";
-import pushData from "../data/pushData";
+import callApi from "../data/callApi";
 import * as Amplitude from 'expo-analytics-amplitude';
 import logAmplitudeEventOnMount from "../utility/logAmplitudeEventOnMount"
 import colors from "../config/colors"
@@ -16,19 +16,26 @@ function RegisterScreen({ route, navigation }) {
 
   const handleSubmit = async (userInfo) => {
     try {
-      Amplitude.logEvent('PressRegister')
-      await Auth.signUp({
+      const result = await Auth.signUp({
         username: userInfo.username,
         password: userInfo.password,
         attributes: {
           email: userInfo.email,
           "custom:causes": route.params.causes,
-          "custom:userGuid": route.params.guid},});
+          "custom:userGuid": route.params.guid
+        },
+      });
+      
       await Auth.signIn(
         userInfo.username,
-        userInfo.password);
-      Auth.currentSession().then((data) => {auth.logIn(data);});
-      await pushData("pushNewUserGuid", params=[{key:"newGuid", value:route.params.guid}])
+        userInfo.password
+      );
+      const user = await Auth.currentSession();
+      await callApi(user.idToken.jwtToken, "pushNewUserGuid", params=[{key:"newGuid", value:route.params.guid}])
+      Amplitude.logEvent('PressRegister')
+      Auth.currentSession().then((data) => {
+        auth.logIn(data);
+      });
     } catch (error) {
       setError(error.message);
     }
