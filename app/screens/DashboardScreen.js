@@ -3,6 +3,7 @@ import { View } from "react-native";
 import useAuth from "../auth/useAuth";
 import callApi from "../data/callApi";
 import * as Amplitude from 'expo-analytics-amplitude';
+import useMountEffect from '../hooks/useMountEffect'
 import refreshToken from '../auth/refreshToken'
 import Screen from "../components/Screen";
 import ActionList from "../components/ActionList";
@@ -13,7 +14,6 @@ function DashboardScreen({ navigation }) {
   const { user } = useAuth();
   const [userExperience, setUserExperience] = useState();
   const [actions, setActions] = useState();
-  const useMountEffect = (fun) => useEffect(fun, [])
 
   async function refreshDashboard(){
     const exp = await callApi(user, "fetchUserExperience");
