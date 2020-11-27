@@ -1,10 +1,9 @@
 import React from "react";
 import { FlatList, StyleSheet, RefreshControl, View, Text  } from "react-native";
-import useAuth from "../auth/useAuth";
 import ActionCard from "../components/ActionCard";
 import routes from "../navigation/routes";
 import ListItemDeleteAction from "../components/lists/ListItemDeleteAction"
-import callApi from "../data/callApi";
+import pushData from "../data/pushData";
 import colors from "../config/colors";
 import fonts from "../config/fonts"
 import Icon from "../components/Icon";
@@ -13,12 +12,10 @@ function ActionList({
     itemList,
     navigation,
     doOnRefresh,
-    refreshParentFunction,
     title,
     icon,
     height = 400
  }) {
-  const { user } = useAuth();
   const [refreshing, setRefreshing] = React.useState(false);
   const wait = (timeout) => {
     return new Promise(resolve => {
@@ -32,7 +29,7 @@ function ActionList({
   }, []);
 
   async function handleDelete(item) {
-    await callApi(user, "pushActionStatus", params = [{key:"statusUpdate", value:"HIDDEN"}, {key:"actionId", value:item.actionId}])
+    await pushData("pushActionStatus", params = [{key:"statusUpdate", value:"HIDDEN"}, {key:"actionId", value:item.actionId}])
     doOnRefresh()
   };
 

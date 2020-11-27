@@ -1,7 +1,6 @@
 import React, { useEffect } from "react";
 import { View, StyleSheet, Linking, ScrollView  } from "react-native";
-import useAuth from "../auth/useAuth";
-import callApi from "../data/callApi";
+import pushData from "../data/pushData";
 import * as Amplitude from 'expo-analytics-amplitude';
 import routes from "../navigation/routes";
 import colors from "../config/colors";
@@ -14,7 +13,6 @@ import Icon from "../components/Icon";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 function ActionDetailsScreen({ route, navigation }) {
-  const { user } = useAuth();
   const action = route.params;
   const useMountEffect = (fun) => useEffect(fun, [])
   useMountEffect(() => {Amplitude.logEventWithProperties('ViewActionDetails', {actionId: action.actionId, actionTitle: action.actionTitle})});
@@ -36,8 +34,8 @@ function ActionDetailsScreen({ route, navigation }) {
   const handleStatusPress = async (status, actionId) => {
       Amplitude.logEventWithProperties('PressStatusUpdate', {status: status, actionId: actionId})
       
-      await callApi(user, "pushActionStatus", params = [{key:"statusUpdate", value:status}, {key:"actionId", value:actionId}])
-      if (status == "COMPLETE") await callApi(user, "pushCalcExp");
+      await pushData("pushActionStatus", params = [{key:"statusUpdate", value:status}, {key:"actionId", value:actionId}])
+      if (status == "COMPLETE") await pushData("pushCalcExp");
       navigation.goBack()
   };
 

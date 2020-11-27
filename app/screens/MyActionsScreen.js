@@ -1,21 +1,19 @@
 import React, { useEffect, useState } from "react";
 import { View } from "react-native";
-import useAuth from "../auth/useAuth";
-import callApi from "../data/callApi";
+import getData from "../data/getData";
 import Screen from "../components/Screen";
 import ActionList from "../components/ActionList"
 import BadgesWidget from "../components/widgets/BadgesWidget";
 import logAmplitudeEventOnMount from "../utility/logAmplitudeEventOnMount"
 
 function MyActionsScreen({ navigation }) {
-  const { user } = useAuth();
   logAmplitudeEventOnMount('ViewMyActions')
   const [actionsInProgress, setActionsInProgress] = useState([]);
   const [actionsCompleted, setActionsCompleted] = useState([]);
 
   async function refreshActions(){
-    const listingsInProgress = await callApi(user, "fetchMyActions");
-    const listingsCompleted = await callApi(user, "fetchCompletedActions");
+    const listingsInProgress = await getData("fetchMyActions");
+    const listingsCompleted = await getData("fetchCompletedActions");
     setActionsInProgress(listingsInProgress);
     setActionsCompleted(listingsCompleted);}
 

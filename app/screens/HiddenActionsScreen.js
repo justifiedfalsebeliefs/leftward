@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
-import callApi from "../data/callApi";
-import useAuth from "../auth/useAuth";
+import getData from "../data/getData";
 import Screen from "../components/Screen";
 import ActionList from "../components/ActionList"
 import logAmplitudeEventOnMount from "../utility/logAmplitudeEventOnMount"
@@ -8,10 +7,9 @@ import logAmplitudeEventOnMount from "../utility/logAmplitudeEventOnMount"
 function HiddenActionsScreen({ navigation }) {
   logAmplitudeEventOnMount('ViewHiddenActions')
   const [actions, setActions] = useState([]);
-  const { user } = useAuth();
 
   async function refreshActions(){
-    const listings = await callApi(user, "fetchHiddenActions");
+    const listings = await getData("fetchHiddenActions");
     setActions(listings);}
 
   useEffect(() => {refreshActions();}, []);
