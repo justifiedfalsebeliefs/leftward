@@ -11,7 +11,6 @@ import AppNavigator from "./app/navigation/AppNavigator";
 import AuthNavigator from "./app/navigation/AuthNavigator";
 import AuthContext from "./app/auth/context";
 import authStorage from "./app/auth/storage";
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import * as Amplitude from 'expo-analytics-amplitude';
 
@@ -25,7 +24,6 @@ export default function App() {
   const restoreUser = async () => {
     const user = await authStorage.getUserSession();
     if (user) {
-      await AsyncStorage.getAllKeys().then(keys => AsyncStorage.multiRemove(keys))
       setUser(user);
     }
   };
