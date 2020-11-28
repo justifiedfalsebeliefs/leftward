@@ -24,7 +24,7 @@ export default function App() {
   const restoreUser = async () => {
     const user = await authStorage.getUserSession();
     if (user) {
-      setUser(user);
+      Auth.currentSession().then((data) => {setUser(data); authStorage.storeSession(data)})
     }
   };
 

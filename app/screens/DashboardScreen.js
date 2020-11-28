@@ -2,14 +2,12 @@ import React, { useEffect, useState} from "react";
 import eventHub from "../events/eventHub";
 import { View } from "react-native";
 import getData from "../data/getData";
-import refreshToken from '../auth/refreshToken'
 import Screen from "../components/Screen";
 import ActionList from "../components/ActionList";
 import LevelWidget from "../components/widgets/LevelWidget";
 import CauseActionBreakdownWidget from "../components/widgets/CauseActionBreakdownWidget";
 
 function DashboardScreen({ navigation }) {
-  refreshToken();
   eventHub.emitEvent(eventType='navigationEvent', eventTitle='viewDashboard')
 
   const [userExperience, setUserExperience] = useState();
