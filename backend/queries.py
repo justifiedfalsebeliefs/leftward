@@ -227,6 +227,7 @@ def pushCalcExp(exp, level, nextLevel, totalActions, previousLevel, guid, EcoAct
 def fetchUserLevel(guid):
     return"""
     SELECT
+    (SELECT level FROM user WHERE guid = '{}') as previousLevelNumber,
     (SELECT SUM(a.reward)
             FROM userAction ua
             INNER JOIN action a on a.actionId = ua.actionId
@@ -238,7 +239,7 @@ def fetchUserLevel(guid):
                     FROM userAction ua
                     INNER JOIN action a on a.actionId = ua.actionId
                     WHERE ua.userGuid = '{}'
-                    AND ua.status = 'COMPLETE')) as level,
+                    AND ua.status = 'COMPLETE')) as currentLevelNumber,
     (SELECT expRequired from level WHERE levelNumber = (
                     SELECT MAX(levelNumber) from level l
                 WHERE expRequired <= (
@@ -324,4 +325,4 @@ def fetchUserLevel(guid):
         AND c2.title = 'Criminal Justice Reform'
         ) as JustExp
         ;
-    """.format(guid, guid, guid, guid, guid, guid, guid, guid, guid, guid, guid)
+    """.format(guid, guid, guid, guid, guid, guid, guid, guid, guid, guid, guid, guid)

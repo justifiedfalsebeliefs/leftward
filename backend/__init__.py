@@ -150,9 +150,11 @@ def push_new_user_guid():
 @aws_auth.authentication_required
 def push_calc_exp():
     guid = aws_auth.claims['custom:userGuid']
+
     objects = get_response(queries.fetchUserLevel(guid), 'GET', return_as_records=True)
     exp = objects[0]['exp']
-    level = objects[0]['level']
+    previousLevelNumber = objects[0]['previousLevelNumber']
+    currentLevelNumber = objects[0]['currentLevelNumber']
     nextLevel = objects[0]['nextLevel']
     totalActions = objects[0]['totalActions']
     previousLevel = objects[0]['previousLevel']
@@ -162,8 +164,13 @@ def push_calc_exp():
     EcoExp = objects[0]['EcoExp']
     EnvExp = objects[0]['EnvExp']
     JustExp = objects[0]['JustExp']
-    return get_response(queries.pushCalcExp(exp, level, nextLevel, totalActions, previousLevel, guid,
-                            EcoActions, EnvActions, JustActions), "PUSH")
+    if currentLevelNumber > previousLevelNumber:
+        level_up = True
+    else:
+        level_up = False
+    get_response(queries.pushCalcExp(exp, currentLevelNumber, nextLevel, totalActions, previousLevel, guid,
+                                     EcoActions, EnvActions, JustActions), "PUSH")
+    return jsonify({'levelUp': level_up, 'newLevel': currentLevelNumber}), 200
 
 
 @app.route('/fetchUserExperience', methods=['POST'])
