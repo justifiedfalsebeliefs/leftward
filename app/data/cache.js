@@ -14,9 +14,7 @@ async function getData(key){
         return false
     } else{
         storageObject = JSON.parse(cachedValue)
-        console.log(nowTimestamp)
-        console.log(storageObject.cacheTimestamp)
-        if (nowTimestamp - storageObject.cacheTimestamp > 600) {
+        if (nowTimestamp - storageObject.cacheTimestamp > 300) {
             console.log("cache expired!")
             return false
         }
