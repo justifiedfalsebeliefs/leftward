@@ -4,8 +4,12 @@ import cache from "./cache"
 
 export default async function getData(endpoint, params = false) {
     const session = await authStorage.getUserSession();
-    const stringParams = JSON.stringify(params)
-    const cacheKey = endpoint.concat(stringParams)
+    if (params){
+        const stringParams = JSON.stringify(params)
+        var cacheKey = endpoint.concat(stringParams)
+    } else {
+        var cacheKey = endpoint
+    }
     var storageObject = await cache.getData(cacheKey)
     if (storageObject){
         console.log('using cached response for cacheKey: '.concat(cacheKey))
