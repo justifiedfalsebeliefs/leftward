@@ -18,8 +18,8 @@ function ActionCard({
   renderRightActions
 }) {
   return (
-    <Swipeable renderRightActions={renderRightActions}>
-      <TouchableWithoutFeedback onPress={onPress}>
+    <TouchableWithoutFeedback onPress={onPress}>
+      <Swipeable renderRightActions={renderRightActions}>
         <View style={styles.cardContainer}>
           <View style={styles.titleBar}>
             <CauseIcon style={styles.icon} cause={cause} size={35}></CauseIcon>
@@ -31,8 +31,8 @@ function ActionCard({
             <Text style={styles.titleText}>{title}</Text>
           </View>
         </View>
-      </TouchableWithoutFeedback>
-    </Swipeable>
+      </Swipeable>
+    </TouchableWithoutFeedback>
   );
 }
 
