@@ -1,6 +1,5 @@
 import React from "react";
-import { View, StyleSheet, Linking, ScrollView  } from "react-native";
-import pushData from "../data/pushData";
+import { View, StyleSheet, Alert, Linking, ScrollView  } from "react-native";
 import eventHub from "../events/eventHub"
 import routes from "../navigation/routes";
 import colors from "../config/colors";
@@ -13,7 +12,7 @@ import Icon from "../components/Icon";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 function ActionDetailsScreen({ route, navigation }) {
-  eventHub.emitEvent(eventType='navigationEvent', eventTitle='ViewActionDetails')
+  eventHub.emitEvent(eventType='navigationEvent', eventTitle='viewActionDetails')
 
   const action = route.params;
   const campaign = {
@@ -26,14 +25,12 @@ function ActionDetailsScreen({ route, navigation }) {
     }};
     
     function loadInBrowser() {
-      eventHub.emitEvent(eventType='userEvent', eventTitle='PressOpenActionURL', props={actionId: action.actionId, actionTitle: action.actionTitle})
+      eventHub.emitEvent(eventType='userEvent', eventTitle='pressOpenActionURL', props={actionId: action.actionId, actionTitle: action.actionTitle})
       Linking.openURL(action.url).catch(err => console.error("Couldn't load page", err));
     };
     
   const handleStatusPress = async (status, actionId) => {
-      await eventHub.emitEvent(eventType='userEvent', eventTitle='PressActionStatusUpdate', props={status: status, actionId: actionId})
-      await pushData("pushActionStatus", params = [{key:"statusUpdate", value:status}, {key:"actionId", value:actionId}])
-      if (status == "COMPLETE") await pushData("pushCalcExp");
+      eventHub.emitEvent(eventType='userEvent', eventTitle='pressActionStatusUpdate', props={status: status, actionId: actionId})
       navigation.goBack()
   };
 
