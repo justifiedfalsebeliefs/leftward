@@ -1,7 +1,7 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { View, StyleSheet, Linking, ScrollView  } from "react-native";
 import pushData from "../data/pushData";
-import * as Amplitude from 'expo-analytics-amplitude';
+import eventHub from "../events/eventHub"
 import routes from "../navigation/routes";
 import colors from "../config/colors";
 import fonts from "../config/fonts"
@@ -13,10 +13,9 @@ import Icon from "../components/Icon";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 function ActionDetailsScreen({ route, navigation }) {
-  const action = route.params;
-  const useMountEffect = (fun) => useEffect(fun, [])
-  useMountEffect(() => {Amplitude.logEventWithProperties('ViewActionDetails', {actionId: action.actionId, actionTitle: action.actionTitle})});
+  eventHub.emitEvent(eventType='navigationEvent', eventTitle='ViewActionDetails')
 
+  const action = route.params;
   const campaign = {
     title: action.campaignTitle,
     description: action.campaignDescription,
@@ -27,13 +26,12 @@ function ActionDetailsScreen({ route, navigation }) {
     }};
     
     function loadInBrowser() {
-      Amplitude.logEventWithProperties('PressOpenActionURL', {actionId: action.actionId, actionTitle: action.actionTitle})
+      eventHub.emitEvent(eventType='userEvent', eventTitle='PressOpenActionURL', props={actionId: action.actionId, actionTitle: action.actionTitle})
       Linking.openURL(action.url).catch(err => console.error("Couldn't load page", err));
     };
     
   const handleStatusPress = async (status, actionId) => {
-      Amplitude.logEventWithProperties('PressStatusUpdate', {status: status, actionId: actionId})
-      
+      await eventHub.emitEvent(eventType='userEvent', eventTitle='PressActionStatusUpdate', props={status: status, actionId: actionId})
       await pushData("pushActionStatus", params = [{key:"statusUpdate", value:status}, {key:"actionId", value:actionId}])
       if (status == "COMPLETE") await pushData("pushCalcExp");
       navigation.goBack()

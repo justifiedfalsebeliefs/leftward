@@ -10,7 +10,6 @@ import logAmplitudeEventOnMount from "../utility/logAmplitudeEventOnMount"
 function AccountSettingsScreen({ navigation }) {
   logAmplitudeEventOnMount('ViewAccountSettings')
 
-  const { user, logOut } = useAuth();
   const [error, setError] = useState();
   const [emailVerified, setEmailVerified] = useState();
   const [cognitoUser, setCognitoUser] = useState();
