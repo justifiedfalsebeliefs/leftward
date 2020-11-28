@@ -14,7 +14,9 @@ async function getData(key){
         return false
     } else{
         storageObject = JSON.parse(cachedValue)
-        refreshCache = (nowTimestamp - storageObject.cacheTimestamp > 600) ? true:false
+        if (nowTimestamp - storageObject.cacheTimestamp > 600) {
+            return false
+        }
     }
     return storageObject
 }
