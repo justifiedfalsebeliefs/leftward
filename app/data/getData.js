@@ -8,12 +8,12 @@ export default async function getData(endpoint, params = false) {
     const cacheKey = endpoint.concat(stringParams)
     var storageObject = await cache.getData(cacheKey)
     if (storageObject){
-        console.log('using cached response')
+        console.log('using cached response for cacheKey: '.concat(cacheKey))
         return storageObject.data
     }
     responseData = await callApi(session.idToken.jwtToken, endpoint, params)
     await cache.cacheData(responseData, cacheKey)
-    console.log("refreshed the cache")
+    console.log("refreshed the cache for cacheKey: ".concat(cacheKey))
     return responseData
     }
 
