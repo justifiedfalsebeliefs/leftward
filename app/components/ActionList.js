@@ -3,7 +3,7 @@ import { FlatList, StyleSheet, RefreshControl, View, Text  } from "react-native"
 import ActionCard from "../components/ActionCard";
 import routes from "../navigation/routes";
 import ListItemDeleteAction from "../components/lists/ListItemDeleteAction"
-import pushData from "../data/pushData";
+import eventHub from "../events/eventHub"
 import colors from "../config/colors";
 import fonts from "../config/fonts"
 import Icon from "../components/Icon";
@@ -29,7 +29,7 @@ function ActionList({
   }, []);
 
   async function handleDelete(item) {
-    await pushData("pushActionStatus", params = [{key:"statusUpdate", value:"HIDDEN"}, {key:"actionId", value:item.actionId}])
+    eventHub.emitEvent(eventType='userEvent', eventTitle='pressActionStatusUpdate', props={status: "HIDDEN", actionId: item.actionId})
     doOnRefresh()
   };
 
