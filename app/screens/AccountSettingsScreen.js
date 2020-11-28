@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from "react";
+import eventHub from "../events/eventHub"
 import { StyleSheet, Alert } from "react-native";
 import Screen from "../components/Screen";
 import AuthForm from "../components/AuthForm";
 import { Auth } from "aws-amplify";
 import Button from "../components/Button";
-import logAmplitudeEventOnMount from "../utility/logAmplitudeEventOnMount"
 
 
 function AccountSettingsScreen({ navigation }) {
-  logAmplitudeEventOnMount('ViewAccountSettings')
+  eventHub.emitEvent(eventType='navigationEvent', eventTitle='viewAccountSettings')
 
   const [error, setError] = useState();
   const [emailVerified, setEmailVerified] = useState();

@@ -1,13 +1,11 @@
 import React from "react";
+import eventHub from "../events/eventHub";
 import { ImageBackground, StyleSheet, View, Image } from "react-native";
-
 import Button from "../components/Button";
 import routes from "../navigation/routes";
 
-import logAmplitudeEventOnMount from "../utility/logAmplitudeEventOnMount"
-
 function WelcomeScreen({ navigation }) {
-  logAmplitudeEventOnMount('ViewWelcomeScreen')
+  eventHub.emitEvent(eventType='navigationEvent', eventTitle='viewWelcomeScreen')
   
   return (
     <ImageBackground

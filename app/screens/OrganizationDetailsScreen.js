@@ -1,19 +1,16 @@
 import React from "react";
+import eventHub from "../events/eventHub";
 import { View, StyleSheet, ScrollView, TouchableOpacity, Linking} from "react-native";
-
 import Screen from "../components/Screen"
-import colors from "../config/colors";
 import fonts from "../config/fonts"
 import Text from "../components/Text";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import logAmplitudeEventOnMount from "../utility/logAmplitudeEventOnMount"
-import * as Amplitude from 'expo-analytics-amplitude';
 
 function OrganizationDetailsScreen({ route, navigation }) {
-  logAmplitudeEventOnMount('ViewOrganizationDetails')
+  eventHub.emitEvent(eventType='navigationEvent', eventTitle='viewOrganizationDetails')
   
   function loadInBrowser() {
-    Amplitude.logEventWithProperties('PressOpenOrganizationURL', {organizationId: organization.title})
+    eventHub.emitEvent(eventType='userEvent', eventTitle='pressOpenOrganizationURL', props={organizationId: organization.title})
     Linking.openURL(organization.url).catch(err => console.error("Couldn't load page", err));
   };
 

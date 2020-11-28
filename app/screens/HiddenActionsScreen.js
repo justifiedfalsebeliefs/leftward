@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
+import eventHub from "../events/eventHub";
 import getData from "../data/getData";
 import Screen from "../components/Screen";
 import ActionList from "../components/ActionList"
-import logAmplitudeEventOnMount from "../utility/logAmplitudeEventOnMount"
 
 function HiddenActionsScreen({ navigation }) {
-  logAmplitudeEventOnMount('ViewHiddenActions')
+  eventHub.emitEvent(eventType='navigationEvent', eventTitle='viewHiddenActions')
   const [actions, setActions] = useState([]);
 
   async function refreshActions(){

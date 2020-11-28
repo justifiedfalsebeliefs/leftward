@@ -14,8 +14,7 @@ export default useAuth = () => {
 
   const logOut = () => {
     setUser(null);
-    AsyncStorage.getAllKeys()
-        .then(keys => AsyncStorage.multiRemove(keys))
+    AsyncStorage.getAllKeys().then(keys => AsyncStorage.multiRemove(keys))
     authStorage.removeSession();
   };
 

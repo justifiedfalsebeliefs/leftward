@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
+import eventHub from "../events/eventHub";
 import { View } from "react-native";
 import getData from "../data/getData";
 import Screen from "../components/Screen";
 import ActionList from "../components/ActionList"
 import BadgesWidget from "../components/widgets/BadgesWidget";
-import logAmplitudeEventOnMount from "../utility/logAmplitudeEventOnMount"
 
 function MyActionsScreen({ navigation }) {
-  logAmplitudeEventOnMount('ViewMyActions')
+  eventHub.emitEvent(eventType='navigationEvent', eventTitle='viewMyActions')
   const [actionsInProgress, setActionsInProgress] = useState([]);
   const [actionsCompleted, setActionsCompleted] = useState([]);
 

@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
+import eventHub from "../events/eventHub";
 import { StyleSheet, View } from "react-native";
 import routes from "../navigation/routes";
 import AuthForm from "../components/AuthForm";
@@ -6,10 +7,9 @@ import Screen from "../components/Screen";
 import { Auth } from "aws-amplify";
 import useAuth from "../auth/useAuth";
 import Button from "../components/Button";
-import logAmplitudeEventOnMount from "../utility/logAmplitudeEventOnMount"
 
 function LoginScreen({ navigation }) {
-  logAmplitudeEventOnMount('ViewLogin')
+  eventHub.emitEvent(eventType='navigationEvent', eventTitle='viewLogin')
 
   const auth = useAuth();
   const [error, setError] = useState();

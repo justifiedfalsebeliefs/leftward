@@ -1,9 +1,7 @@
 import React, { useEffect, useState} from "react";
+import eventHub from "../events/eventHub";
 import { View } from "react-native";
-import useAuth from "../auth/useAuth";
 import getData from "../data/getData";
-import * as Amplitude from 'expo-analytics-amplitude';
-import useMountEffect from '../hooks/useMountEffect'
 import refreshToken from '../auth/refreshToken'
 import Screen from "../components/Screen";
 import ActionList from "../components/ActionList";
@@ -11,7 +9,9 @@ import LevelWidget from "../components/widgets/LevelWidget";
 import CauseActionBreakdownWidget from "../components/widgets/CauseActionBreakdownWidget";
 
 function DashboardScreen({ navigation }) {
-  const { user } = useAuth();
+  refreshToken();
+  eventHub.emitEvent(eventType='navigationEvent', eventTitle='viewDashboard')
+
   const [userExperience, setUserExperience] = useState();
   const [actions, setActions] = useState();
 
@@ -27,13 +27,6 @@ function DashboardScreen({ navigation }) {
       return refresh
     });
   }, [navigation]);
-  
-  useMountEffect(() => {
-    Amplitude.setUserId(user.idToken.payload["custom:userGuid"]);
-    Amplitude.logEvent('ViewDashboard');
-  });
-
-  refreshToken();
 
   return (
       <Screen>

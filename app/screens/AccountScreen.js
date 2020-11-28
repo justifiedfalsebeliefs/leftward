@@ -1,4 +1,5 @@
 import React from "react";
+import eventHub from "../events/eventHub"
 import { StyleSheet, View, FlatList, Text} from "react-native";
 
 import { ListItem, ListItemSeparator } from "../components/lists";
@@ -7,7 +8,6 @@ import Icon from "../components/Icon";
 import routes from "../navigation/routes";
 import Screen from "../components/Screen";
 import useAuth from "../auth/useAuth";
-import logAmplitudeEventOnMount from "../utility/logAmplitudeEventOnMount"
 import fonts from "../config/fonts";
 
 
@@ -36,7 +36,7 @@ const menuItems = [
 ];
 
 function AccountScreen({ navigation }) {
-  logAmplitudeEventOnMount('ViewAccount')
+  eventHub.emitEvent(eventType='navigationEvent', eventTitle='viewAccount')
   const { user, logOut } = useAuth();
   
   return (

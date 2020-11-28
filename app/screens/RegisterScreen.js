@@ -4,19 +4,18 @@ import useAuth from "../auth/useAuth";
 import { Auth } from "aws-amplify";
 import callApi from "../data/callApi";
 import * as Amplitude from 'expo-analytics-amplitude';
-import logAmplitudeEventOnMount from "../utility/logAmplitudeEventOnMount"
 import colors from "../config/colors"
 import AuthForm from "../components/AuthForm";
 import Screen from "../components/Screen";
 
 function RegisterScreen({ route, navigation }) {
-  logAmplitudeEventOnMount('ViewRegister')
+  Amplitude.logEvent('ViewRegister')
   const [error, setError] = useState();
   const auth = useAuth();
 
   const handleSubmit = async (userInfo) => {
     try {
-      const result = await Auth.signUp({
+      await Auth.signUp({
         username: userInfo.username,
         password: userInfo.password,
         attributes: {

@@ -1,17 +1,15 @@
-import React, { useState, useEffect } from "react";
-import { StyleSheet, Alert } from "react-native";
+import React, { useState } from "react";
+import eventHub from "../events/eventHub"
+import { Alert } from "react-native";
 import routes from "../navigation/routes";
 import AuthForm from "../components/AuthForm";
 import Screen from "../components/Screen";
 import { Auth } from "aws-amplify";
-import useAuth from "../auth/useAuth";
-import logAmplitudeEventOnMount from "../utility/logAmplitudeEventOnMount"
 
 
 function ConfirmRecoverPasswordScreen({ navigation }) {
-  logAmplitudeEventOnMount('ViewConfirmRecoverPassword')
+  eventHub.emitEvent(eventType='navigationEvent', eventTitle='viewConfirmRecoverPassword')
 
-  const auth = useAuth();
   const [error, setError] = useState();
 
   const handleSubmit = async (userInfo) => {

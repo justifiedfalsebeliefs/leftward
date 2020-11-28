@@ -1,17 +1,13 @@
-import React, { useState, useEffect } from "react";
-import { StyleSheet } from "react-native";
+import React, { useState } from "react";
+import eventHub from "../events/eventHub"
 import routes from "../navigation/routes";
 import Screen from "../components/Screen";
 import { Auth } from "aws-amplify";
 import AuthForm from "../components/AuthForm";
-import useAuth from "../auth/useAuth";
-import logAmplitudeEventOnMount from "../utility/logAmplitudeEventOnMount"
-
 
 function ForgotPasswordScreen({ navigation }) {
-  logAmplitudeEventOnMount('ViewForgotPassword')
+  eventHub.emitEvent(eventType='navigationEvent', eventTitle='viewForgotPassword')
 
-  const auth = useAuth();
   const [error, setError] = useState();
 
   const handleSubmit = async (userInfo) => {

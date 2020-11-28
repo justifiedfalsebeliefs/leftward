@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import eventHub from "../events/eventHub";
 import { StyleSheet, View, Text } from "react-native";
 import Screen from "../components/Screen";
 import Button from "../components/Button";
@@ -6,10 +7,9 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import { Auth } from "aws-amplify";
 import colors from "../config/colors"
 import fonts from "../config/fonts"
-import logAmplitudeEventOnMount from "../utility/logAmplitudeEventOnMount"
 
 function UpdateCauseScreen({ navigation }) {
-  logAmplitudeEventOnMount('ViewUpdateCause')
+  eventHub.emitEvent(eventType='navigationEvent', eventTitle='viewUpdateCause')
 
   const [causes, setCauses] = useState();
   const [envColor, setEnvColor] = useState(colors.levelBarBackground);
