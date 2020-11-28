@@ -9,15 +9,18 @@ async function cacheData(data, key) {
 
 async function getData(key){
     const nowTimestamp = Math.round(Date.now() / 1000);
-    var refreshCache = false
     const cachedValue = await AsyncStorage.getItem(key)
     if(cachedValue == null) {
-        refreshCache = true
+        return false
     } else{
         storageObject = JSON.parse(cachedValue)
         refreshCache = (nowTimestamp - storageObject.cacheTimestamp > 600) ? true:false
     }
-    return refreshCache, storageObject
+    return storageObject
 }
 
-export default {cacheData, getData}
+async function clearCache(key){
+    await AsyncStorage.removeItem(key)
+}
+
+export default {cacheData, getData, clearCache}
