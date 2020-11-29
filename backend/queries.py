@@ -131,8 +131,8 @@ def fetchUserExperience(guid):
     return """
     SELECT
         levelNumber,
-        levelUpPoints,
-        previousLevelUpPoints,
+        nextLevelPointsRequired,
+        currentLevelPointsRequired,
         pointsEarnedTotal,
         actionsByCause,
         totalActionsCompletedCount

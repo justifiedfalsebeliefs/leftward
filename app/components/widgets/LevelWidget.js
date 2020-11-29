@@ -7,10 +7,10 @@ function LevelWidget({
     userExperience
 }) {
 if(typeof userExperience !== 'undefined'){
-    const progress = ((userExperience.exp-userExperience.previousLevel)/(userExperience.nextLevel-userExperience.previousLevel)) * 100
+    const progress = ((userExperience.pointsEarnedTotal-userExperience.currentLevelPointsRequired)/(userExperience.nextLevelPointsRequired-userExperience.currentLevelPointsRequired)) * 100
     return (
       <View style={styles.widgetContainer}>
-        <Text style={styles.levelText}>{`Level ${userExperience.level}`}</Text>
+        <Text style={styles.levelText}>{`Level ${userExperience.levelNumber}`}</Text>
         <View style={styles.levelBarBackground}>
           <View style={{
             backgroundColor: colors.levelBarFill,
@@ -19,8 +19,8 @@ if(typeof userExperience !== 'undefined'){
             width: `${progress}%`,
             }}>
           </View>
-            <Text style={styles.expCurrent}>{`${userExperience.exp} pts`}</Text>
-            <Text style={styles.expGoal}>{`${userExperience.nextLevel}`}</Text>
+            <Text style={styles.expCurrent}>{`${userExperience.pointsEarnedTotal} pts`}</Text>
+            <Text style={styles.expGoal}>{`${userExperience.nextLevelPointsRequired}`}</Text>
         </View>
     </View>
   

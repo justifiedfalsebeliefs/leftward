@@ -1,8 +1,6 @@
 import React from "react";
 import { StyleSheet, View, Text } from "react-native";
 import routes from "../../navigation/routes";
-import ListItem from "../lists/ListItem"
-import Icon from "../Icon"
 import colors from "../../config/colors"
 import fonts from "../../config/fonts"
 import {  TouchableOpacity } from "react-native-gesture-handler";
@@ -12,22 +10,22 @@ function CauseActionBreakdownWidget({
     navigation
 }) {
 if(typeof userExperience !== 'undefined'){
-    const progress = ((userExperience.exp-userExperience.previousLevel)/(userExperience.nextLevel-userExperience.previousLevel)) * 100
+  userExperience.actionBreakdown = JSON.parse(userExperience.actionsByCause)
   return (
     <View style={styles.widgetContainer}>
       <TouchableOpacity onPress={() => navigation.navigate(routes.MYACTIONS)}>
         <View style={styles.actionBreakdownContainer}>
           <View style={styles.actionBreakdown}>
-            <Text style={styles.actionCount}>{userExperience.EnvActions}</Text>
-            <Text style={styles.causeTitle}>Environment {"\n"} Protection</Text>
+            <Text style={styles.actionCount}>{userExperience.actionBreakdown['Environmental Justice'].count}</Text>
+            <Text style={styles.causeTitle}>Environmental {"\n"} Justice</Text>
           </View>
           <View style={styles.actionBreakdown}>
-            <Text style={styles.actionCount}>{userExperience.EcoActions}</Text>
+            <Text style={styles.actionCount}>{userExperience.actionBreakdown['Economic Justice'].count}</Text>
             <Text style={styles.causeTitle}>Economic {"\n"} Justice</Text>
           </View>
           <View style={styles.actionBreakdown}>
-            <Text style={styles.actionCount}>{userExperience.JustActions}</Text>
-            <Text style={styles.causeTitle}>Criminal{"\n"}Justice Reform</Text>
+            <Text style={styles.actionCount}>{userExperience.actionBreakdown['Legal Justice'].count}</Text>
+            <Text style={styles.causeTitle}>Legal{"\n"}Justice </Text>
           </View>
         </View>
       </TouchableOpacity>
