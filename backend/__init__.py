@@ -4,6 +4,7 @@ import datetime as dt
 import config
 import mysql.connector
 import queries
+import json
 
 app = Flask(__name__)
 
@@ -67,59 +68,36 @@ def fetch_dashboard_listings():
             get_response(queries.pushDeactivateActions(actions_to_deactivate, guid), "PUSH")
         return actions
 
-    def get_more_actions(actions, user_cause, guid):
-        appropriate_cause_count = 0
+    def get_more_actions(actions, guid):
         previous_actionIds = []
         new_actionIds = []
         exclude_list = []
-        while len(new_actionIds + previous_actionIds) < 4:
-            easy_action = False
-            if actions:
-                exclude_list = [action['actionId'] for action in actions]
-                for action in actions:
-                    if action['active']:
-                        previous_actionIds.append(action['actionId'])
-                        if action['reward'] < 50:
-                            easy_action = True
-                        if action['causeTitle'] == user_cause:
-                            appropriate_cause_count += 1
-            if len(new_actionIds + previous_actionIds) >= 4:
-                break
-            if not easy_action:
-                response = get_response(queries.getEasyAction(exclude_list, guid), 'GET', return_as_records=True)
-                if response:
-                    id = response[0]['actionId']
-                    new_actionIds.append(id)
-                    exclude_list.append(id)
-            while appropriate_cause_count < 2:
-                response = get_response(queries.getUserCausePrefAction(exclude_list, guid, user_cause), 'GET', return_as_records=True)
-                if response:
-                    id = response[0]['actionId']
-                    new_actionIds.append(id)
-                    exclude_list.append(id)
-                appropriate_cause_count += 1
+        if actions:
+            exclude_list = [action['actionId'] for action in actions]
+            for action in actions:
+                if action['active']:
+                    previous_actionIds.append(action['actionId'])
+        if len(new_actionIds + previous_actionIds) >= 4:
+            return previous_actionIds, new_actionIds
 
-            response = get_response(queries.getRandomAction(exclude_list, guid), 'GET', return_as_records=True)
-            if response:
-                id = response[0]['actionId']
-                new_actionIds.append(id)
-                exclude_list.append(id)
+        remaining_actions_needed = 4 - len(previous_actionIds + new_actionIds)
+        actionIdObjects = get_response(queries.getActionIdsForDashboard(
+            remaining_actions_needed, exclude_list, guid), 'GET', return_as_records=True)
+        for record in actionIdObjects:
+            id = record['actionId']
+            new_actionIds.append(id)
         return previous_actionIds, new_actionIds
 
-    def flag_actions_active(previous_actionIds, new_actionIds, guid):
-        if previous_actionIds:
-            get_response(queries.updateUserDashActionsStatus(previous_actionIds, dt.datetime.now(), guid), "PUSH")
-        for action_Id in new_actionIds:
-            get_response(queries.pushUserDashActionsStatus(action_Id, dt.datetime.now(), guid), "PUSH")
-
     guid = aws_auth.claims['custom:userGuid']
-    user_cause = aws_auth.claims['custom:causes']
-
     actions = get_response(queries.getDashboardActionsForAlgorithm(guid), 'GET', return_as_records=True)
     actions = deactivate_actions(actions, guid)
-    previous_actionIds, new_actionIds = get_more_actions(actions, user_cause, guid)
-    flag_actions_active(previous_actionIds, new_actionIds, guid)
-    return get_response(queries.listActionsDashboard(previous_actionIds + new_actionIds), 'GET')
+    previous_actionIds, new_actionIds = get_more_actions(actions, guid)
+    if previous_actionIds:
+        get_response(queries.updateUserDashActionsStatus(previous_actionIds, dt.datetime.now(), guid), "PUSH")
+    for action_Id in new_actionIds:
+        get_response(queries.pushUserDashActionsStatus(action_Id, dt.datetime.now(), guid), "PUSH")
+    actionIds = (previous_actionIds + new_actionIds)
+    return get_response(queries.listActionsDashboard(actionIds), 'GET')
 
 
 @app.route('/fetchHiddenActions', methods=['POST'])
@@ -150,27 +128,38 @@ def push_new_user_guid():
 @aws_auth.authentication_required
 def push_calc_exp():
     guid = aws_auth.claims['custom:userGuid']
+    userActionsObjects = get_response(queries.fetchCompletedUserActions(guid), 'GET', return_as_records=True)
+    userObjects = get_response(queries.getUser(guid), 'GET', return_as_records=True)
+    preUpdateLevel = userObjects[0]['levelNumber']
+    pointsEarnedTotal = sum([x['reward'] for x in userActionsObjects])
+    currentLevelObjects = get_response(queries.getLevelByPoints(pointsEarnedTotal), 'GET', return_as_records=True)
+    currentLevel = currentLevelObjects[0]['level']
+    LevelPointsRequiredObjects = get_response(queries.getPointsByLevel(currentLevel), 'GET', return_as_records=True)
+    currentLevelPointsRequired = LevelPointsRequiredObjects[0]['currentPointsRequired']
+    nextLevelPointsRequired = LevelPointsRequiredObjects[0]['nextPointsRequired']
 
-    objects = get_response(queries.fetchUserLevel(guid), 'GET', return_as_records=True)
-    exp = objects[0]['exp']
-    previousLevelNumber = objects[0]['previousLevelNumber']
-    currentLevelNumber = objects[0]['currentLevelNumber']
-    nextLevel = objects[0]['nextLevel']
-    totalActions = objects[0]['totalActions']
-    previousLevel = objects[0]['previousLevel']
-    EcoActions = objects[0]['EcoActions']
-    EnvActions = objects[0]['EnvActions']
-    JustActions = objects[0]['JustActions']
-    EcoExp = objects[0]['EcoExp']
-    EnvExp = objects[0]['EnvExp']
-    JustExp = objects[0]['JustExp']
-    if currentLevelNumber > previousLevelNumber:
+    level_up = False
+    if preUpdateLevel > currentLevel:
         level_up = True
-    else:
-        level_up = False
-    get_response(queries.pushCalcExp(exp, currentLevelNumber, nextLevel, totalActions, previousLevel, guid,
-                                     EcoActions, EnvActions, JustActions), "PUSH")
-    return jsonify({'levelUp': level_up, 'newLevel': currentLevelNumber}), 200
+
+    totalActionsCompletedCount = 0
+    actionsByCause = {'Economic Justice': {'count': 0, 'points': 0},
+                      'Legal Justice': {'count': 0, 'points': 0},
+                      'Environmental Justice': {'count': 0, 'points': 0},
+                      'Racial Justice': {'count': 0, 'points': 0},
+                      'Gender and LGBTQ+ Justice': {'count': 0, 'points': 0}}
+    for record in userActionsObjects:
+        actionsByCause[record['cause']]['count'] += 1
+        actionsByCause[record['cause']]['points'] += record['reward']
+        totalActionsCompletedCount += 1
+
+    userDetails = {'actionsByCause': json.dumps(actionsByCause), 'totalActionsCompletedCount': totalActionsCompletedCount,
+                   'pointsEarnedTotal': pointsEarnedTotal,
+                   'currentLevel': currentLevel, 'currentLevelPointsRequired': currentLevelPointsRequired,
+                   'nextLevel': currentLevel+1, 'nextLevelPointsRequired': nextLevelPointsRequired}
+
+    get_response(queries.pushUpdateUser(guid, **userDetails), "PUSH")
+    return jsonify({'levelUp': level_up, 'userDetails': userDetails}), 200
 
 
 @app.route('/fetchUserExperience', methods=['POST'])
@@ -182,28 +171,10 @@ def fetch_user_experience():
 @app.route('/pushActionStatus', methods=['POST'])
 @aws_auth.authentication_required
 def push_action_status():
-    try:
-        user_guid = aws_auth.claims['custom:userGuid']
-        status = request.args.get('statusUpdate')
-        actionId = request.args.get('actionId')
-        objects = get_response(queries.getUserActions(user_guid), 'GET', return_as_records=True)
-        delete_id = []
-
-        if status == 'INPROGRESS':
-            for record in objects:
-                if record['status'] == 'HIDDEN' and str(record['actionId']) == str(actionId):
-                    print(delete_id)
-                    delete_id.append(record['userActionId'])
-
-        if status == 'COMPLETE' or 'HIDDEN':
-            for record in objects:
-                if record['status'] == 'INPROGRESS' and str(record['actionId']) == str(actionId):
-                    delete_id.append(record['userActionId'])
-        for id in delete_id:
-            get_response(queries.deleteUserAction(id), "PUSH")
-        return get_response(queries.pushActionStatus(user_guid, status, actionId), "PUSH")
-    except Exception as e:
-        return jsonify({'resp':"An Error Occured"}), 500
+    user_guid = aws_auth.claims['custom:userGuid']
+    actionId = request.args.get('actionId')
+    get_response(queries.deleteUserAction(actionId, user_guid), "PUSH")
+    return get_response(queries.pushActionStatus(user_guid, request.args.get('statusUpdate'), actionId), "PUSH")
 
 
 if __name__ == '__main__':
