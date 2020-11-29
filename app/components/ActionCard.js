@@ -8,8 +8,6 @@ import Swipeable from "react-native-gesture-handler/Swipeable";
 
 function ActionCard({
   title,
-  description,
-  imageUrl,
   onPress,
   cause,
   reward,
@@ -18,8 +16,8 @@ function ActionCard({
   renderRightActions
 }) {
   return (
-    <TouchableWithoutFeedback onPress={onPress}>
-      <Swipeable renderRightActions={renderRightActions}>
+    <Swipeable renderRightActions={renderRightActions}>
+      <TouchableWithoutFeedback onPress={onPress}>
         <View style={styles.cardContainer}>
           <View style={styles.titleBar}>
             <CauseIcon style={styles.icon} cause={cause} size={35}></CauseIcon>
@@ -31,8 +29,8 @@ function ActionCard({
             <Text style={styles.titleText}>{title}</Text>
           </View>
         </View>
-      </Swipeable>
-    </TouchableWithoutFeedback>
+      </TouchableWithoutFeedback>
+    </Swipeable>
   );
 }
 

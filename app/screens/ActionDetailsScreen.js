@@ -32,7 +32,7 @@ function ActionDetailsScreen({ route, navigation }) {
   const handleStatusPress = async (status, actionId) => {
       eventHub.emitEvent(eventType='userEvent', eventTitle='pressActionStatusUpdate', props={status: status, actionId: actionId})
       navigation.goBack()
-  };
+  }
 
   return (
     <Screen title={"Details"} back={true} navigation={navigation}>
