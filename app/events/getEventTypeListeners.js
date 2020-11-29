@@ -4,7 +4,7 @@ import listenerCalcExp from "./listenerCalcExp"
 import listenerUserPropUpdater from "./listenerUserPropUpdater"
 import listenerListingsUpdater from "./listenerListingsUpdater"
 
-export default async function getEventTypeListeners(eventType){
+export default function getEventTypeListeners(eventType){
     switch(eventType){
         case 'userEvent':
             return [
@@ -13,7 +13,7 @@ export default async function getEventTypeListeners(eventType){
             ]; break;
         case 'navigationEvent':
             return [
-                listenerAmplitude
+                listenerAmplitude,
             ]; break;
         case 'databasePush':
             return [
