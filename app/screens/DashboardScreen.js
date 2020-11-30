@@ -5,6 +5,7 @@ import getData from "../data/getData";
 import Screen from "../components/Screen";
 import ActionList from "../components/ActionList";
 import LevelWidget from "../components/widgets/LevelWidget";
+import wait from "../utility/wait"
 import CauseActionBreakdownWidget from "../components/widgets/CauseActionBreakdownWidget";
 
 function DashboardScreen({ navigation }) {
@@ -22,6 +23,7 @@ function DashboardScreen({ navigation }) {
   useEffect(() => {
     const refresh = navigation.addListener("focus", () =>{
       refreshDashboard()
+      wait(1000).then(() => refreshDashboard());
       return refresh
     });
   }, [navigation]);
@@ -30,7 +32,7 @@ function DashboardScreen({ navigation }) {
       <Screen>
         <LevelWidget userExperience={userExperience} navigation={navigation}/>
         <View style={{height:20}}></View>
-        <CauseActionBreakdownWidget userExperience={userExperience} navigation={navigation}/>
+        {/* <CauseActionBreakdownWidget userExperience={userExperience} navigation={navigation}/> */}
         <View style={{height:20}}></View>
         <ActionList
           itemList={actions}
