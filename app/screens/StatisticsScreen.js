@@ -4,7 +4,6 @@ import { View } from "react-native";
 import getData from "../data/getData";
 import Screen from "../components/Screen";
 import ActionList from "../components/ActionList"
-import BadgesWidget from "../components/widgets/BadgesWidget";
 
 function StatisticsScreen({ navigation }) {
   eventHub.emitEvent(eventType='navigationEvent', eventTitle='viewStatistics')
@@ -26,8 +25,6 @@ function StatisticsScreen({ navigation }) {
 
   return (
       <Screen>
-        <BadgesWidget badgesData={[]}></BadgesWidget>
-        <View style={{height:20}}></View>
         <ActionList
           height= {"20%"}
           itemList={actionsInProgress}

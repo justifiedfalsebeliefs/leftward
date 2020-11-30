@@ -5,6 +5,7 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import AccountNavigator from "./AccountNavigator";
 import DashboardNavigator from "./DashboardNavigator";
 import StatisticsNavigator from "./StatisticsNavigator"
+import BadgesNavigator from "./BadgesNavigator"
 import routes from "./routes";
 
 const Tab = createBottomTabNavigator();
@@ -32,7 +33,15 @@ const AppNavigator = () => (
         ),
       }}
     />
-
+        <Tab.Screen
+      name="Badges"
+      component={BadgesNavigator}
+      options={{
+        tabBarIcon: ({ color, size }) => (
+          <MaterialCommunityIcons name="trophy" color={color} size={size} />
+        ),
+      }}
+    />
 
     <Tab.Screen
       name="Account"
