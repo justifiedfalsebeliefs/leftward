@@ -1,6 +1,6 @@
 import React from "react";
 import eventHub from "../events/eventHub"
-import { StyleSheet, View, FlatList, Text} from "react-native";
+import { StyleSheet, View, FlatList, Text, Linking, Share} from "react-native";
 
 import { ListItem, ListItemSeparator } from "../components/lists";
 import colors from "../config/colors";
@@ -17,28 +17,57 @@ const menuItems = [
     icon: {
       name: "format-list-bulleted"
     },
-    targetScreen: routes.HIDDENACTIONS,
+    buttonCommand: {doThis: "navigate", target: routes.HIDDENACTIONS},
   },
   {
     title: "Manage Account",
     icon: {
       name: "account-settings"
     },
-    targetScreen: routes.SETTINGS,
+    buttonCommand: {doThis: "navigate", target: routes.SETTINGS},
   },
   {
     title: "Update Cause Preferences",
     icon: {
       name: "selection-ellipse-arrow-inside"
     },
-    targetScreen: routes.UPDATECAUSE,
+    buttonCommand: {doThis: "navigate", target: routes.UPDATECAUSE},
+  },
+  {
+    title: "Our Values",
+    icon: {
+      name: "link"
+    },
+    buttonCommand: {doThis: "link", target: "https://leftward.app/"},
+  },
+  {
+    title: "Share Leftward!",
+    icon: {
+      name: "share"
+    },
+    buttonCommand: {doThis: "share"},
   }
+  
 ];
 
 function AccountScreen({ navigation }) {
   eventHub.emitEvent(eventType='navigationEvent', eventTitle='viewAccount')
   const { user, logOut } = useAuth();
-  
+
+  const handleButtonPress = async (buttonCommand) =>{
+    if (buttonCommand.doThis == 'navigate') {
+      navigation.navigate(buttonCommand.target)
+    }
+    if (buttonCommand.doThis == 'link'){
+      Linking.openURL(buttonCommand.target).catch(err => console.error("Couldn't load page", err));
+    }
+    if (buttonCommand.doThis =='share'){
+      await Share.share({
+        message:
+          'Checkout the site Leftward.app',
+      });
+    }
+  }
   return (
     <Screen>
       <Text style={styles.username}>{user.username}</Text>
@@ -68,7 +97,7 @@ function AccountScreen({ navigation }) {
                 backgroundColor={item.icon.backgroundColor}
               />
             }
-            onPress={() => navigation.navigate(item.targetScreen)}
+            onPress={() => handleButtonPress(item.buttonCommand)}
           />
         )}
       />

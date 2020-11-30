@@ -6,23 +6,15 @@ import colors from "../config/colors";
 import fonts from "../config/fonts"
 import Text from "../components/Text";
 import Screen from "../components/Screen"
-import CauseIcon from "../components/CauseIcon"
+import Icon from "../components/Icon"
 import { TouchableWithoutFeedback, TouchableOpacity } from "react-native-gesture-handler";
-import Icon from "../components/Icon";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 function ActionDetailsScreen({ route, navigation }) {
   eventHub.emitEvent(eventType='navigationEvent', eventTitle='viewActionDetails')
 
   const action = route.params;
-  const campaign = {
-    title: action.campaignTitle,
-    description: action.campaignDescription,
-    organization: {
-      contact: action.organizationContact,
-      title: action.organizationTitle,
-      description: action.organizationDescription,
-    }};
+  const organization = {title: action.organizationTitle, url:action.organizationUrl, description: action.organizationDescription}
     
     function loadInBrowser() {
       eventHub.emitEvent(eventType='userEvent', eventTitle='pressOpenActionURL', props={actionId: action.actionId, actionTitle: action.actionTitle})
@@ -41,15 +33,15 @@ function ActionDetailsScreen({ route, navigation }) {
         <Text style={styles.descriptionText}>{action.actionDescription}</Text>
       </ScrollView >
       <View style={{height:20}}></View>
-      <TouchableWithoutFeedback style={styles.detailsContainer} onPress={() => navigation.navigate(routes.ORGANIZATION_DETAILS, campaign.organization)}>
+      <TouchableWithoutFeedback style={styles.detailsContainer} onPress={() => navigation.navigate(routes.ORGANIZATION_DETAILS, organization)}>
         <View style={styles.navDivider}>
           <View style={{width:"80%", justifyContent: "space-around"}}>
             <View style={styles.titleBar}>
-                <CauseIcon style={styles.icon} cause={action.causeTitle} size={35}></CauseIcon>
+                <Icon style={styles.icon} name={action.actionCause} size={35}></Icon>
                 <Text style={styles.actionTypeText}>{action.actionType}</Text>
                 <Text style={styles.rewardText}>{`${action.reward} pts`}</Text>
             </View>
-            <Text style={styles.orgTitle}>{campaign.organization.title}</Text>
+            <Text style={styles.orgTitle}>{action.organizationTitle}</Text>
           </View>
           <Icon name="chevron-right" size={80}></Icon>
         </View>
