@@ -15,7 +15,7 @@ function ActionList({
     doOnRefresh,
     title,
     icon,
-    height = 400
+    height
  }) {
   const [refreshing, setRefreshing] = React.useState(false);
   const onRefresh = React.useCallback(() => {

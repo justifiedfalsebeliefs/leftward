@@ -13,7 +13,7 @@ if(typeof userExperience !== 'undefined'){
   userExperience.actionBreakdown = JSON.parse(userExperience.actionsByCause)
   return (
     <View style={styles.widgetContainer}>
-      <TouchableOpacity onPress={() => navigation.navigate(routes.MYACTIONS)}>
+      <TouchableOpacity onPress={() => navigation.navigate(routes.STATISTICS)}>
         <View style={styles.actionBreakdownContainer}>
           <View style={styles.actionBreakdown}>
             <Text style={styles.actionCount}>{userExperience.actionBreakdown['Environmental Justice'].count}</Text>

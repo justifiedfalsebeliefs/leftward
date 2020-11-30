@@ -12,6 +12,6 @@ export default Object.freeze({
   CONFIRMRECOVERPASSWORD: "ConfirmRecoverPassword",
   UPDATECAUSE: "Update Cause",
   ORGANIZATION_DETAILS: "Organization Details",
-  MYACTIONS: "My Actions",
+  STATISTICS: "STATISTICS",
   HIDDENACTIONS: "Hidden Actions"
 });

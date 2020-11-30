@@ -35,6 +35,7 @@ function DashboardScreen({ navigation }) {
         {/* <CauseActionBreakdownWidget userExperience={userExperience} navigation={navigation}/> */}
         <View style={{height:20}}></View>
         <ActionList
+          height = '80%'
           itemList={actions}
           navigation={navigation}
           doOnRefresh={() => refreshDashboard()}

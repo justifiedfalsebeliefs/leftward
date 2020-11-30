@@ -2,14 +2,14 @@ import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import ActionDetailsScreen from "../screens/ActionDetailsScreen";
 import OrganizationDetailsScreen from "../screens/OrganizationDetailsScreen";
-import MyActionsScreen from "../screens/MyActionsScreen";
+import StatisticsScreen from "../screens/StatisticsScreen";
 
 const Stack = createStackNavigator();
 
-const MyActionsNavigator = () => (
+const StatisticsNavigator = () => (
   <Stack.Navigator mode="modal" 
   screenOptions={{headerShown: false}}>
-    <Stack.Screen name="My Actions" component={MyActionsScreen} />
+    <Stack.Screen name="Statistics" component={StatisticsScreen} />
     <Stack.Screen name="Action Details" component={ActionDetailsScreen} />
     <Stack.Screen
       name="Organization Details"
@@ -18,4 +18,4 @@ const MyActionsNavigator = () => (
   </Stack.Navigator>
 );
 
-export default MyActionsNavigator;
+export default StatisticsNavigator;

@@ -6,8 +6,8 @@ import Screen from "../components/Screen";
 import ActionList from "../components/ActionList"
 import BadgesWidget from "../components/widgets/BadgesWidget";
 
-function MyActionsScreen({ navigation }) {
-  eventHub.emitEvent(eventType='navigationEvent', eventTitle='viewMyActions')
+function StatisticsScreen({ navigation }) {
+  eventHub.emitEvent(eventType='navigationEvent', eventTitle='viewStatistics')
   const [actionsInProgress, setActionsInProgress] = useState([]);
   const [actionsCompleted, setActionsCompleted] = useState([]);
 
@@ -26,25 +26,25 @@ function MyActionsScreen({ navigation }) {
 
   return (
       <Screen>
+        <BadgesWidget badgesData={[]}></BadgesWidget>
+        <View style={{height:20}}></View>
         <ActionList
+          height= {"20%"}
           itemList={actionsInProgress}
           navigation={navigation}
           doOnRefresh={() => refreshActions()}
-          height={200}
           title={"In Progress"}
           icon={"clock-outline"}/>
         <View style={{height:20}}></View>
         <ActionList
+          height = {"60%"}
           itemList={actionsCompleted}
           navigation={navigation}
           doOnRefresh={() => refreshActions()}
-          height={200}
           title={"Completed"}
           icon={"check-bold"}/>
-          <View style={{height:20}}></View>
-          <BadgesWidget badgesData={[]}></BadgesWidget>
       </Screen>
   );
 }
 
-export default MyActionsScreen;
+export default StatisticsScreen;
