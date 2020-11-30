@@ -6,7 +6,7 @@ import Screen from "../components/Screen";
 import ActionList from "../components/ActionList";
 import LevelWidget from "../components/widgets/LevelWidget";
 import wait from "../utility/wait"
-import CauseActionBreakdownWidget from "../components/widgets/CauseActionBreakdownWidget";
+
 
 function DashboardScreen({ navigation }) {
   eventHub.emitEvent(eventType='navigationEvent', eventTitle='viewDashboard')
@@ -31,8 +31,6 @@ function DashboardScreen({ navigation }) {
   return (
       <Screen>
         <LevelWidget userExperience={userExperience} navigation={navigation}/>
-        <View style={{height:20}}></View>
-        {/* <CauseActionBreakdownWidget userExperience={userExperience} navigation={navigation}/> */}
         <View style={{height:20}}></View>
         <ActionList
           height = '80%'
