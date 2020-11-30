@@ -4,6 +4,7 @@ def listActionsDashboard(ids):
         a.actionId, a.title as 'actionTitle',
         a.description as 'actionDescription',
         a.actionType as 'actionType',
+        a.cause as 'actionCause',
         a.url as 'actionUrl',
         o.title as 'organizationTitle',
         o.description as 'organizationDescription',

@@ -97,6 +97,8 @@ def fetch_dashboard_listings():
     for action_Id in new_actionIds:
         get_response(queries.pushUserDashActionsStatus(action_Id, dt.datetime.now(), guid), "PUSH")
     actionIds = (previous_actionIds + new_actionIds)
+    if not actionIds:
+        return jsonify({'response': "All actions completed!"}), 200
     return get_response(queries.listActionsDashboard(actionIds), 'GET')
 
 
