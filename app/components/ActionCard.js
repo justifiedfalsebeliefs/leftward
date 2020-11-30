@@ -3,7 +3,7 @@ import { View, StyleSheet, TouchableWithoutFeedback} from "react-native";
 import Text from "./Text";
 import colors from "../config/colors";
 import fonts from "../config/fonts"
-import CauseIcon from "./CauseIcon";
+import Icon from "./Icon";
 import Swipeable from "react-native-gesture-handler/Swipeable";
 
 function ActionCard({
@@ -20,7 +20,7 @@ function ActionCard({
       <TouchableWithoutFeedback onPress={onPress}>
         <View style={styles.cardContainer}>
           <View style={styles.titleBar}>
-            <CauseIcon style={styles.icon} cause={cause} size={35}></CauseIcon>
+            <Icon name={cause} size={35}></Icon>
             <Text style={styles.actionTypeText}>{actionType}</Text>
             <Text style={styles.rewardText}>{`${reward} pts`}</Text>
           </View>

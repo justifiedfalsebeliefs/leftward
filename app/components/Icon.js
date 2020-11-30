@@ -8,7 +8,26 @@ function Icon({
   backgroundColor = "rgba(52, 52, 52, 0.0)",
   iconColor = "black",
   alignItems = "center"
-}) {
+}) { 
+  switch (name){
+    case 'Environmental Justice':
+      var iconName = "leaf"
+    break;
+    case 'Legal Justice':
+      var iconName = 'scale-balance'
+    break;
+    case 'Economic Justice':
+      var iconName = 'tools'
+    break;
+    case 'Racial Justice':
+      var iconName = 'equalizer-outline'
+    break;
+    case 'Gender and LGBTQ+ Justice':
+      var iconName = 'flag-plus'
+    break;
+    default:
+      var iconName = name
+  }
   return (
     <View
       style={{
@@ -20,7 +39,7 @@ function Icon({
         alignItems: alignItems,
       }}
     >
-      <MaterialCommunityIcons name={name} color={iconColor} size={size * 0.5} />
+      <MaterialCommunityIcons name={iconName} color={iconColor} size={size * 0.5} />
     </View>
   );
 }

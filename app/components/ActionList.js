@@ -7,6 +7,7 @@ import eventHub from "../events/eventHub"
 import colors from "../config/colors";
 import fonts from "../config/fonts"
 import Icon from "../components/Icon";
+import wait from "../utility/wait"
 
 function ActionList({ 
     itemList,
@@ -17,11 +18,6 @@ function ActionList({
     height = 400
  }) {
   const [refreshing, setRefreshing] = React.useState(false);
-  const wait = (timeout) => {
-    return new Promise(resolve => {
-      setTimeout(resolve, timeout);
-    });
-  }
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);
     doOnRefresh()
@@ -68,7 +64,7 @@ function ActionList({
               renderRightActions={() => (
                 <ListItemDeleteAction onPress={() => handleDelete(item)} />
               )}
-              cause={item.causeTitle}
+              cause={item.actionCause}
               reward={item.reward}
               actionType={item.actionType}
               organization={item.organizationTitle}
