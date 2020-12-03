@@ -1,4 +1,4 @@
-Create Database LFT;
+CREATE DATABASE LFT;
 USE LFT;
 CREATE TABLE `user`
 (
