@@ -13,6 +13,9 @@ export default class RootStore {
     listingsInProgressShouldUpdate = true
     listingsCompleted = false
     listingsCompletedShouldUpdate = true
+    // Hidden Actions Screen
+    listingsHidden = false
+    listingsHiddenShouldUpdate = true
 
     constructor(){
         makeObservable(this, {
@@ -36,6 +39,11 @@ export default class RootStore {
             updateListingsInProgressShouldUpdate: action,
             updateListingsCompleted: action,
             updateListingsCompletedShouldUpdate: action,
+            // Hidden Actions Screen
+            listingsHidden: observable,
+            listingsHiddenShouldUpdate: observable,
+            updateListingsHidden: action,
+            updateListingsHiddenShouldUpdate: action,
         });
     }
 
@@ -81,6 +89,7 @@ export default class RootStore {
                 this.updateUserStatisticsShouldUpdate(true);
                 this.updateListingsInProgressShouldUpdate(true)
                 this.updateListingsCompletedShouldUpdate(true)
+                this.updateListingsHiddenShouldUpdate(true)
                 })
         )
     }
@@ -116,6 +125,22 @@ export default class RootStore {
     updateListingsCompletedShouldUpdate(updateValue) {
         this.listingsCompletedShouldUpdate = updateValue
         this.updateListingsCompleted()
+    }
+    // Hidden Actions Screen
+    updateListingsHidden() {
+        if (this.listingsHiddenShouldUpdate == true) {
+            getData("fetchHiddenActions").then(
+                action(data => {
+                    this.listingsHidden = data;
+                    this.updateListingsHiddenShouldUpdate(false)
+                })
+            )
+        }
+    }
+
+    updateListingsHiddenShouldUpdate(updateValue) {
+        this.listingsHiddenShouldUpdate = updateValue
+        this.updateListingsHidden()
     }
 
 }

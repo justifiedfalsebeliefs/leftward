@@ -1,29 +1,33 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext } from "react";
+import { RootStoreContext } from "../store/RootStoreContext"
+import { observer } from "mobx-react-lite"
 import telemetry from "../analytics/telemetry"
-import getData from "../data/getData";
+import useMountEffect from "../hooks/useMountEffect"
 import Screen from "../components/Screen";
 import ActionList from "../components/ActionList"
 
 function HiddenActionsScreen({ navigation }) {
-  telemetry(eventTitle='viewHiddenActions')
-  const [actions, setActions] = useState([]);
+  const things = useContext(RootStoreContext)
 
   async function refreshActions(){
-    const listings = await getData("fetchHiddenActions");
-    setActions(listings);}
+    things.updateListingsHiddenShouldUpdate(true)
+    }
 
-  useEffect(() => {refreshActions();}, []);
+  useMountEffect(() => {
+    telemetry(eventTitle='viewHiddenActions')
+    !things.listingsHidden ? refreshActions() : null;
+  })
   
   return (
       <Screen>
         <ActionList
           title="Hidden Actions"
           icon={"archive"}
-          itemList={actions}
+          itemList={things.listingsHidden}
           navigation={navigation}
           doOnRefresh={() => refreshActions()}/>
       </Screen>
   );
 }
 
-export default HiddenActionsScreen;
+export default observer(HiddenActionsScreen);
