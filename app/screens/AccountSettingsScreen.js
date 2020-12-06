@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import eventHub from "../events/eventHub"
+import telemetry from "../analytics/telemetry"
 import { StyleSheet, Alert } from "react-native";
 import Screen from "../components/Screen";
 import AuthForm from "../components/AuthForm";
@@ -8,7 +8,7 @@ import Button from "../components/Button";
 
 
 function AccountSettingsScreen({ navigation }) {
-  eventHub.emitEvent(eventType='navigationEvent', eventTitle='viewAccountSettings')
+  telemetry(eventTitle='viewAccountSettings')
 
   const [error, setError] = useState();
   const [emailVerified, setEmailVerified] = useState();

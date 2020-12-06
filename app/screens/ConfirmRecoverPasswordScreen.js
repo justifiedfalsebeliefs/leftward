@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import eventHub from "../events/eventHub"
+import telemetry from "../analytics/telemetry"
 import { Alert } from "react-native";
 import routes from "../navigation/routes";
 import AuthForm from "../components/AuthForm";
@@ -8,7 +8,7 @@ import { Auth } from "aws-amplify";
 
 
 function ConfirmRecoverPasswordScreen({ navigation }) {
-  eventHub.emitEvent(eventType='navigationEvent', eventTitle='viewConfirmRecoverPassword')
+  telemetry(eventTitle='viewConfirmRecoverPassword')
 
   const [error, setError] = useState();
 

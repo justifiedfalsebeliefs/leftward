@@ -3,13 +3,13 @@ import { StyleSheet, View} from "react-native";
 import useAuth from "../auth/useAuth";
 import { Auth } from "aws-amplify";
 import callApi from "../data/callApi";
-import * as Amplitude from 'expo-analytics-amplitude';
+import telemetry from "../analytics/telemetry"
 import colors from "../config/colors"
 import AuthForm from "../components/AuthForm";
 import Screen from "../components/Screen";
 
 function RegisterScreen({ route, navigation }) {
-  Amplitude.logEvent('ViewRegister')
+  telemetry('ViewRegister')
   const [error, setError] = useState();
   const auth = useAuth();
 
@@ -31,7 +31,7 @@ function RegisterScreen({ route, navigation }) {
       );
       const user = await Auth.currentSession();
       await callApi(user.idToken.jwtToken, "pushNewUserGuid", params=[{key:"newGuid", value:route.params.guid}])
-      Amplitude.logEvent('PressRegister')
+      telemetry('PressRegister')
       Auth.currentSession().then((data) => {
         auth.logIn(data);
       });

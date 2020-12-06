@@ -1,12 +1,12 @@
 import React from "react";
-import eventHub from "../events/eventHub";
+import telemetry from "../analytics/telemetry"
 import { View } from "react-native";
 import Screen from "../components/Screen";
 import BadgesWidget from "../components/widgets/BadgesWidget";
 import CauseActionBreakdownWidget from "../components/widgets/CauseActionBreakdownWidget";
 
 function StatisticsScreen({ navigation }) {
-  eventHub.emitEvent(eventType='navigationEvent', eventTitle='viewBadges')
+  telemetry(eventTitle='viewBadges')
 
   return (
       <Screen>

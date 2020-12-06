@@ -1,7 +1,7 @@
 import * as Amplitude from 'expo-analytics-amplitude';
 import storage from "../auth/storage"
 
-export default async function listenerAmplitude(eventType, eventTitle, props) {
+export default async function telemetry(eventTitle, props=false) {
     if (props){
         Amplitude.logEventWithProperties(eventTitle, props)
     } else{

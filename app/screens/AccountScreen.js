@@ -1,5 +1,5 @@
 import React from "react";
-import eventHub from "../events/eventHub"
+import telemetry from "../analytics/telemetry"
 import { StyleSheet, View, FlatList, Text, Linking, Share} from "react-native";
 
 import { ListItem, ListItemSeparator } from "../components/lists";
@@ -51,7 +51,7 @@ const menuItems = [
 ];
 
 function AccountScreen({ navigation }) {
-  eventHub.emitEvent(eventType='navigationEvent', eventTitle='viewAccount')
+  telemetry(eventTitle='viewAccount')
   const { user, logOut } = useAuth();
 
   const handleButtonPress = async (buttonCommand) =>{

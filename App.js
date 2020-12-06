@@ -11,6 +11,8 @@ import AppNavigator from "./app/navigation/AppNavigator";
 import AuthNavigator from "./app/navigation/AuthNavigator";
 import AuthContext from "./app/auth/context";
 import authStorage from "./app/auth/storage";
+import RootStore from "./app/store/RootStore";
+import { RootStoreContext } from "./app/store/RootStoreContext";
 
 import * as Amplitude from 'expo-analytics-amplitude';
 
@@ -35,9 +37,11 @@ export default function App() {
 
   return (
     <AuthContext.Provider value={{ user, setUser }}>
-      <NavigationContainer theme={navigationTheme}>
-        {user ? <AppNavigator /> : <AuthNavigator />}
-      </NavigationContainer>
+      <RootStoreContext.Provider value={new RootStore()}>
+        <NavigationContainer theme={navigationTheme}>
+          {user ? <AppNavigator /> : <AuthNavigator />}
+        </NavigationContainer>
+      </RootStoreContext.Provider>
     </AuthContext.Provider>
   );
 }

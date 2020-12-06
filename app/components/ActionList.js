@@ -1,9 +1,9 @@
-import React from "react";
+import React, { useContext } from "react";
+import { RootStoreContext } from "../store/RootStoreContext"
 import { FlatList, StyleSheet, RefreshControl, View, Text  } from "react-native";
 import ActionCard from "../components/ActionCard";
 import routes from "../navigation/routes";
 import ListItemDeleteAction from "../components/lists/ListItemDeleteAction"
-import eventHub from "../events/eventHub"
 import colors from "../config/colors";
 import fonts from "../config/fonts"
 import Icon from "../components/Icon";
@@ -17,6 +17,7 @@ function ActionList({
     icon,
     height
  }) {
+  const things = useContext(RootStoreContext)
   const [refreshing, setRefreshing] = React.useState(false);
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);
@@ -25,7 +26,7 @@ function ActionList({
   }, []);
 
   async function handleDelete(item) {
-    eventHub.emitEvent(eventType='userEvent', eventTitle='pressActionStatusUpdate', props={status: "HIDDEN", actionId: item.actionId})
+    things.updateActionStatus(status="HIDDEN", actionId=item.actionId)
     doOnRefresh()
   };
 

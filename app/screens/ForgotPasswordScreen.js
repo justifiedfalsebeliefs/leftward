@@ -1,12 +1,12 @@
 import React, { useState } from "react";
-import eventHub from "../events/eventHub"
+import telemetry from "../analytics/telemetry"
 import routes from "../navigation/routes";
 import Screen from "../components/Screen";
 import { Auth } from "aws-amplify";
 import AuthForm from "../components/AuthForm";
 
 function ForgotPasswordScreen({ navigation }) {
-  eventHub.emitEvent(eventType='navigationEvent', eventTitle='viewForgotPassword')
+  telemetry(eventTitle='viewForgotPassword')
 
   const [error, setError] = useState();
 

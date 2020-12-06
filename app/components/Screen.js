@@ -22,7 +22,7 @@ function Screen({ children, style, title, back, navigation }) {
 
 const styles = StyleSheet.create({
   screen: {
-    paddingTop: Constants.statusBarHeight,
+    paddingTop: Constants.statusBarHeight + 15,
     flex: 1,
     paddingHorizontal: 20,
     backgroundColor: colors.screenBackground,

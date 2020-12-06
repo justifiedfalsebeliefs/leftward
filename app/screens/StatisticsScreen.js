@@ -1,33 +1,30 @@
-import React, { useEffect, useState } from "react";
-import eventHub from "../events/eventHub";
+import React, { useContext } from "react";
+import { RootStoreContext } from "../store/RootStoreContext"
+import { observer } from "mobx-react-lite"
+import telemetry from "../analytics/telemetry"
 import { View } from "react-native";
-import getData from "../data/getData";
+import useMountEffect from "../hooks/useMountEffect"
 import Screen from "../components/Screen";
 import ActionList from "../components/ActionList"
 
 function StatisticsScreen({ navigation }) {
-  eventHub.emitEvent(eventType='navigationEvent', eventTitle='viewStatistics')
-  const [actionsInProgress, setActionsInProgress] = useState([]);
-  const [actionsCompleted, setActionsCompleted] = useState([]);
+  const things = useContext(RootStoreContext)
 
   async function refreshActions(){
-    const listingsInProgress = await getData("fetchMyActions");
-    const listingsCompleted = await getData("fetchCompletedActions");
-    setActionsInProgress(listingsInProgress);
-    setActionsCompleted(listingsCompleted);}
+    things.updateListingsInProgressShouldUpdate(true)
+    things.updateListingsCompletedShouldUpdate(true)
+    }
 
-  useEffect(() => {
-    const refresh = navigation.addListener("focus", () =>{
-      refreshActions()
-      return refresh
-    });
-  }, [navigation]);
+  useMountEffect(() => {
+    telemetry(eventTitle='viewStatistics');
+    !things.listingsInProgress || !things.listingsCompleted ? refreshActions() : null;
+  })
 
   return (
       <Screen>
         <ActionList
-          height= {"20%"}
-          itemList={actionsInProgress}
+          height= {"30%"}
+          itemList={things.listingsInProgress}
           navigation={navigation}
           doOnRefresh={() => refreshActions()}
           title={"In Progress"}
@@ -35,7 +32,7 @@ function StatisticsScreen({ navigation }) {
         <View style={{height:20}}></View>
         <ActionList
           height = {"60%"}
-          itemList={actionsCompleted}
+          itemList={things.listingsCompleted}
           navigation={navigation}
           doOnRefresh={() => refreshActions()}
           title={"Completed"}
@@ -44,4 +41,4 @@ function StatisticsScreen({ navigation }) {
   );
 }
 
-export default StatisticsScreen;
+export default observer(StatisticsScreen);

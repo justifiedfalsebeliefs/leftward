@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import eventHub from "../events/eventHub";
+import telemetry from "../analytics/telemetry"
 import { StyleSheet, View } from "react-native";
 import routes from "../navigation/routes";
 import AuthForm from "../components/AuthForm";
@@ -9,7 +9,7 @@ import useAuth from "../auth/useAuth";
 import Button from "../components/Button";
 
 function LoginScreen({ navigation }) {
-  eventHub.emitEvent(eventType='navigationEvent', eventTitle='viewLogin')
+  telemetry(eventTitle='viewLogin')
 
   const auth = useAuth();
   const [error, setError] = useState();

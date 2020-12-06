@@ -354,10 +354,42 @@ def fetch_user_experience():
 @app.route('/pushActionStatus', methods=['POST'])
 @aws_auth.authentication_required
 def push_action_status():
-    user_guid = aws_auth.claims['custom:userGuid']
+    guid = aws_auth.claims['custom:userGuid']
     actionId = request.args.get('actionId')
-    get_response(deleteUserAction(actionId, user_guid), "PUSH")
-    return get_response(pushActionStatus(user_guid, request.args.get('statusUpdate'), actionId), "PUSH")
+    get_response(deleteUserAction(actionId, guid), "PUSH")
+    get_response(pushActionStatus(guid, request.args.get('statusUpdate'), actionId), "PUSH")
+    userActionsObjects = get_response(fetchCompletedUserActions(guid), 'GET', return_as_records=True)
+    userObjects = get_response(getUser(guid), 'GET', return_as_records=True)
+    preUpdateLevel = userObjects[0]['levelNumber']
+    pointsEarnedTotal = sum([x['reward'] for x in userActionsObjects])
+    currentLevelObjects = get_response(getLevelByPoints(pointsEarnedTotal), 'GET', return_as_records=True)
+    currentLevel = currentLevelObjects[0]['level']
+    LevelPointsRequiredObjects = get_response(getPointsByLevel(currentLevel), 'GET', return_as_records=True)
+    currentLevelPointsRequired = LevelPointsRequiredObjects[0]['currentPointsRequired']
+    nextLevelPointsRequired = LevelPointsRequiredObjects[0]['nextPointsRequired']
+
+    level_up = False
+    if preUpdateLevel > currentLevel:
+        level_up = True
+
+    totalActionsCompletedCount = 0
+    actionsByCause = {'Economic Justice': {'count': 0, 'points': 0},
+                      'Legal Justice': {'count': 0, 'points': 0},
+                      'Environmental Justice': {'count': 0, 'points': 0},
+                      'Racial Justice': {'count': 0, 'points': 0},
+                      'Gender and LGBTQ+ Justice': {'count': 0, 'points': 0}}
+    for record in userActionsObjects:
+        actionsByCause[record['cause']]['count'] += 1
+        actionsByCause[record['cause']]['points'] += record['reward']
+        totalActionsCompletedCount += 1
+
+    userDetails = {'actionsByCause': json.dumps(actionsByCause), 'totalActionsCompletedCount': totalActionsCompletedCount,
+                   'pointsEarnedTotal': pointsEarnedTotal,
+                   'currentLevel': currentLevel, 'currentLevelPointsRequired': currentLevelPointsRequired,
+                   'nextLevel': currentLevel+1, 'nextLevelPointsRequired': nextLevelPointsRequired}
+
+    get_response(pushUpdateUser(guid, **userDetails), "PUSH")
+    return jsonify({'levelUp': level_up, 'userDetails': userDetails}), 200
 
 
 if __name__ == '__main__':

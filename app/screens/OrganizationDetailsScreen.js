@@ -1,5 +1,5 @@
 import React from "react";
-import eventHub from "../events/eventHub";
+import telemetry from "../analytics/telemetry"
 import { View, StyleSheet, ScrollView, TouchableOpacity, Linking} from "react-native";
 import Screen from "../components/Screen"
 import fonts from "../config/fonts"
@@ -7,10 +7,10 @@ import Text from "../components/Text";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 function OrganizationDetailsScreen({ route, navigation }) {
-  eventHub.emitEvent(eventType='navigationEvent', eventTitle='viewOrganizationDetails')
+  telemetry(eventTitle='viewOrganizationDetails')
   
   function loadInBrowser() {
-    eventHub.emitEvent(eventType='userEvent', eventTitle='pressOpenOrganizationURL', props={organizationId: organization.title})
+    telemetry(eventTitle='pressOpenOrganizationURL', props={organizationId: organization.title})
     Linking.openURL(organization.url).catch(err => console.error("Couldn't load page", err));
   };
 

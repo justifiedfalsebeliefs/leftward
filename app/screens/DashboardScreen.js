@@ -1,40 +1,32 @@
-import React, { useEffect, useState} from "react";
-import eventHub from "../events/eventHub";
-import { View } from "react-native";
-import getData from "../data/getData";
+import React, { useContext } from "react";
+import { RootStoreContext } from "../store/RootStoreContext"
+import { observer } from "mobx-react-lite"
+import telemetry from "../analytics/telemetry"
+import useMountEffect from "../hooks/useMountEffect"
 import Screen from "../components/Screen";
 import ActionList from "../components/ActionList";
 import LevelWidget from "../components/widgets/LevelWidget";
-import wait from "../utility/wait"
 
 
 function DashboardScreen({ navigation }) {
-  eventHub.emitEvent(eventType='navigationEvent', eventTitle='viewDashboard')
-
-  const [userExperience, setUserExperience] = useState();
-  const [actions, setActions] = useState();
+  const things = useContext(RootStoreContext)
 
   async function refreshDashboard(){
-    const exp = await getData("fetchUserExperience");
-    const listings = await getData("fetchDashboardListings");
-    setUserExperience(exp[0]);
-    setActions(listings);}
+    things.updateDashboardActionListingsShouldUpdate(true)
+    things.updateUserStatisticsShouldUpdate(true)
+    }
 
-  useEffect(() => {
-    const refresh = navigation.addListener("focus", () =>{
-      refreshDashboard()
-      wait(1000).then(() => refreshDashboard());
-      return refresh
-    });
-  }, [navigation]);
-
+  useMountEffect(() => {
+    telemetry(eventTitle='viewDashboard');
+    !things.dashboardActionListings || !things.userStatistics ? refreshDashboard() : null;
+  })
+  
   return (
       <Screen>
-        <LevelWidget userExperience={userExperience} navigation={navigation}/>
-        <View style={{height:20}}></View>
+        <LevelWidget userStatistics={things.userStatistics}/>
         <ActionList
           height = '80%'
-          itemList={actions}
+          itemList={things.dashboardActionListings}
           navigation={navigation}
           doOnRefresh={() => refreshDashboard()}
           title={"Actions"}/>
@@ -42,4 +34,4 @@ function DashboardScreen({ navigation }) {
   );
 }
 
-export default DashboardScreen;
+export default observer(DashboardScreen);

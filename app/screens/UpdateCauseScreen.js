@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import eventHub from "../events/eventHub";
+import telemetry from "../analytics/telemetry"
 import { StyleSheet, View, Text } from "react-native";
 import Screen from "../components/Screen";
 import Button from "../components/Button";
@@ -9,7 +9,7 @@ import colors from "../config/colors"
 import fonts from "../config/fonts"
 
 function UpdateCauseScreen({ navigation }) {
-  eventHub.emitEvent(eventType='navigationEvent', eventTitle='viewUpdateCause')
+  telemetry(eventTitle='viewUpdateCause')
 
   const [causes, setCauses] = useState();
   const [envColor, setEnvColor] = useState(colors.levelBarBackground);

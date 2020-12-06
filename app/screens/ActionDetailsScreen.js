@@ -1,6 +1,7 @@
-import React from "react";
-import { View, StyleSheet, Alert, Linking, ScrollView  } from "react-native";
-import eventHub from "../events/eventHub"
+import React, { useContext } from "react";
+import { RootStoreContext } from "../store/RootStoreContext"
+import { View, StyleSheet, Linking, ScrollView  } from "react-native";
+import telemetry from "../analytics/telemetry"
 import routes from "../navigation/routes";
 import colors from "../config/colors";
 import fonts from "../config/fonts"
@@ -11,18 +12,20 @@ import { TouchableWithoutFeedback, TouchableOpacity } from "react-native-gesture
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 function ActionDetailsScreen({ route, navigation }) {
-  eventHub.emitEvent(eventType='navigationEvent', eventTitle='viewActionDetails')
+  const things = useContext(RootStoreContext)
+  telemetry(eventTitle='viewActionDetails')
 
   const action = route.params;
   const organization = {title: action.organizationTitle, url:action.organizationUrl, description: action.organizationDescription}
     
     function loadInBrowser() {
-      eventHub.emitEvent(eventType='userEvent', eventTitle='pressOpenActionURL', props={actionId: action.actionId, actionTitle: action.actionTitle})
+      telemetry(eventTitle='pressOpenActionURL', props={actionId: action.actionId, actionTitle: action.actionTitle})
       Linking.openURL(action.url).catch(err => console.error("Couldn't load page", err));
     };
     
   const handleStatusPress = async (status, actionId) => {
-      eventHub.emitEvent(eventType='userEvent', eventTitle='pressActionStatusUpdate', props={status: status, actionId: actionId})
+      telemetry(eventTitle='pressActionStatusUpdate', props={status: status, actionId: actionId})
+      things.updateActionStatus(status=status, actionId=actionId)
       navigation.goBack()
   }
 

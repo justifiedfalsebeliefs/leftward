@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
-import eventHub from "../events/eventHub";
+import telemetry from "../analytics/telemetry"
 import getData from "../data/getData";
 import Screen from "../components/Screen";
 import ActionList from "../components/ActionList"
 
 function HiddenActionsScreen({ navigation }) {
-  eventHub.emitEvent(eventType='navigationEvent', eventTitle='viewHiddenActions')
+  telemetry(eventTitle='viewHiddenActions')
   const [actions, setActions] = useState([]);
 
   async function refreshActions(){
