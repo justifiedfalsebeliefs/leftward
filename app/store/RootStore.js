@@ -18,6 +18,7 @@ export default class RootStore {
     listingsHiddenShouldUpdate = true
     // Modals
     testModalVisible = false
+    levelUpVisible = false
 
     constructor(){
         makeObservable(this, {
@@ -49,6 +50,8 @@ export default class RootStore {
             // Modals
             testModalVisible: observable,
             updateTestModalVisible: action,
+            levelUpVisible: observable,
+            updateLevelUpVisible: action
         });
     }
 
@@ -95,6 +98,10 @@ export default class RootStore {
                 this.updateListingsInProgressShouldUpdate(true)
                 this.updateListingsCompletedShouldUpdate(true)
                 this.updateListingsHiddenShouldUpdate(true)
+                if (data.levelUp){
+                    console.log('Level up!')
+                    this.updateLevelUpVisible(true)
+                }
                 })
         )
     }
@@ -151,5 +158,9 @@ export default class RootStore {
     // Modals
     updateTestModalVisible(updateValue){
         this.testModalVisible = updateValue
+    }
+
+    updateLevelUpVisible(updateValue){
+        this.levelUpVisible = updateValue
     }
 }

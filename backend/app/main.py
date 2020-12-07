@@ -355,12 +355,16 @@ def fetch_user_experience():
 @aws_auth.authentication_required
 def push_action_status():
     guid = aws_auth.claims['custom:userGuid']
+
+    userObjects = get_response(getUser(guid), 'GET', return_as_records=True)
+    preUpdateLevel = userObjects[0]['levelNumber']
+
     actionId = request.args.get('actionId')
     get_response(deleteUserAction(actionId, guid), "PUSH")
     get_response(pushActionStatus(guid, request.args.get('statusUpdate'), actionId), "PUSH")
+
+
     userActionsObjects = get_response(fetchCompletedUserActions(guid), 'GET', return_as_records=True)
-    userObjects = get_response(getUser(guid), 'GET', return_as_records=True)
-    preUpdateLevel = userObjects[0]['levelNumber']
     pointsEarnedTotal = sum([x['reward'] for x in userActionsObjects])
     currentLevelObjects = get_response(getLevelByPoints(pointsEarnedTotal), 'GET', return_as_records=True)
     currentLevel = currentLevelObjects[0]['level']
@@ -369,7 +373,7 @@ def push_action_status():
     nextLevelPointsRequired = LevelPointsRequiredObjects[0]['nextPointsRequired']
 
     level_up = False
-    if preUpdateLevel > currentLevel:
+    if preUpdateLevel < currentLevel:
         level_up = True
 
     totalActionsCompletedCount = 0
