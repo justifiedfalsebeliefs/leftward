@@ -1,4 +1,4 @@
-import { makeAutoObservable, makeObservable, observable, action } from 'mobx';
+import { makeObservable, observable, action, reaction, when } from 'mobx';
 import getData from '../data/getData'
 import pushData from '../data/pushData'
 
@@ -16,6 +16,8 @@ export default class RootStore {
     // Hidden Actions Screen
     listingsHidden = false
     listingsHiddenShouldUpdate = true
+    // Modals
+    testModalVisible = false
 
     constructor(){
         makeObservable(this, {
@@ -44,6 +46,9 @@ export default class RootStore {
             listingsHiddenShouldUpdate: observable,
             updateListingsHidden: action,
             updateListingsHiddenShouldUpdate: action,
+            // Modals
+            testModalVisible: observable,
+            updateTestModalVisible: action,
         });
     }
 
@@ -143,4 +148,8 @@ export default class RootStore {
         this.updateListingsHidden()
     }
 
+    // Modals
+    updateTestModalVisible(updateValue){
+        this.testModalVisible = updateValue
+    }
 }
