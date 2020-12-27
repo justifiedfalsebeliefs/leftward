@@ -1,58 +1,44 @@
 import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
-
+import { NavigationContainer } from "@react-navigation/native";
 import AccountNavigator from "./AccountNavigator";
 import DashboardNavigator from "./DashboardNavigator";
-import StatisticsNavigator from "./StatisticsNavigator"
-import BadgesNavigator from "./BadgesNavigator"
+import StatisticsNavigator from "./StatisticsNavigator";
 import routes from "./routes";
+import {
+  BottomNavigation,
+  BottomNavigationTab,
+  Icon,
+} from "@ui-kitten/components";
 
-const Tab = createBottomTabNavigator();
+const { Navigator, Screen } = createBottomTabNavigator();
+const DashboardIcon = (props) => <Icon {...props} name="home" />;
+const StatisticsIcon = (props) => <Icon {...props} name="bar-chart-outline" />;
+const AccountIcon = (props) => <Icon {...props} name="settings-outline" />;
+
+const BottomTabBar = ({ navigation, state }) => (
+  <BottomNavigation
+    selectedIndex={state.index}
+    onSelect={(index) => navigation.navigate(state.routeNames[index])}
+  >
+    <BottomNavigationTab icon={DashboardIcon} />
+    <BottomNavigationTab icon={StatisticsIcon} />
+    <BottomNavigationTab icon={AccountIcon} />
+  </BottomNavigation>
+);
+
+const TabNavigator = () => (
+  <Navigator tabBar={(props) => <BottomTabBar {...props} />}>
+    <Screen name="Dashboard" component={DashboardNavigator} />
+    <Screen name="Statistics" component={StatisticsNavigator} />
+    <Screen name="Account" component={AccountNavigator} />
+  </Navigator>
+);
 
 const AppNavigator = () => (
-  
-  <Tab.Navigator 
-  screenOptions={{headerShown: false}}
-    >  
-        <Tab.Screen
-      name="Dashboard"
-      component={DashboardNavigator}
-      options={{
-        tabBarIcon: ({ color, size }) => (
-          <MaterialCommunityIcons name="view-dashboard" color={color} size={size} />
-        ),
-      }}
-    />
-        <Tab.Screen
-      name="Statistics"
-      component={StatisticsNavigator}
-      options={{
-        tabBarIcon: ({ color, size }) => (
-          <MaterialCommunityIcons name="chart-areaspline" color={color} size={size} />
-        ),
-      }}
-    />
-        <Tab.Screen
-      name="Badges"
-      component={BadgesNavigator}
-      options={{
-        tabBarIcon: ({ color, size }) => (
-          <MaterialCommunityIcons name="trophy" color={color} size={size} />
-        ),
-      }}
-    />
-
-    <Tab.Screen
-      name="Account"
-      component={AccountNavigator}
-      options={{
-        tabBarIcon: ({ color, size }) => (
-          <MaterialCommunityIcons name="account" color={color} size={size} />
-        ),
-      }}
-    />
-  </Tab.Navigator>
+  <NavigationContainer independent={true}>
+    <TabNavigator />
+  </NavigationContainer>
 );
 
 export default AppNavigator;

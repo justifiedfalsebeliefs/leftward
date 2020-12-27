@@ -1,44 +1,54 @@
 import React, { useContext } from "react";
-import { RootStoreContext } from "../store/RootStoreContext"
-import { observer } from "mobx-react-lite"
-import telemetry from "../analytics/telemetry"
-import { View } from "react-native";
-import useMountEffect from "../hooks/useMountEffect"
+import { StyleSheet } from "react-native";
+import { RootStoreContext } from "../store/RootStoreContext";
+import { observer } from "mobx-react-lite";
+import telemetry from "../analytics/telemetry";
+import useMountEffect from "../hooks/useMountEffect";
 import Screen from "../components/Screen";
-import ActionList from "../components/ActionList"
+import LevelWidget from "../components/widgets/progress/LevelWidget";
+import CompletedActionsStack from "../components/stacks/CompletedActionsStack";
+import SavedActionsStack from "../components/stacks/SavedActionsStack";
+import BadgeSummaryWidget from "../components/widgets/badges/BadgeSummaryWidget";
 
 function StatisticsScreen({ navigation }) {
-  const things = useContext(RootStoreContext)
+  const things = useContext(RootStoreContext);
 
-  async function refreshActions(){
-    things.updateListingsInProgressShouldUpdate(true)
-    things.updateListingsCompletedShouldUpdate(true)
-    }
+  async function refreshData() {
+    things.updateListingsInProgressShouldUpdate(true);
+    things.updateListingsCompletedShouldUpdate(true);
+  }
 
   useMountEffect(() => {
-    telemetry(eventTitle='viewStatistics');
-    !things.listingsInProgress || !things.listingsCompleted ? refreshActions() : null;
-  })
+    telemetry((eventTitle = "viewStatisticsScreen"));
+    !things.listingsInProgress || !things.listingsCompleted
+      ? refreshData()
+      : null;
+  });
 
   return (
-      <Screen>
-        <ActionList
-          height= {"30%"}
-          itemList={things.listingsInProgress}
-          navigation={navigation}
-          doOnRefresh={() => refreshActions()}
-          title={"In Progress"}
-          icon={"clock-outline"}/>
-        <View style={{height:20}}></View>
-        <ActionList
-          height = {"60%"}
-          itemList={things.listingsCompleted}
-          navigation={navigation}
-          doOnRefresh={() => refreshActions()}
-          title={"Completed"}
-          icon={"check-bold"}/>
-      </Screen>
+    <Screen doOnRefresh={refreshData} scrolling={true}>
+      <LevelWidget
+        leftWidget="ActionBadgesSummary"
+        style={styles.widgetSpacerPrimary}
+      />
+      <BadgeSummaryWidget
+        navigation={navigation}
+        style={styles.widgetSpacerPrimary}
+      />
+      <SavedActionsStack
+        navigation={navigation}
+        style={styles.widgetSpacerPrimary}
+      />
+      <CompletedActionsStack
+        navigation={navigation}
+        style={styles.widgetSpacerPrimary}
+      />
+    </Screen>
   );
 }
-
+const styles = StyleSheet.create({
+  widgetSpacerPrimary: {
+    marginBottom: 30,
+  },
+});
 export default observer(StatisticsScreen);

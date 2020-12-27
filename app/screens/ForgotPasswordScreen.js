@@ -1,12 +1,12 @@
 import React, { useState } from "react";
-import telemetry from "../analytics/telemetry"
+import telemetry from "../analytics/telemetry";
 import routes from "../navigation/routes";
 import Screen from "../components/Screen";
 import { Auth } from "aws-amplify";
 import AuthForm from "../components/AuthForm";
 
 function ForgotPasswordScreen({ navigation }) {
-  telemetry(eventTitle='viewForgotPassword')
+  telemetry((eventTitle = "viewForgotPasswordScreen"));
 
   const [error, setError] = useState();
 
@@ -18,7 +18,7 @@ function ForgotPasswordScreen({ navigation }) {
       setError(error.message);
     }
   };
-  
+
   return (
     <>
       <Screen>
@@ -32,6 +32,5 @@ function ForgotPasswordScreen({ navigation }) {
     </>
   );
 }
-
 
 export default ForgotPasswordScreen;

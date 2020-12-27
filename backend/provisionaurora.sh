@@ -1,0 +1,1 @@
+mysql --user=[your Master username] --password -h [your database endpoint]

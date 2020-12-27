@@ -1,37 +1,65 @@
 import React, { useContext } from "react";
-import { RootStoreContext } from "../store/RootStoreContext"
-import { observer } from "mobx-react-lite"
-import telemetry from "../analytics/telemetry"
-import useMountEffect from "../hooks/useMountEffect"
+import { StyleSheet } from "react-native";
+import { RootStoreContext } from "../store/RootStoreContext";
+import { observer } from "mobx-react-lite";
+import telemetry from "../analytics/telemetry";
+import useMountEffect from "../hooks/useMountEffect";
 import Screen from "../components/Screen";
-import ActionList from "../components/ActionList";
-import LevelWidget from "../components/widgets/LevelWidget";
-
+import routes from "../navigation/routes";
+import LevelWidget from "../components/widgets/progress/LevelWidget";
+import DashboardActionsWidget from "../components/widgets/actions/DashboardActionsWidget";
+import ActionsByTypeStack from "../components/stacks/ActionsByTypeStack";
+import ActionsByCauseStack from "../components/stacks/ActionsByCauseStack";
+import ActionsByOtherStack from "../components/stacks/ActionsByOtherStack";
 
 function DashboardScreen({ navigation }) {
-  const things = useContext(RootStoreContext)
+  const things = useContext(RootStoreContext);
 
-  async function refreshDashboard(){
-    things.updateDashboardActionListingsShouldUpdate(true)
-    things.updateUserStatisticsShouldUpdate(true)
-    }
+  async function refreshData() {
+    things.updateDashboardActionListingsShouldUpdate(true);
+    things.updateUserStatisticsShouldUpdate(true);
+  }
 
   useMountEffect(() => {
-    telemetry(eventTitle='viewDashboard');
-    !things.dashboardActionListings || !things.userStatistics ? refreshDashboard() : null;
-  })
-  
+    telemetry((eventTitle = "viewDashboardScreen"));
+    !things.dashboardActionListings || !things.userStatistics
+      ? refreshData()
+      : null;
+  });
+
+  async function handleSectionButtonPress(title) {
+    navigation.navigate(routes.ACTIONLISTING, title);
+  }
+
   return (
-      <Screen>
-        <LevelWidget userStatistics={things.userStatistics}/>
-        <ActionList
-          height = '80%'
-          itemList={things.dashboardActionListings}
-          navigation={navigation}
-          doOnRefresh={() => refreshDashboard()}
-          title={"Actions"}/>
-      </Screen>
+    <Screen doOnRefresh={refreshData} scrolling={true}>
+      <LevelWidget
+        leftWidget="RecentActions"
+        style={styles.widgetSpacerPrimary}
+      />
+      <DashboardActionsWidget
+        navigation={navigation}
+        style={styles.widgetSpacerPrimary}
+      />
+      <ActionsByTypeStack
+        navigation={navigation}
+        style={styles.widgetSpacerPrimary}
+      />
+      <ActionsByCauseStack
+        navigation={navigation}
+        style={styles.widgetSpacerPrimary}
+      />
+      <ActionsByOtherStack
+        navigation={navigation}
+        style={styles.widgetSpacerPrimary}
+      />
+    </Screen>
   );
 }
+const styles = StyleSheet.create({
+  widgetSpacerPrimary: {
+    marginBottom: 30,
+  },
+});
 
 export default observer(DashboardScreen);

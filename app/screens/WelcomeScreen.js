@@ -1,12 +1,12 @@
 import React from "react";
-import telemetry from "../analytics/telemetry"
+import telemetry from "../analytics/telemetry";
 import { ImageBackground, StyleSheet, View, Image } from "react-native";
-import Button from "../components/Button";
 import routes from "../navigation/routes";
+import { Layout, Button } from "@ui-kitten/components";
 
 function WelcomeScreen({ navigation }) {
-  telemetry(eventTitle='viewWelcomeScreen')
-  
+  telemetry((eventTitle = "viewWelcomeScreen"));
+
   return (
     <ImageBackground
       blurRadius={1.5}
@@ -14,18 +14,28 @@ function WelcomeScreen({ navigation }) {
       source={require("../assets/WelcomeBackground.png")}
     >
       <View style={styles.logoContainer}>
-        <Image source={require("../assets/leftward_logo.png")} style={{width: 300, height: 150, resizeMode: 'contain'}}></Image>
+        <Image
+          source={require("../assets/leftward_logo.png")}
+          style={{ width: 300, height: 150, resizeMode: "contain" }}
+        ></Image>
       </View>
       <View style={styles.buttonsContainer}>
         <Button
-          title="Login"
+          style={styles.button}
+          size="large"
+          status="success"
           onPress={() => navigation.navigate(routes.LOGIN)}
-        />
+        >
+          Login{" "}
+        </Button>
         <Button
-          title="Register"
-          color="secondary"
+          style={styles.button}
+          size="large"
+          status="info"
           onPress={() => navigation.navigate(routes.REGISTERCAUSE)}
-        />
+        >
+          Register
+        </Button>
       </View>
     </ImageBackground>
   );
@@ -38,8 +48,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   buttonsContainer: {
-    padding: 20,
+    margin: 20,
     width: "100%",
+  },
+  button: {
+    margin: 20,
   },
   logo: {
     width: 100,
@@ -49,11 +62,6 @@ const styles = StyleSheet.create({
     position: "absolute",
     top: 70,
     alignItems: "center",
-  },
-  tagline: {
-    fontSize: 25,
-    fontWeight: "600",
-    paddingVertical: 20,
   },
 });
 

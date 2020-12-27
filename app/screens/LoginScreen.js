@@ -1,19 +1,19 @@
 import React, { useState } from "react";
-import telemetry from "../analytics/telemetry"
+import telemetry from "../analytics/telemetry";
 import { StyleSheet, View } from "react-native";
 import routes from "../navigation/routes";
 import AuthForm from "../components/AuthForm";
 import Screen from "../components/Screen";
 import { Auth } from "aws-amplify";
 import useAuth from "../auth/useAuth";
-import Button from "../components/Button";
+import { Layout, Button } from "@ui-kitten/components";
 
 function LoginScreen({ navigation }) {
-  telemetry(eventTitle='viewLogin')
+  telemetry((eventTitle = "viewLoginScreen"));
 
   const auth = useAuth();
   const [error, setError] = useState();
-  
+
   const handleSubmit = async (userInfo) => {
     try {
       const result = await Auth.signIn(userInfo.username, userInfo.password);
@@ -26,34 +26,27 @@ function LoginScreen({ navigation }) {
   };
 
   return (
-    <>
-      <Screen style={styles.container}>
-        <View>
-          <AuthForm
-            fields={["username", "password"]}
-            onSubmit={handleSubmit}
-            submitTitle={"Log In"}
-            error={error}
-          ></AuthForm>
-         </View>
-        <Button
-          style={styles.forgot}
-          title="Forgot Password?"
-          color="secondary"
-          onPress={() => navigation.navigate(routes.RECOVERPASSWORD)}
-        ></Button>
-      </Screen>
-    </>
+    <Screen>
+      <AuthForm
+        fields={["username", "password"]}
+        onSubmit={handleSubmit}
+        submitTitle={"Log In"}
+        error={error}
+      ></AuthForm>
+      <Button
+        style={styles.forgot}
+        onPress={() => navigation.navigate(routes.RECOVERPASSWORD)}
+      >
+        Forgot Password?
+      </Button>
+    </Screen>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    justifyContent: "space-between"
+    justifyContent: "space-between",
   },
-  forgot: {
-    alignSelf: "flex-end",
-  }
 });
 
 export default LoginScreen;

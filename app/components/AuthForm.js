@@ -3,6 +3,7 @@ import { FormField, SubmitButton, ErrorMessage } from "./forms";
 import { Formik } from "formik";
 import * as Yup from "yup";
 
+
 function AuthForm({ fields, onSubmit, submitTitle, error }) {
   const initialValues = {};
   const validationConditions = {};

@@ -1,14 +1,13 @@
 import React, { useState } from "react";
-import telemetry from "../analytics/telemetry"
+import telemetry from "../analytics/telemetry";
 import { Alert } from "react-native";
 import routes from "../navigation/routes";
 import AuthForm from "../components/AuthForm";
 import Screen from "../components/Screen";
 import { Auth } from "aws-amplify";
 
-
 function ConfirmRecoverPasswordScreen({ navigation }) {
-  telemetry(eventTitle='viewConfirmRecoverPassword')
+  telemetry((eventTitle = "viewConfirmRecoverPasswordScreen"));
 
   const [error, setError] = useState();
 
@@ -27,7 +26,7 @@ function ConfirmRecoverPasswordScreen({ navigation }) {
       setError(error.message);
     }
   };
-  
+
   return (
     <>
       <Screen>

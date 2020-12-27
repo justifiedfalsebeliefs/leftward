@@ -1,7 +1,7 @@
 import React from "react";
 import { StyleSheet } from "react-native";
 
-import Text from "../Text";
+import { Layout, Text, useTheme  } from '@ui-kitten/components';
 
 function ErrorMessage({ error, visible }) {
   if (!visible || !error) return null;

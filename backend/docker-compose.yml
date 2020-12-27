@@ -12,8 +12,8 @@ services:
       MYSQL_USER: root
       MYSQL_PASSWORD: making the world a better place one action at a time
       MYSQL_DB: LFT
-      AWS_DEFAULT_REGION: 
-      AWS_COGNITO_DOMAIN: 
+      AWS_DEFAULT_REGION: us-east-1
+      AWS_COGNITO_DOMAIN: https://leftwarddev.auth.us-east-1.amazoncognito.com
       AWS_COGNITO_USER_POOL_ID: 
       AWS_COGNITO_USER_POOL_CLIENT_ID: 
       AWS_COGNITO_REDIRECT_URL: leftward.app

@@ -1,4 +1,5 @@
 export default Object.freeze({
+  DASHBOARD: "Dashboard",
   ACTION_DETAILS: "Action Details",
   LISTING_EDIT: "ListingEdit",
   LOGIN: "Login",
@@ -13,5 +14,8 @@ export default Object.freeze({
   UPDATECAUSE: "Update Cause",
   ORGANIZATION_DETAILS: "Organization Details",
   STATISTICS: "STATISTICS",
-  HIDDENACTIONS: "Hidden Actions"
+  HIDDENACTIONS: "Hidden Actions",
+  COMPLETEURL: "Action Complete URL",
+  ACTIONLISTING: "Action Listings",
+  BADGELISTING: "Badge Listings",
 });

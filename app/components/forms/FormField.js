@@ -1,7 +1,6 @@
 import React from "react";
 import { useFormikContext } from "formik";
-
-import TextInput from "../TextInput";
+import { Input } from '@ui-kitten/components';
 import ErrorMessage from "./ErrorMessage";
 
 function AppFormField({ name, width, ...otherProps }) {
@@ -15,7 +14,7 @@ function AppFormField({ name, width, ...otherProps }) {
 
   return (
     <>
-      <TextInput
+      <Input
         onBlur={() => setFieldTouched(name)}
         onChangeText={(text) => setFieldValue(name, text)}
         value={values[name]}

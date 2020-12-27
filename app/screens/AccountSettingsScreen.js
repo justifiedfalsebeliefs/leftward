@@ -1,25 +1,26 @@
 import React, { useState, useEffect } from "react";
-import telemetry from "../analytics/telemetry"
+import telemetry from "../analytics/telemetry";
 import { StyleSheet, Alert } from "react-native";
 import Screen from "../components/Screen";
 import AuthForm from "../components/AuthForm";
 import { Auth } from "aws-amplify";
-import Button from "../components/Button";
-
+import { Button } from "@ui-kitten/components";
 
 function AccountSettingsScreen({ navigation }) {
-  telemetry(eventTitle='viewAccountSettings')
+  telemetry((eventTitle = "viewAccountSettingsScreen"));
 
   const [error, setError] = useState();
   const [emailVerified, setEmailVerified] = useState();
   const [cognitoUser, setCognitoUser] = useState();
-  const useMountEffect = (fun) => useEffect(fun, [])
+  const useMountEffect = (fun) => useEffect(fun, []);
   const checkVerification = async () => {
-    const response = await Auth.currentAuthenticatedUser()
+    const response = await Auth.currentAuthenticatedUser();
     setCognitoUser(response);
     setEmailVerified(response.signInUserSession.idToken.payload.email_verified);
   };
-  useMountEffect(() => {checkVerification()})
+  useMountEffect(() => {
+    checkVerification();
+  });
 
   const handleSubmit = async (userInfo) => {
     try {
@@ -35,14 +36,18 @@ function AccountSettingsScreen({ navigation }) {
 
   const handleSubmitPassword = async (userInfo) => {
     try {
-      await Auth.changePassword(cognitoUser, userInfo.password, userInfo.newPassword);
+      await Auth.changePassword(
+        cognitoUser,
+        userInfo.password,
+        userInfo.newPassword
+      );
       Alert.alert("Success!", "Password Changed.", [{ text: "OK" }]);
     } catch (error) {
       console.log(error);
       setError(error.message);
     }
   };
-  
+
   return (
     <>
       <Screen>
@@ -55,11 +60,13 @@ function AccountSettingsScreen({ navigation }) {
           ></AuthForm>
         )}
 
-        {!emailVerified &&  (<Button
-          title="Send Confirmation Code"
-          onPress={() => Auth.verifyCurrentUserAttribute("email")}
-          color="secondary"
-        ></Button>)}
+        {!emailVerified && (
+          <Button
+            title="Send Confirmation Code"
+            onPress={() => Auth.verifyCurrentUserAttribute("email")}
+            color="secondary"
+          ></Button>
+        )}
 
         <AuthForm
           fields={["password", "newPassword", "newPasswordConfirmation"]}

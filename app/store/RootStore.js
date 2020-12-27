@@ -76,7 +76,7 @@ export default class RootStore {
     updateUserStatistics = async () => {
         if (this.userStatisticsShouldUpdate == true) {
             console.log("updating user statistics")
-            getData("fetchUserExperience").then(
+            getData("fetchUserStatistics").then(
                 action(data => {
                     this.userStatistics = data[0];
                     this.updateUserStatisticsShouldUpdate(false)

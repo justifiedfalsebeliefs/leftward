@@ -1,130 +1,110 @@
-import React, { useState, useEffect } from "react";
-import { StyleSheet, View, Text } from "react-native";
+import React, { useState } from "react";
+import { StyleSheet, View } from "react-native";
 import Screen from "../components/Screen";
-import Button from "../components/Button";
+import { Button, CheckBox, Layout, Text } from "@ui-kitten/components";
 import routes from "../navigation/routes";
-import colors from "../config/colors"
-import { TouchableOpacity } from "react-native-gesture-handler";
+import cause from "../config/cause";
 import uuidv4 from "../utility/uuid";
-import getWeekNumber from "../utility/getWeekNumber"
-import * as Amplitude from 'expo-analytics-amplitude';
-import fonts from "../config/fonts";
+import getWeekNumber from "../utility/getWeekNumber";
+import * as Amplitude from "expo-analytics-amplitude";
+import useMountEffect from "../hooks/useMountEffect";
 
 function RegisterCauseScreen({ navigation }) {
-
-  const [causes, setCauses] = useState();
-  const [envColor, setEnvColor] = useState(colors.levelBarBackground);
-  const [crimColor, setCrimColor] = useState(colors.levelBarBackground);
-  const [econColor, setEconColor] = useState(colors.levelBarBackground);
+  const [causes, setCauses] = useState("TODO");
   const [uuid, setUuid] = useState();
-  
-  const useMountEffect = (fun) => useEffect(fun, [])
+  const [envChecked, setEnvChecked] = useState(false);
+  const [ecoChecked, setEcoChecked] = useState(false);
+  const [lawChecked, setLawChecked] = useState(false);
+  const [lgbChecked, setLgbChecked] = useState(false);
+  const [racChecked, setRacChecked] = useState(false);
+
   useMountEffect(() => {
     setUuid(uuidv4());
-    Amplitude.setUserId(uuid)
-    Amplitude.setUserProperties({cohortId: getWeekNumber(new Date())})
-    Amplitude.logEvent('ViewRegisterCause')})
-
-  function handleEnvPress(){
-    setCrimColor(colors.levelBarBackground)
-    setEnvColor(colors.primary)
-    setEconColor(colors.levelBarBackground)
-    setCauses("Environment Protection")
-  }
-
-  function handleCrimPress(){
-    setCrimColor(colors.primary)
-    setEnvColor(colors.levelBarBackground)
-    setEconColor(colors.levelBarBackground)
-    setCauses("Criminal Justice Reform")
-  }
-
-  function handleEconPress(){
-    setEconColor(colors.primary)
-    setEnvColor(colors.levelBarBackground)
-    setCrimColor(colors.levelBarBackground)
-    setCauses("Economic Justice")
-  }
-
+    Amplitude.setUserId(uuid);
+    Amplitude.setUserProperties({ cohortId: getWeekNumber(new Date()) });
+    Amplitude.logEvent("ViewRegisterCauseScreem");
+  });
 
   return (
-      <Screen>
-        <View style={styles.container}>
-          <View style={styles.progressBackground}>
-            <View style={styles.progressFill}></View>
-          </View>
-          <View style={{height:20}}></View>
-          <Text style={styles.instructions}>Pick a cause, get actions that make a difference</Text>
-          <View style={{height:20}}></View>
-          <TouchableOpacity style={[styles.causeButton, {backgroundColor: envColor,}]} onPress={() => handleEnvPress()}>
-            <Text style={styles.causeText}>Environment Protection</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={[styles.causeButton, {backgroundColor: crimColor,}]} onPress={() => handleCrimPress()}>
-            <Text style={styles.causeText}>Criminal Justice Reform</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={[styles.causeButton, {backgroundColor: econColor,}]} onPress={() => handleEconPress()}>
-            <Text style={styles.causeText}>Economic Justice</Text>
-          </TouchableOpacity>
-          <View style={{height:20}}></View>
-          <Text style={styles.note}>You'll see more actions for this cause at first. You can always change this later.</Text>
-          <View style={{height:20}}></View>
-          <Text style={styles.note}>We're adding causes as we grow!</Text>
-          <View style={{height:40}}></View>
-          <Button
-          style={styles.nextButton}
-            title="Next"
-            onPress={() =>{
-              navigation.navigate(routes.REGISTER, { causes: causes, guid: uuid })}
-            }
-          ></Button>
-        </View>
-      </Screen>
+    <Screen style={styles.container}>
+      <View style={styles.progressBackground}>
+        <View style={styles.progressFill}></View>
+      </View>
+      <Layout style={styles.checkboxContainer}>
+        <CheckBox
+          style={styles.checkbox}
+          checked={envChecked}
+          onChange={(nextChecked) => setEnvChecked(nextChecked)}
+        >
+          {cause.env.title}
+        </CheckBox>
+        <CheckBox
+          style={styles.checkbox}
+          checked={ecoChecked}
+          onChange={(nextChecked) => setEcoChecked(nextChecked)}
+        >
+          {cause.eco.title}
+        </CheckBox>
+        <CheckBox
+          style={styles.checkbox}
+          checked={lawChecked}
+          onChange={(nextChecked) => setLawChecked(nextChecked)}
+        >
+          {cause.law.title}
+        </CheckBox>
+        <CheckBox
+          style={styles.checkbox}
+          checked={lgbChecked}
+          onChange={(nextChecked) => setLgbChecked(nextChecked)}
+        >
+          {cause.lgb.title}
+        </CheckBox>
+        <CheckBox
+          style={styles.checkbox}
+          checked={racChecked}
+          onChange={(nextChecked) => setRacChecked(nextChecked)}
+        >
+          {cause.rac.title}
+        </CheckBox>
+      </Layout>
+      <Text style={styles.note}>You can always change this later.</Text>
+      <Button
+        style={styles.nextButton}
+        status="success"
+        onPress={() => {
+          navigation.navigate(routes.REGISTER, { causes: causes, guid: uuid });
+        }}
+      >
+        Next
+      </Button>
+    </Screen>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    paddingTop: 30,
+    paddingVertical: 30,
   },
-  progressBackground:{
-    backgroundColor: colors.levelBarBackground,
+  progressBackground: {
+    backgroundColor: "blue",
     height: 20,
     borderRadius: 12,
   },
-  progressFill:{
-      backgroundColor: colors.levelBarFill,
-      borderRadius: 12,
-      flex: 1,
-      width: `50%`,
+  checkboxContainer: {
+    margin: 20,
   },
-  causeButton:{
-    borderRadius: 20,
-    justifyContent: "center",
-    alignItems: "center",
-    alignSelf: "center",
-    padding: 25,
-    width: 250,
+  checkbox: {
     marginVertical: 10,
   },
-  causeText:{
-    textAlign: 'center',
-    color: colors.contrastTextDarkBG,
-    fontSize: 16,
-    fontFamily: fonts.subTitle
+  progressFill: {
+    backgroundColor: "blue",
+    borderRadius: 12,
+    flex: 1,
+    width: `50%`,
   },
-  instructions:{
-    textAlign: 'center',
-    fontSize: 24,
-    fontFamily: fonts.screenTitle,
-    paddingHorizontal: 20
+  note: {
+    textAlign: "center",
+    marginVertical: 10,
   },
-  note:{
-    textAlign: 'center',
-    fontSize: 18,
-    fontFamily: fonts.screenTitle,
-    paddingHorizontal: 20
-  },
-  nextButton:{
-  }
 });
 export default RegisterCauseScreen;

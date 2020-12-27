@@ -1,15 +1,14 @@
 import React, { useState } from "react";
-import { StyleSheet, View} from "react-native";
+import { StyleSheet, View } from "react-native";
 import useAuth from "../auth/useAuth";
 import { Auth } from "aws-amplify";
 import callApi from "../data/callApi";
-import telemetry from "../analytics/telemetry"
-import colors from "../config/colors"
+import telemetry from "../analytics/telemetry";
 import AuthForm from "../components/AuthForm";
 import Screen from "../components/Screen";
 
 function RegisterScreen({ route, navigation }) {
-  telemetry('ViewRegister')
+  telemetry("ViewRegisterScreen");
   const [error, setError] = useState();
   const auth = useAuth();
 
@@ -21,17 +20,18 @@ function RegisterScreen({ route, navigation }) {
         attributes: {
           email: userInfo.email,
           "custom:causes": route.params.causes,
-          "custom:userGuid": route.params.guid
+          "custom:userGuid": route.params.guid,
         },
       });
-      
-      await Auth.signIn(
-        userInfo.username,
-        userInfo.password
-      );
+
+      await Auth.signIn(userInfo.username, userInfo.password);
       const user = await Auth.currentSession();
-      await callApi(user.idToken.jwtToken, "pushNewUserGuid", params=[{key:"newGuid", value:route.params.guid}])
-      telemetry('PressRegister')
+      await callApi(
+        user.idToken.jwtToken,
+        "pushNewUserGuid",
+        (params = [{ key: "newGuid", value: route.params.guid }])
+      );
+      telemetry("PressRegister");
       Auth.currentSession().then((data) => {
         auth.logIn(data);
       });
@@ -39,14 +39,14 @@ function RegisterScreen({ route, navigation }) {
       setError(error.message);
     }
   };
-  
+
   return (
     <>
       <Screen style={styles.container}>
-      <View style={styles.progressBackground}>
-            <View style={styles.progressFill}></View>
-          </View>
-          <View style={{height:20}}></View>
+        <View style={styles.progressBackground}>
+          <View style={styles.progressFill}></View>
+        </View>
+        <View style={{ height: 20 }}></View>
         <AuthForm
           fields={["username", "email", "password", "passwordConfirmation"]}
           onSubmit={handleSubmit}
@@ -62,16 +62,16 @@ const styles = StyleSheet.create({
   container: {
     paddingTop: 30,
   },
-  progressBackground:{
-    backgroundColor: colors.levelBarBackground,
+  progressBackground: {
+    backgroundColor: "blue",
     height: 20,
     borderRadius: 12,
   },
-  progressFill:{
-      backgroundColor: colors.levelBarFill,
-      borderRadius: 12,
-      flex: 1,
-      width: `100%`,
+  progressFill: {
+    backgroundColor: "blue",
+    borderRadius: 12,
+    flex: 1,
+    width: `100%`,
   },
 });
 

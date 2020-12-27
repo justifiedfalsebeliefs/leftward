@@ -22,181 +22,6 @@ MYSQL_USER = os.getenv('MYSQL_USER')
 MYSQL_PASSWORD = os.getenv('MYSQL_PASSWORD')
 MYSQL_DB = os.getenv('MYSQL_DB')
 
-def listActionsDashboard(ids):
-    return """
-    SELECT
-        a.actionId, a.title as 'actionTitle',
-        a.description as 'actionDescription',
-        a.actionType as 'actionType',
-        a.cause as 'actionCause',
-        a.url as 'actionUrl',
-        o.title as 'organizationTitle',
-        o.description as 'organizationDescription',
-        o.url as 'organizationUrl',
-        'dashboard' as 'sourceList',
-        reward
-    FROM action a INNER JOIN organization o on o.organizationId = a.organizationId
-        WHERE a.actionId IN ({})
-        LIMIT 4;""".format(str(ids)[1:-1])
-
-def getDashboardActionsForAlgorithm(guid):
-    return """SELECT 
-            uda.actionId, 
-            uda.active,
-            uda.lastPresentedDT,
-            uda.firstPresentedDT,
-            a.expireDT,
-            a.reward,
-            ua.status
-            from userDashboardActions uda
-        INNER JOIN action a on a.actionId = uda.actionId
-        LEFT JOIN (SELECT actionId, status from userAction WHERE userGuid = '{}') ua on ua.actionId = a.actionId
-        WHERE uda.userGuid = '{}';""".format(guid, guid)
-
-def pushDeactivateActions(actionIds, guid):
-    if not actionIds:
-        exclude_list = '--11'
-    return """UPDATE userDashboardActions SET active = 0 WHERE actionId in ({}) and userGuid = '{}'
-        """.format(str(actionIds)[1:-1], guid)
-
-def getActionIdsForDashboard(remaining_actions_needed, exclude_list, guid):
-    if not exclude_list:
-        exclude_list = '--11'
-    return """SELECT actionId from action WHERE
-                actionId not in ({}) AND
-                actionId not in (SELECT actionId from userAction where userGuid = '{}')
-                ORDER BY RAND()
-                LIMIT {}""".format(str(exclude_list)[1:-1], guid, remaining_actions_needed)
-
-def updateUserDashActionsStatus(action_ids, dt, guid):
-    if not action_ids:
-        action_ids = '--11'
-    return """
-    UPDATE userDashboardActions SET active = 1, lastPresentedDT = '{}' WHERE actionId in ({}) AND userGuid = '{}'
-    """.format(dt, str(action_ids)[1:-1], guid)
-
-
-def pushUserDashActionsStatus(action_id, dt, guid):
-    return """ INSERT INTO userDashboardActions (actionId, active, lastPresentedDT, firstPresentedDT, userGuid)
-     VALUES ({}, 1, '{}', '{}', '{}')""".format(action_id, dt, dt, guid)
-
-def pushNewUserGuid(guid):
-    return "INSERT INTO user ( userGuid ) VALUES ('{}')".format(guid)
-
-def pushActionStatus(guid, status, actionId ):
-    return """
-    INSERT INTO userAction ( userGuid, status, actionId, reward, cause) 
-    VALUES ('{}', '{}', {}, (SELECT reward FROM action WHERE actionId = {}), (SELECT cause FROM action WHERE actionId = {}))
-        """.format(guid, status, str(actionId),str(actionId), str(actionId))
-
-def fetchHiddenActions(guid):
-    return """
-    SELECT
-        a.actionId, a.title as 'actionTitle',
-        a.description as 'actionDescription',
-        a.actionType as 'actionType',
-        a.url as 'actionUrl',
-        o.title as 'organizationTitle',
-        o.description as 'organizationDescription',
-        o.url as 'organizationUrl',
-        'hidden' as 'sourceList',
-        reward
-    FROM action a INNER JOIN organization o on o.organizationId = a.organizationId
-        WHERE ( NOW() between a.liveDT and a.expireDT )
-        AND a.actionId IN (
-            SELECT DISTINCT actionId from userAction 
-            WHERE userGuid = '{}' 
-            AND status = 'HIDDEN')
-        """.format(guid)
-
-def fetchCompletedActions(guid):
-    return """
-    SELECT
-        a.actionId, a.title as 'actionTitle',
-        a.description as 'actionDescription',
-        a.actionType as 'actionType',
-        a.url as 'actionUrl',
-        o.title as 'organizationTitle',
-        o.description as 'organizationDescription',
-        o.url as 'organizationUrl',
-        'complete' as 'sourceList',
-        reward
-    FROM action a INNER JOIN organization o on o.organizationId = a.organizationId
-        WHERE ( NOW() between a.liveDT and a.expireDT )
-        AND a.actionId IN (
-            SELECT DISTINCT actionId from userAction 
-            WHERE userGuid = '{}' 
-            AND status = 'COMPLETE')
-        """.format(guid)
-
-def fetchMyActions(guid):
-    return """
-    SELECT
-        a.actionId, a.title as 'actionTitle',
-        a.description as 'actionDescription',
-        a.actionType as 'actionType',
-        a.url as 'actionUrl',
-        o.title as 'organizationTitle',
-        o.description as 'organizationDescription',
-        o.url as 'organizationUrl',
-        'myActions' as 'sourceList',
-        reward
-    FROM action a INNER JOIN organization o on o.organizationId = a.organizationId
-        WHERE ( NOW() between a.liveDT and a.expireDT )
-        AND a.actionId IN (
-            SELECT DISTINCT actionId from userAction 
-            WHERE userGuid = '{}' 
-            AND status = 'INPROGRESS')
-        """.format(guid)
-
-def deleteUserAction(userActionId, guid):
-    return "DELETE FROM userAction where actionId = {} AND userGuid = '{}'".format(userActionId, guid)
-
-def fetchUserExperience(guid):
-    return """
-    SELECT
-        levelNumber,
-        nextLevelPointsRequired,
-        currentLevelPointsRequired,
-        pointsEarnedTotal,
-        actionsByCause,
-        totalActionsCompletedCount
-    from user
-    WHERE userGuid = '{}'
-""".format(guid)
-
-def pushUpdateUser(guid, actionsByCause, totalActionsCompletedCount, pointsEarnedTotal, currentLevel,
-                   currentLevelPointsRequired, nextLevelPointsRequired, nextLevel):
-    return"""
-    UPDATE user SET 
-        levelNumber = {} ,
-        pointsEarnedTotal = {} ,
-        nextLevelPointsRequired = {},
-        currentLevelPointsRequired = {},
-        totalActionsCompletedCount = {},
-        actionsByCause = '{}'
-    WHERE userGuid = '{}';
-    """.format(currentLevel, pointsEarnedTotal, nextLevelPointsRequired, currentLevelPointsRequired,
-               totalActionsCompletedCount, actionsByCause, guid)
-
-def fetchCompletedUserActions(guid):
-    return"""
-    SELECT userActionId, actionId, reward, cause FROM userAction WHERE userGuid = '{}' and status = 'COMPLETE';
-    """.format(guid)
-
-def getUser(guid):
-    return"SELECT * FROM user WHERE userGuid = '{}';".format(guid)
-
-def getLevelByPoints(points):
-    return"""SELECT MAX(levelNumber) as level from level WHERE pointsRequired <= {}""".format(points)
-
-def getPointsByLevel(level):
-    return"""
-    SELECT
-    (SELECT pointsRequired from level WHERE levelNumber = {}) as currentPointsRequired,
-    (SELECT pointsRequired from level WHERE levelNumber = {}) as nextPointsRequired
-    """.format(level, level+1)
-
 
 class APIReceiver:
     def __enter__(self):
@@ -233,6 +58,10 @@ def get_response(query, query_type, return_as_records=False):
             return jsonify({'resp': 'Success'}), 200
 
 
+def get_user_by_guid(guid, return_as_records=False):
+    return get_response("SELECT * FROM user WHERE userGuid = '{}';".format(guid), 'GET', return_as_records=return_as_records)
+
+
 @app.route('/fetchDashboardListings', methods=['POST'])
 @aws_auth.authentication_required
 def fetch_dashboard_listings():
@@ -246,7 +75,8 @@ def fetch_dashboard_listings():
                     actions_to_deactivate.append(action['actionId'])
                     action['active'] = 0
         if actions_to_deactivate:
-            get_response(pushDeactivateActions(actions_to_deactivate, guid), "PUSH")
+            get_response("""UPDATE userDashboardActions SET active = 0 WHERE actionId in ({}) and userGuid = '{}'
+                    """.format(str(actions_to_deactivate)[1:-1], guid), "PUSH")
         return actions
 
     def get_more_actions(actions, guid):
@@ -262,93 +92,141 @@ def fetch_dashboard_listings():
             return previous_actionIds, new_actionIds
 
         remaining_actions_needed = 4 - len(previous_actionIds + new_actionIds)
-        actionIdObjects = get_response(getActionIdsForDashboard(
-            remaining_actions_needed, exclude_list, guid), 'GET', return_as_records=True)
+        if not exclude_list:
+            exclude_list = '--11'
+        query = """SELECT actionId from action WHERE
+                    actionId not in ({}) AND
+                    actionId not in (SELECT actionId from userAction where userGuid = '{}')
+                    ORDER BY RAND()
+                    LIMIT {}""".format(str(exclude_list)[1:-1], guid, remaining_actions_needed)
+
+        actionIdObjects = get_response(query, 'GET', return_as_records=True)
         for record in actionIdObjects:
             id = record['actionId']
             new_actionIds.append(id)
         return previous_actionIds, new_actionIds
 
     guid = aws_auth.claims['custom:userGuid']
-    actions = get_response(getDashboardActionsForAlgorithm(guid), 'GET', return_as_records=True)
+    actions = get_response("""SELECT 
+            uda.actionId, 
+            uda.active,
+            uda.lastPresentedDT,
+            uda.firstPresentedDT,
+            a.expireDT,
+            a.reward,
+            ua.status
+            from userDashboardActions uda
+        INNER JOIN action a on a.actionId = uda.actionId
+        LEFT JOIN (SELECT actionId, status from userAction WHERE userGuid = '{}') ua on ua.actionId = a.actionId
+        WHERE uda.userGuid = '{}';""".format(guid, guid), 'GET', return_as_records=True)
     actions = deactivate_actions(actions, guid)
     previous_actionIds, new_actionIds = get_more_actions(actions, guid)
     if previous_actionIds:
-        get_response(updateUserDashActionsStatus(previous_actionIds, dt.datetime.now(), guid), "PUSH")
+        get_response("""
+            UPDATE userDashboardActions SET active = 1, lastPresentedDT = '{}' WHERE actionId in ({}) AND userGuid = '{}'
+            """.format(dt.datetime.now(), str(previous_actionIds)[1:-1], guid), "PUSH")
     for action_Id in new_actionIds:
-        get_response(pushUserDashActionsStatus(action_Id, dt.datetime.now(), guid), "PUSH")
+        get_response(""" INSERT INTO userDashboardActions (actionId, active, lastPresentedDT, firstPresentedDT, userGuid)
+     VALUES ({}, 1, '{}', '{}', '{}')""".format(action_Id, dt.datetime.now(), dt.datetime.now(), guid), "PUSH")
     actionIds = (previous_actionIds + new_actionIds)
     if not actionIds:
         return jsonify({'response': "All actions completed!"}), 200
-    return get_response(listActionsDashboard(actionIds), 'GET')
+    return get_response("""
+    SELECT
+        a.actionId, a.title as 'actionTitle',
+        a.description as 'actionDescription',
+        a.actionType as 'actionType',
+        a.cause as 'actionCause',
+        a.url as 'actionUrl',
+        o.title as 'organizationTitle',
+        o.description as 'organizationDescription',
+        o.url as 'organizationUrl',
+        'dashboard' as 'sourceList',
+        reward
+    FROM action a INNER JOIN organization o on o.organizationId = a.organizationId
+        WHERE a.actionId IN ({})
+        LIMIT 4;""".format(str(actionIds)[1:-1]), 'GET')
 
 
 @app.route('/fetchHiddenActions', methods=['POST'])
 @aws_auth.authentication_required
 def fetch_hidden_actions():
-    return get_response(fetchHiddenActions(aws_auth.claims['custom:userGuid']), 'GET')
+    return get_response("""
+    SELECT
+        a.actionId, a.title as 'actionTitle',
+        a.description as 'actionDescription',
+        a.actionType as 'actionType',
+        a.url as 'actionUrl',
+        o.title as 'organizationTitle',
+        o.description as 'organizationDescription',
+        o.url as 'organizationUrl',
+        'hidden' as 'sourceList',
+        reward
+    FROM action a INNER JOIN organization o on o.organizationId = a.organizationId
+        WHERE ( NOW() between a.liveDT and a.expireDT )
+        AND a.actionId IN (
+            SELECT DISTINCT actionId from userAction 
+            WHERE userGuid = '{}' 
+            AND status = 'HIDDEN')
+        """.format(aws_auth.claims['custom:userGuid']), 'GET')
 
 
 @app.route('/fetchCompletedActions', methods=['POST'])
 @aws_auth.authentication_required
 def fetch_completed_actions():
-    return get_response(fetchCompletedActions(aws_auth.claims['custom:userGuid']), 'GET')
+    return get_response("""
+    SELECT
+        a.actionId, a.title as 'actionTitle',
+        a.description as 'actionDescription',
+        a.actionType as 'actionType',
+        a.url as 'actionUrl',
+        o.title as 'organizationTitle',
+        o.description as 'organizationDescription',
+        o.url as 'organizationUrl',
+        'complete' as 'sourceList',
+        reward
+    FROM action a INNER JOIN organization o on o.organizationId = a.organizationId
+        WHERE ( NOW() between a.liveDT and a.expireDT )
+        AND a.actionId IN (
+            SELECT DISTINCT actionId from userAction 
+            WHERE userGuid = '{}' 
+            AND status = 'COMPLETE')
+        """.format(aws_auth.claims['custom:userGuid']), 'GET')
 
 
 @app.route('/fetchMyActions', methods=['POST'])
 @aws_auth.authentication_required
 def fetch_my_actions():
-    return get_response(fetchMyActions(aws_auth.claims['custom:userGuid']), 'GET')
+    return get_response("""
+    SELECT
+        a.actionId, a.title as 'actionTitle',
+        a.description as 'actionDescription',
+        a.actionType as 'actionType',
+        a.url as 'actionUrl',
+        o.title as 'organizationTitle',
+        o.description as 'organizationDescription',
+        o.url as 'organizationUrl',
+        'myActions' as 'sourceList',
+        reward
+    FROM action a INNER JOIN organization o on o.organizationId = a.organizationId
+        WHERE ( NOW() between a.liveDT and a.expireDT )
+        AND a.actionId IN (
+            SELECT DISTINCT actionId from userAction 
+            WHERE userGuid = '{}' 
+            AND status = 'INPROGRESS')
+        """.format(aws_auth.claims['custom:userGuid']), 'GET')
 
 
 @app.route('/pushNewUserGuid', methods=['POST'])
 @aws_auth.authentication_required
 def push_new_user_guid():
-    return get_response(pushNewUserGuid(aws_auth.claims['custom:userGuid']), "PUSH")
+    return get_response("INSERT INTO user ( userGuid ) VALUES ('{}')".format(aws_auth.claims['custom:userGuid']), "PUSH")
 
 
-@app.route('/pushCalcExp', methods=['POST'])
-@aws_auth.authentication_required
-def push_calc_exp():
-    guid = aws_auth.claims['custom:userGuid']
-    userActionsObjects = get_response(fetchCompletedUserActions(guid), 'GET', return_as_records=True)
-    userObjects = get_response(getUser(guid), 'GET', return_as_records=True)
-    preUpdateLevel = userObjects[0]['levelNumber']
-    pointsEarnedTotal = sum([x['reward'] for x in userActionsObjects])
-    currentLevelObjects = get_response(getLevelByPoints(pointsEarnedTotal), 'GET', return_as_records=True)
-    currentLevel = currentLevelObjects[0]['level']
-    LevelPointsRequiredObjects = get_response(getPointsByLevel(currentLevel), 'GET', return_as_records=True)
-    currentLevelPointsRequired = LevelPointsRequiredObjects[0]['currentPointsRequired']
-    nextLevelPointsRequired = LevelPointsRequiredObjects[0]['nextPointsRequired']
-
-    level_up = False
-    if preUpdateLevel > currentLevel:
-        level_up = True
-
-    totalActionsCompletedCount = 0
-    actionsByCause = {'Economic Justice': {'count': 0, 'points': 0},
-                      'Legal Justice': {'count': 0, 'points': 0},
-                      'Environmental Justice': {'count': 0, 'points': 0},
-                      'Racial Justice': {'count': 0, 'points': 0},
-                      'Gender and LGBTQ+ Justice': {'count': 0, 'points': 0}}
-    for record in userActionsObjects:
-        actionsByCause[record['cause']]['count'] += 1
-        actionsByCause[record['cause']]['points'] += record['reward']
-        totalActionsCompletedCount += 1
-
-    userDetails = {'actionsByCause': json.dumps(actionsByCause), 'totalActionsCompletedCount': totalActionsCompletedCount,
-                   'pointsEarnedTotal': pointsEarnedTotal,
-                   'currentLevel': currentLevel, 'currentLevelPointsRequired': currentLevelPointsRequired,
-                   'nextLevel': currentLevel+1, 'nextLevelPointsRequired': nextLevelPointsRequired}
-
-    get_response(pushUpdateUser(guid, **userDetails), "PUSH")
-    return jsonify({'levelUp': level_up, 'userDetails': userDetails}), 200
-
-
-@app.route('/fetchUserExperience', methods=['POST'])
+@app.route('/fetchUserStatistics', methods=['POST'])
 @aws_auth.authentication_required
 def fetch_user_experience():
-    return get_response(fetchUserExperience(aws_auth.claims['custom:userGuid']), 'GET')
+    return get_user_by_guid(aws_auth.claims['custom:userGuid'])
 
 
 @app.route('/pushActionStatus', methods=['POST'])
@@ -356,19 +234,27 @@ def fetch_user_experience():
 def push_action_status():
     guid = aws_auth.claims['custom:userGuid']
 
-    userObjects = get_response(getUser(guid), 'GET', return_as_records=True)
-    preUpdateLevel = userObjects[0]['levelNumber']
+    user = get_user_by_guid(guid, return_as_records=True)
+    preUpdateLevel = user[0]['levelNumber']
 
     actionId = request.args.get('actionId')
-    get_response(deleteUserAction(actionId, guid), "PUSH")
-    get_response(pushActionStatus(guid, request.args.get('statusUpdate'), actionId), "PUSH")
+    get_response("DELETE FROM userAction where actionId = {} AND userGuid = '{}'".format(actionId, guid), "PUSH")
+    get_response("""
+    INSERT INTO userAction ( userGuid, status, actionId, reward, cause) 
+    VALUES ('{}', '{}', {}, (SELECT reward FROM action WHERE actionId = {}), (SELECT cause FROM action WHERE actionId = {}))
+        """.format(guid, request.args.get('statusUpdate'), str(actionId),str(actionId), str(actionId)), "PUSH")
 
 
-    userActionsObjects = get_response(fetchCompletedUserActions(guid), 'GET', return_as_records=True)
+    userActionsObjects = get_response("""
+    SELECT userActionId, actionId, reward, cause FROM userAction WHERE userGuid = '{}' and status = 'COMPLETE';
+    """.format(guid), 'GET', return_as_records=True)
     pointsEarnedTotal = sum([x['reward'] for x in userActionsObjects])
-    currentLevelObjects = get_response(getLevelByPoints(pointsEarnedTotal), 'GET', return_as_records=True)
+    currentLevelObjects = get_response("""SELECT MAX(levelNumber) as level from level WHERE pointsRequired <= {}""".format(pointsEarnedTotal), 'GET', return_as_records=True)
     currentLevel = currentLevelObjects[0]['level']
-    LevelPointsRequiredObjects = get_response(getPointsByLevel(currentLevel), 'GET', return_as_records=True)
+    LevelPointsRequiredObjects = get_response("""SELECT
+        (SELECT pointsRequired from level WHERE levelNumber = {}) as currentPointsRequired,
+        (SELECT pointsRequired from level WHERE levelNumber = {}) as nextPointsRequired
+        """.format(currentLevel, currentLevel + 1), 'GET', return_as_records=True)
     currentLevelPointsRequired = LevelPointsRequiredObjects[0]['currentPointsRequired']
     nextLevelPointsRequired = LevelPointsRequiredObjects[0]['nextPointsRequired']
 
@@ -392,6 +278,19 @@ def push_action_status():
                    'currentLevel': currentLevel, 'currentLevelPointsRequired': currentLevelPointsRequired,
                    'nextLevel': currentLevel+1, 'nextLevelPointsRequired': nextLevelPointsRequired}
 
+    def pushUpdateUser(guid, actionsByCause, totalActionsCompletedCount, pointsEarnedTotal, currentLevel,
+                       currentLevelPointsRequired, nextLevelPointsRequired, nextLevel):
+        return """
+        UPDATE user SET 
+            levelNumber = {} ,
+            pointsEarnedTotal = {} ,
+            nextLevelPointsRequired = {},
+            currentLevelPointsRequired = {},
+            totalActionsCompletedCount = {},
+            actionsByCause = '{}'
+        WHERE userGuid = '{}';
+        """.format(currentLevel, pointsEarnedTotal, nextLevelPointsRequired, currentLevelPointsRequired,
+                   totalActionsCompletedCount, actionsByCause, guid)
     get_response(pushUpdateUser(guid, **userDetails), "PUSH")
     return jsonify({'levelUp': level_up, 'userDetails': userDetails}), 200
 

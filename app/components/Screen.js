@@ -1,43 +1,67 @@
 import React from "react";
 import Constants from "expo-constants";
-import colors from "../config/colors"
-import fonts from "../config/fonts"
-import Icon from "../components/Icon"
-import { StyleSheet, SafeAreaView, View, Text} from "react-native";
+import { StyleSheet, ScrollView, RefreshControl } from "react-native";
+import { Layout } from "@ui-kitten/components";
+import wait from "../utility/wait";
+import { Ionicons } from "@expo/vector-icons";
 import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 
-function Screen({ children, style, title, back, navigation }) {
-  return (
-    <SafeAreaView style={styles.screen}>
-      <View style={styles.titleContainer}>
-      {back && (<TouchableWithoutFeedback onPress={() => navigation.goBack()} >
-        <Icon name={"chevron-left"} alignItems="flex-start" size={80}></Icon>
-        </TouchableWithoutFeedback>)}
-      {title && (<Text style={styles.titleText}>{title}</Text>)}
-      </View>
-      <View style={[styles.view, style]}>{children}</View>
-    </SafeAreaView>
-  );
+function Screen({
+  children,
+  style,
+  doOnRefresh = () => {},
+  scrolling,
+  back,
+  navigation,
+}) {
+  const [refreshing, setRefreshing] = React.useState(false);
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+    doOnRefresh();
+    wait(2000).then(() => setRefreshing(false));
+  }, []);
+  if (scrolling == true) {
+    return (
+      <ScrollView
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
+      >
+        <Layout level={"4"} style={[styles.screen, style]}>
+          {back && (
+            <TouchableWithoutFeedback
+              onPress={() => navigation.goBack()}
+              style={styles.back}
+            >
+              <Ionicons name="ios-arrow-back" size={24} color="black" />
+            </TouchableWithoutFeedback>
+          )}
+          {children}
+        </Layout>
+      </ScrollView>
+    );
+  } else {
+    return (
+      <Layout level={"4"} style={[styles.screen, style]}>
+        {back && (
+          <TouchableWithoutFeedback
+            onPress={() => navigation.goBack()}
+            style={styles.back}
+          >
+            <Ionicons name="ios-arrow-back" size={24} color="black" />
+          </TouchableWithoutFeedback>
+        )}
+        {children}
+      </Layout>
+    );
+  }
 }
 
 const styles = StyleSheet.create({
   screen: {
-    paddingTop: Constants.statusBarHeight + 15,
-    flex: 1,
+    paddingTop: Constants.statusBarHeight,
     paddingHorizontal: 20,
-    backgroundColor: colors.screenBackground,
-  },
-  titleContainer:{
-    flexDirection: "row",
-  },
-  titleText:{
-    fontSize: 30,
-    alignSelf: "center",
-    paddingVertical: 20,
-    fontFamily: fonts.screenTitle,
-    color: colors.screenTitle
-  },
-  view: {
+    flex: 1,
   },
 });
 
