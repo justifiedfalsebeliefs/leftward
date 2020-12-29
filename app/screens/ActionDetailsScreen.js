@@ -6,9 +6,8 @@ import routes from "../navigation/routes";
 import { Layout, Text, Button, Tooltip } from "@ui-kitten/components";
 import Screen from "../components/Screen";
 import WidgetContainer from "../components/widgets/WidgetContainer";
-
+import AppIcon from "../components/AppIcon";
 import { FontAwesome5 } from "@expo/vector-icons";
-import { Ionicons } from "@expo/vector-icons";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import {
   TouchableOpacity,
@@ -17,10 +16,10 @@ import {
 
 function ActionDetailsScreen({ route, navigation }) {
   const action = route.params;
-  telemetry(
-    ((eventTitle = "viewActionDetailsScreen"),
-    { actionId: action.actionId, actionTitle: action.actionTitle })
-  );
+  // telemetry(
+  //   ((eventTitle = "viewActionDetailsScreen"),
+  //   { actionId: action.actionId, actionTitle: action.actionTitle })
+  // );
   const things = useContext(RootStoreContext);
   const [starIcon, setStarIcon] = useState("star-outline");
   const [tooltipVisible, setTooltipVisible] = useState(false);
@@ -32,44 +31,54 @@ function ActionDetailsScreen({ route, navigation }) {
   };
 
   const countMeInPress = async () => {
-    telemetry((eventTitle = "countMeInPress"), {
-      actionId: action.actionId,
-      actionTitle: action.actionTitle,
-    });
+    // telemetry((eventTitle = "countMeInPress"), {
+    //   actionId: action.actionId,
+    //   actionTitle: action.actionTitle,
+    // });
     navigation.navigate(routes.COMPLETEURL, action);
   };
   const handleOrgPress = async () => {
-    telemetry((eventTitle = "openOrgURL"), {
-      actionId: action.actionId,
-      actionTitle: action.actionTitle,
-    });
+    // telemetry((eventTitle = "openOrgURL"), {
+    //   actionId: action.actionId,
+    //   actionTitle: action.actionTitle,
+    // });
     Linking.openURL(organization.url).catch((err) =>
       console.error("Couldn't load page", err)
     );
   };
   const handleStarIconPress = async () => {
     if (starIcon == "star-outline") {
-      telemetry((eventTitle = "saveIconPressSave"), {
-        actionId: action.actionId,
-        actionTitle: action.actionTitle,
-      });
+      // telemetry((eventTitle = "saveIconPressSave"), {
+      //   actionId: action.actionId,
+      //   actionTitle: action.actionTitle,
+      // });
       // update to save it
       setStarIcon("star");
       setTooltipVisible(true);
-      things.updateActionStatus("INPROGRESS", action.actionId);
+      things.updateActionState(
+        action.actionId,
+        "SAVED",
+        action.reward,
+        action.actionCause
+      );
     } else {
-      telemetry((eventTitle = "saveIconPressUnSave"), {
-        actionId: action.actionId,
-        actionTitle: action.actionTitle,
-      });
+      // telemetry((eventTitle = "saveIconPressUnSave"), {
+      //   actionId: action.actionId,
+      //   actionTitle: action.actionTitle,
+      // });
       setStarIcon("star-outline");
-      things.updateActionStatus("UNSAVED", action.actionId);
+      things.updateActionState(
+        action.actionId,
+        "UNSAVED",
+        action.reward,
+        action.actionCause
+      );
     }
   };
 
   const renderStarIcon = () => (
     <TouchableWithoutFeedback onPress={() => handleStarIconPress()}>
-      <MaterialCommunityIcons name={starIcon} size={28} color="black" />
+      <AppIcon name={starIcon} size={"miniscule"} color="black" />
     </TouchableWithoutFeedback>
   );
 
@@ -77,11 +86,7 @@ function ActionDetailsScreen({ route, navigation }) {
     <>
       <Screen back={true} navigation={navigation} scrolling={true}>
         <Layout level="4" style={{ alignItems: "center", paddingBottom: 30 }}>
-          <MaterialCommunityIcons
-            name="image-size-select-large"
-            size={150}
-            color="black"
-          />
+          <AppIcon name="no-image" size="small-medium" />
           <Text category="h1" style={{ fontWeight: "bold", margin: 10 }}>
             {action.actionTitle}
           </Text>
@@ -96,7 +101,7 @@ function ActionDetailsScreen({ route, navigation }) {
                 marginLeft: 20,
               }}
             >
-              <Ionicons name="md-people" size={30} color="black" />
+              <AppIcon name="people" size={"quick-hit"} />
               <Text
                 category="s1"
                 style={{

@@ -9,9 +9,9 @@ import BadgeList from "../components/widgets/badges/BadgeList";
 function BadgeListingsScreen({ route, navigation }) {
   const things = useContext(RootStoreContext);
 
-  useMountEffect(() => {
-    telemetry((eventTitle = "viewBadgeListingsScreen"));
-  });
+  // useMountEffect(() => {
+  //   telemetry((eventTitle = "viewBadgeListingsScreen"));
+  // });
 
   const fakeBadges = [
     {

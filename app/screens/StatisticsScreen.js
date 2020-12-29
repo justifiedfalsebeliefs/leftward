@@ -14,15 +14,12 @@ function StatisticsScreen({ navigation }) {
   const things = useContext(RootStoreContext);
 
   async function refreshData() {
-    things.updateListingsInProgressShouldUpdate(true);
-    things.updateListingsCompletedShouldUpdate(true);
+    things.updateSavedShouldUpdate(true);
+    things.updateCompletedShouldUpdate(true);
   }
 
   useMountEffect(() => {
-    telemetry((eventTitle = "viewStatisticsScreen"));
-    !things.listingsInProgress || !things.listingsCompleted
-      ? refreshData()
-      : null;
+    // telemetry((eventTitle = "viewStatisticsScreen"));
   });
 
   return (

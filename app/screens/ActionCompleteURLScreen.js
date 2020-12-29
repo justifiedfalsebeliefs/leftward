@@ -10,25 +10,30 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 function ActionCompleteURLScreen({ route, navigation }) {
   const things = useContext(RootStoreContext);
   const action = route.params;
-  telemetry(
-    ((eventTitle = "viewActionCompleteURLScreen"),
-    { actionId: action.actionId, actionTitle: action.actionTitle })
-  );
+  // telemetry(
+  //   ((eventTitle = "viewActionCompleteURLScreen"),
+  //   { actionId: action.actionId, actionTitle: action.actionTitle })
+  // );
 
   const confirmComplete = async () => {
-    telemetry((eventTitle = "confirmActionComplete"), {
-      actionId: action.actionId,
-      actionTitle: action.actionTitle,
-    });
-    things.updateActionStatus("COMPLETE", action.actionId);
+    // telemetry((eventTitle = "confirmActionComplete"), {
+    //   actionId: action.actionId,
+    //   actionTitle: action.actionTitle,
+    // });
+    things.updateActionState(
+      action.actionId,
+      "COMPLETE",
+      action.reward,
+      action.actionCause
+    );
     navigation.navigate(routes.DASHBOARD);
   };
 
   const handleCompleteInBrowserPress = async () => {
-    telemetry((eventTitle = "completeInBrowserPress"), {
-      actionId: action.actionId,
-      actionTitle: action.actionTitle,
-    });
+    // telemetry((eventTitle = "completeInBrowserPress"), {
+    //   actionId: action.actionId,
+    //   actionTitle: action.actionTitle,
+    // });
     Linking.openURL(action.actionUrl).catch((err) =>
       console.error("Couldn't load page", err)
     );

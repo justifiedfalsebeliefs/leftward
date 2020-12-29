@@ -4,13 +4,21 @@ import useAuth from "../auth/useAuth";
 import { Auth } from "aws-amplify";
 import callApi from "../data/callApi";
 import telemetry from "../analytics/telemetry";
+import uuidv4 from "../utility/uuid";
 import AuthForm from "../components/AuthForm";
 import Screen from "../components/Screen";
 
 function RegisterScreen({ route, navigation }) {
-  telemetry("ViewRegisterScreen");
+  // telemetry("ViewRegisterScreen");
   const [error, setError] = useState();
   const auth = useAuth();
+  const userGuid = uuidv4();
+
+  // useMountEffect(() => {
+  //   Amplitude.setUserIdAsync(uuid);
+  //   Amplitude.setUserPropertiesAsync({ cohortId: getWeekNumber(new Date()) });
+  //   Amplitude.logEventAsync("ViewRegisterCauseScreem");
+  // });
 
   const handleSubmit = async (userInfo) => {
     try {
@@ -19,19 +27,15 @@ function RegisterScreen({ route, navigation }) {
         password: userInfo.password,
         attributes: {
           email: userInfo.email,
-          "custom:causes": route.params.causes,
-          "custom:userGuid": route.params.guid,
+          "custom:causes": "none",
+          "custom:userGuid": userGuid,
         },
       });
 
       await Auth.signIn(userInfo.username, userInfo.password);
       const user = await Auth.currentSession();
-      await callApi(
-        user.idToken.jwtToken,
-        "pushNewUserGuid",
-        (params = [{ key: "newGuid", value: route.params.guid }])
-      );
-      telemetry("PressRegister");
+      await callApi(user.idToken.jwtToken, "createNewUser");
+      // telemetry("PressRegister");
       Auth.currentSession().then((data) => {
         auth.logIn(data);
       });

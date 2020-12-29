@@ -24,6 +24,7 @@
     "aws-amplify-react-native": "^4.2.10",
     "expo": "~40.0.0",
     "expo-analytics-amplitude": "~9.0.0",
+    "expo-app-loading": "^1.0.1",
     "expo-blur": "^8.2.2",
     "expo-cli": "^4.0.17",
     "expo-constants": "^9.3.5",

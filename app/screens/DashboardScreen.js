@@ -11,25 +11,24 @@ import DashboardActionsWidget from "../components/widgets/actions/DashboardActio
 import ActionsByTypeStack from "../components/stacks/ActionsByTypeStack";
 import ActionsByCauseStack from "../components/stacks/ActionsByCauseStack";
 import ActionsByOtherStack from "../components/stacks/ActionsByOtherStack";
+import { Button } from "@ui-kitten/components";
 
 function DashboardScreen({ navigation }) {
   const things = useContext(RootStoreContext);
 
   async function refreshData() {
-    things.updateDashboardActionListingsShouldUpdate(true);
-    things.updateUserStatisticsShouldUpdate(true);
+    things.updateProgressionShouldUpdate(true);
+    things.updateCuratedShouldUpdate(true);
+    things.updateSavedShouldUpdate(true);
+    things.updateCompletedShouldUpdate(true);
   }
 
   useMountEffect(() => {
-    telemetry((eventTitle = "viewDashboardScreen"));
-    !things.dashboardActionListings || !things.userStatistics
+    // telemetry((eventTitle = "viewDashboardScreen"));
+    !things.progression || !things.curated || !things.saved || !things.completed
       ? refreshData()
       : null;
   });
-
-  async function handleSectionButtonPress(title) {
-    navigation.navigate(routes.ACTIONLISTING, title);
-  }
 
   return (
     <Screen doOnRefresh={refreshData} scrolling={true}>

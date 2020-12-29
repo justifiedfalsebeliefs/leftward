@@ -1,23 +1,24 @@
-import React, { useContext } from "react";
-import { RootStoreContext } from "../store/RootStoreContext";
+import React, { useContext, useState } from "react";
 import { StyleSheet } from "react-native";
 import telemetry from "../analytics/telemetry";
 import { Text } from "@ui-kitten/components";
 import Screen from "../components/Screen";
 import ActionListVertical from "../components/widgets/actions/ActionListVertical";
+import getData from "../data/getData";
 
 function ActionListingsScreen({ route, navigation }) {
-  const things = useContext(RootStoreContext);
-  async function refreshScreen() {}
+  const [listings, setListings] = useState();
 
   useMountEffect(() => {
-    telemetry((eventTitle = "viewActionListingsScreen")); // update with source button
-    !things.dashboardActionListings || !things.userStatistics
-      ? refreshScreen()
-      : null;
+    // telemetry((eventTitle = "viewActionListingsScreen")); // update with source button
+    getData(
+      "populateActionListings",
+      (params = [{ key: "queryKey", value: route.params }])
+    ).then((data) => setListings(data.actions));
   });
+
   return (
-    <Screen scrolling={false} back={true} navigation={navigation}>
+    <Screen scrolling={true} back={true} navigation={navigation}>
       <Text
         category="h1"
         style={{
@@ -28,10 +29,7 @@ function ActionListingsScreen({ route, navigation }) {
       >
         {route.params}
       </Text>
-      <ActionListVertical
-        itemList={things.dashboardActionListings}
-        navigation={navigation}
-      />
+      <ActionListVertical itemList={listings} navigation={navigation} />
     </Screen>
   );
 }

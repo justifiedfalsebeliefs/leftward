@@ -5,7 +5,7 @@ import routes from "../navigation/routes";
 import { Layout, Button } from "@ui-kitten/components";
 
 function WelcomeScreen({ navigation }) {
-  telemetry((eventTitle = "viewWelcomeScreen"));
+  // telemetry((eventTitle = "viewWelcomeScreen"));
 
   return (
     <ImageBackground
@@ -32,7 +32,7 @@ function WelcomeScreen({ navigation }) {
           style={styles.button}
           size="large"
           status="info"
-          onPress={() => navigation.navigate(routes.REGISTERCAUSE)}
+          onPress={() => navigation.navigate(routes.REGISTER)}
         >
           Register
         </Button>

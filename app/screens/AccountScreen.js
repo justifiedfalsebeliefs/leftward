@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useContext } from "react";
+import { RootStoreContext } from "../store/RootStoreContext";
 import telemetry from "../analytics/telemetry";
 import { StyleSheet, View, FlatList, Linking, Share } from "react-native";
 import routes from "../navigation/routes";
@@ -40,8 +41,9 @@ import { Button } from "@ui-kitten/components";
 // ];
 
 function AccountScreen({ navigation }) {
-  telemetry((eventTitle = "viewAccountScreen"));
+  // telemetry((eventTitle = "viewAccountScreen"));
   const { user, logOut } = useAuth();
+  const things = useContext(RootStoreContext);
 
   const handleButtonPress = async (buttonCommand) => {
     if (buttonCommand.doThis == "navigate") {
@@ -79,6 +81,7 @@ function AccountScreen({ navigation }) {
           )}
         /> */}
         <Button onPress={() => logOut()}>Log Out</Button>
+        <Button onPress={things.toggleTheme}>Toggle Theme</Button>
       </WidgetContainer>
     </Screen>
   );

@@ -7,19 +7,13 @@ import SectionTitle from "../widgets/SectionTitle";
 
 function SavedSactionsStack({ navigation, style }) {
   const things = useContext(RootStoreContext);
-  if (
-    things.listingsInProgress === undefined ||
-    things.listingsInProgress.length == 0
-  ) {
+  if (things.saved === undefined || things.saved.length == 0) {
     return <></>;
   } else {
     return (
       <Layout level="4" style={style}>
         <SectionTitle>Saved Actions</SectionTitle>
-        <ActionListVertical
-          itemList={things.listingsInProgress}
-          navigation={navigation}
-        />
+        <ActionListVertical itemList={things.saved} navigation={navigation} />
       </Layout>
     );
   }

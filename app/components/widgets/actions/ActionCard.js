@@ -1,7 +1,7 @@
 import React from "react";
 import { StyleSheet, TouchableWithoutFeedback } from "react-native";
 import { Layout, Text } from "@ui-kitten/components";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
+import AppIcon from "../../AppIcon";
 import WidgetContainer from "../WidgetContainer";
 
 function ActionCard({ title, onPress }) {
@@ -12,11 +12,7 @@ function ActionCard({ title, onPress }) {
           level={"1"}
           style={{ width: 140, height: 175, alignItems: "center" }}
         >
-          <MaterialCommunityIcons
-            name="image-size-select-large"
-            size={100}
-            color="black"
-          />
+          <AppIcon name="no-image" size="small" />
           <Text
             category="s1"
             style={{ fontWeight: "bold", marginHorizontal: 5 }}

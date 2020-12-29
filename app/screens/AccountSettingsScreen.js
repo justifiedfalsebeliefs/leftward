@@ -7,7 +7,7 @@ import { Auth } from "aws-amplify";
 import { Button } from "@ui-kitten/components";
 
 function AccountSettingsScreen({ navigation }) {
-  telemetry((eventTitle = "viewAccountSettingsScreen"));
+  // telemetry((eventTitle = "viewAccountSettingsScreen"));
 
   const [error, setError] = useState();
   const [emailVerified, setEmailVerified] = useState();

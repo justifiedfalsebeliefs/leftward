@@ -7,7 +7,7 @@ import Screen from "../components/Screen";
 import { Auth } from "aws-amplify";
 
 function ConfirmRecoverPasswordScreen({ navigation }) {
-  telemetry((eventTitle = "viewConfirmRecoverPasswordScreen"));
+  // telemetry((eventTitle = "viewConfirmRecoverPasswordScreen"));
 
   const [error, setError] = useState();
 

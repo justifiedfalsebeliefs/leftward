@@ -9,7 +9,7 @@ import useAuth from "../auth/useAuth";
 import { Layout, Button } from "@ui-kitten/components";
 
 function LoginScreen({ navigation }) {
-  telemetry((eventTitle = "viewLoginScreen"));
+  // telemetry((eventTitle = "viewLoginScreen"));
 
   const auth = useAuth();
   const [error, setError] = useState();
