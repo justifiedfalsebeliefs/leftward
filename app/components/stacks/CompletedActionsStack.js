@@ -8,7 +8,7 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 function CompletedActionsStack({ navigation, style }) {
   const things = useContext(RootStoreContext);
-  const actionsByCause = JSON.parse(things.userStatistics.actionsByCause);
+  const actionsByCause = JSON.parse(things.progression.actionsByCause);
   return (
     <Layout level="4" style={style}>
       <SectionTitle>Completed Actions</SectionTitle>
@@ -31,7 +31,7 @@ function CompletedActionsStack({ navigation, style }) {
           style={{ marginRight: 20 }}
         />
         <Text category="h3">
-          {things.userStatistics.totalActionsCompletedCount}
+          {things.progression.totalActionsCompletedCount}
         </Text>
       </Layout>
       <Layout
@@ -146,10 +146,7 @@ function CompletedActionsStack({ navigation, style }) {
         />
         <Text category="h3">{actionsByCause["Economic Justice"].count}</Text>
       </Layout>
-      <ActionListVertical
-        itemList={things.listingsCompleted}
-        navigation={navigation}
-      />
+      <ActionListVertical itemList={things.completed} navigation={navigation} />
     </Layout>
   );
 }

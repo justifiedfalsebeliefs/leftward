@@ -36,7 +36,10 @@ const TabNavigator = () => (
 );
 
 const AppNavigator = () => (
-  <NavigationContainer independent={true}>
+  <NavigationContainer
+    independent={true}
+    // theme={{ colors: { background: "#000" } }}
+  >
     <TabNavigator />
   </NavigationContainer>
 );

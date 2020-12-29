@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { NavigationContainer } from "@react-navigation/native";
-import { AppLoading } from "expo";
 import Amplify, { Auth } from "aws-amplify";
+import AppLoading from "expo-app-loading";
 import amplifyConfig from "./app/auth/amplifyConfig";
 import amplitudekey from "./app/data/amplitudeconfig";
 import AppNavigator from "./app/navigation/AppNavigator";
@@ -12,26 +12,15 @@ import RootStore from "./app/store/RootStore";
 import { RootStoreContext } from "./app/store/RootStoreContext";
 import ModalManager from "./app/components/modals/ModalManager";
 import * as Amplitude from "expo-analytics-amplitude";
-import * as eva from "@eva-design/eva";
-import { ApplicationProvider, IconRegistry } from "@ui-kitten/components";
-import { default as mapping } from "./app/config/themeMapping.json";
-import { EvaIconsPack } from "@ui-kitten/eva-icons";
-import { default as dark } from "./app/config/dark.json";
-import { default as light } from "./app/config/light.json";
-import { ThemeContext } from "./app/config/theme-context";
+import ThemeAndIconProvider from "./app/store/ThemeAndIconProvider";
 
 Amplify.configure(amplifyConfig);
-Amplitude.initialize(amplitudekey());
+Amplitude.initializeAsync(amplitudekey());
 
 export default function App() {
   const [user, setUser] = useState();
   const [isReady, setIsReady] = useState(false);
-  const [theme, setTheme] = useState(light);
-
-  const toggleTheme = () => {
-    const nextTheme = theme === light ? dark : light;
-    setTheme(nextTheme);
-  };
+  const things = new RootStore();
 
   const restoreUser = async () => {
     const user = await authStorage.getUserSession();
@@ -45,23 +34,24 @@ export default function App() {
 
   if (!isReady)
     return (
-      <AppLoading startAsync={restoreUser} onFinish={() => setIsReady(true)} />
+      <AppLoading
+        startAsync={restoreUser}
+        onFinish={() => setIsReady(true)}
+        onError={console.warn}
+      />
     );
 
   return (
-    <ThemeContext.Provider value={{ theme, toggleTheme }}>
-      <ApplicationProvider {...eva} customMapping={mapping} theme={theme}>
-        <IconRegistry icons={EvaIconsPack} />
+    <RootStoreContext.Provider value={things}>
+      <ThemeAndIconProvider>
         <AuthContext.Provider value={{ user, setUser }}>
-          <RootStoreContext.Provider value={new RootStore()}>
-            <ModalManager>
-              <NavigationContainer>
-                {user ? <AppNavigator /> : <AuthNavigator />}
-              </NavigationContainer>
-            </ModalManager>
-          </RootStoreContext.Provider>
+          <ModalManager>
+            <NavigationContainer>
+              {user ? <AppNavigator /> : <AuthNavigator />}
+            </NavigationContainer>
+          </ModalManager>
         </AuthContext.Provider>
-      </ApplicationProvider>
-    </ThemeContext.Provider>
+      </ThemeAndIconProvider>
+    </RootStoreContext.Provider>
   );
 }

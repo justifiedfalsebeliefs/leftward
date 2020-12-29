@@ -9,29 +9,28 @@ import ActionBadgesSummarySubWidget from "./ActionBadgesSummarySubWidget";
 
 function LevelWidget({ leftWidget, style }) {
   const things = useContext(RootStoreContext);
-  const userStatistics = things.userStatistics;
+  const progression = things.progression;
   const progress =
-    ((userStatistics.pointsEarnedTotal -
-      userStatistics.currentLevelPointsRequired) /
-      (userStatistics.nextLevelPointsRequired -
-        userStatistics.currentLevelPointsRequired)) *
+    ((progression.pointsEarnedTotal - progression.currentLevelPointsRequired) /
+      (progression.nextLevelPointsRequired -
+        progression.currentLevelPointsRequired)) *
     100;
   return (
     <WidgetContainer style={style}>
       <Layout style={{ flexDirection: "row", padding: 3, height: 225 }}>
         <Layout style={{ flex: 1 }}>
           {leftWidget == "RecentActions" && (
-            <RecentActionsSubWidget userStatistics={userStatistics} />
+            <RecentActionsSubWidget progression={progression} />
           )}
           {leftWidget == "ActionBadgesSummary" && (
-            <ActionBadgesSummarySubWidget userStatistics={userStatistics} />
+            <ActionBadgesSummarySubWidget progression={progression} />
           )}
         </Layout>
         <ProgressSubWidget
-          level={userStatistics.levelNumber}
+          level={progression.levelNumber}
           progress={progress}
-          pointsEarnedTotal={userStatistics.pointsEarnedTotal}
-          nextLevelPointsRequired={userStatistics.nextLevelPointsRequired}
+          pointsEarnedTotal={progression.pointsEarnedTotal}
+          nextLevelPointsRequired={progression.nextLevelPointsRequired}
         />
       </Layout>
     </WidgetContainer>

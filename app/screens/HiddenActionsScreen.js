@@ -13,7 +13,7 @@ function HiddenActionsScreen({ navigation }) {
   }
 
   useMountEffect(() => {
-    telemetry((eventTitle = "viewHiddenActionsScreen"));
+    // telemetry((eventTitle = "viewHiddenActionsScreen"));
     !things.listingsHidden ? refreshActions() : null;
   });
 

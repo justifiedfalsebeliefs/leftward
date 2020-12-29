@@ -6,7 +6,7 @@ import { Auth } from "aws-amplify";
 import AuthForm from "../components/AuthForm";
 
 function ForgotPasswordScreen({ navigation }) {
-  telemetry((eventTitle = "viewForgotPasswordScreen"));
+  // telemetry((eventTitle = "viewForgotPasswordScreen"));
 
   const [error, setError] = useState();
 

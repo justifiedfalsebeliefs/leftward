@@ -2,8 +2,7 @@ import React from "react";
 import { observer } from "mobx-react-lite";
 import { Layout, Text, useTheme } from "@ui-kitten/components";
 
-function ActionBadgesSummarySubWidget({ userStatistics }) {
-  const theme = useTheme();
+function ActionBadgesSummarySubWidget({ progression }) {
   return (
     <>
       <Text category="h2" style={{ fontWeight: "bold", textAlign: "center" }}>
@@ -13,7 +12,7 @@ function ActionBadgesSummarySubWidget({ userStatistics }) {
         category="h2"
         style={{ fontWeight: "bold", marginBottom: 15, textAlign: "center" }}
       >
-        {userStatistics.totalActionsCompletedCount}
+        {progression.totalActionsCompletedCount}
       </Text>
       <Layout
         style={{

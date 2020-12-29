@@ -10,10 +10,7 @@ function DashboardActionsWidget({ navigation, style }) {
   return (
     <Layout level="4" style={style}>
       <SectionTitle>For You</SectionTitle>
-      <ActionList
-        itemList={things.dashboardActionListings}
-        navigation={navigation}
-      />
+      <ActionList itemList={things.curated} navigation={navigation} />
     </Layout>
   );
 }
