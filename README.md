@@ -1,3 +1,6 @@
+Moved to https://github.com/leftward-app
+
+
 # Leftward
 
 ## Removing the barriers between Values and Action
