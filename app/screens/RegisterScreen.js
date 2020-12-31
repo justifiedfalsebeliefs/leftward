@@ -1,27 +1,31 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
+import { RootStoreContext } from "../store/RootStoreContext";
 import { StyleSheet, View } from "react-native";
+import * as Amplitude from "expo-analytics-amplitude";
+import getWeekNumber from "../utility/getWeekNumber";
 import useAuth from "../auth/useAuth";
 import { Auth } from "aws-amplify";
-import callApi from "../data/callApi";
 import telemetry from "../analytics/telemetry";
 import uuidv4 from "../utility/uuid";
 import AuthForm from "../components/AuthForm";
 import Screen from "../components/Screen";
 
 function RegisterScreen({ route, navigation }) {
-  // telemetry("ViewRegisterScreen");
+  const things = useContext(RootStoreContext);
   const [error, setError] = useState();
   const auth = useAuth();
   const userGuid = uuidv4();
 
-  // useMountEffect(() => {
-  //   Amplitude.setUserIdAsync(uuid);
-  //   Amplitude.setUserPropertiesAsync({ cohortId: getWeekNumber(new Date()) });
-  //   Amplitude.logEventAsync("ViewRegisterCauseScreem");
-  // });
+  useMountEffect(() => {
+    Amplitude.setUserIdAsync(userGuid);
+    Amplitude.setUserPropertiesAsync({ cohortId: getWeekNumber(new Date()) });
+    telemetry("ViewRegisterScreen");
+  });
 
   const handleSubmit = async (userInfo) => {
     try {
+      things.updateIsLoading(true);
+      telemetry("PressRegister");
       await Auth.signUp({
         username: userInfo.username,
         password: userInfo.password,
@@ -31,14 +35,11 @@ function RegisterScreen({ route, navigation }) {
           "custom:userGuid": userGuid,
         },
       });
-
       await Auth.signIn(userInfo.username, userInfo.password);
-      const user = await Auth.currentSession();
-      await callApi(user.idToken.jwtToken, "createNewUser");
-      // telemetry("PressRegister");
-      Auth.currentSession().then((data) => {
-        auth.logIn(data);
+      await Auth.currentSession().then((data) => {
+        auth.logIn(data, true);
       });
+      things.updateAppStateShouldUpdate(true);
     } catch (error) {
       setError(error.message);
     }
@@ -46,16 +47,13 @@ function RegisterScreen({ route, navigation }) {
 
   return (
     <>
-      <Screen style={styles.container}>
-        <View style={styles.progressBackground}>
-          <View style={styles.progressFill}></View>
-        </View>
-        <View style={{ height: 20 }}></View>
+      <Screen style={styles.container} paddingHorizontal={20}>
         <AuthForm
           fields={["username", "email", "password", "passwordConfirmation"]}
           onSubmit={handleSubmit}
           submitTitle={"Register"}
           error={error}
+          style={{ paddingTop: 20 }}
         ></AuthForm>
       </Screen>
     </>
@@ -64,18 +62,7 @@ function RegisterScreen({ route, navigation }) {
 
 const styles = StyleSheet.create({
   container: {
-    paddingTop: 30,
-  },
-  progressBackground: {
-    backgroundColor: "blue",
-    height: 20,
-    borderRadius: 12,
-  },
-  progressFill: {
-    backgroundColor: "blue",
-    borderRadius: 12,
-    flex: 1,
-    width: `100%`,
+    paddingTop: 70,
   },
 });
 

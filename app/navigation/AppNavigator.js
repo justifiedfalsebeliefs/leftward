@@ -13,7 +13,7 @@ import {
 
 const { Navigator, Screen } = createBottomTabNavigator();
 const DashboardIcon = (props) => <Icon {...props} name="home" />;
-const StatisticsIcon = (props) => <Icon {...props} name="bar-chart-outline" />;
+const StatisticsIcon = (props) => <Icon {...props} name="person" />;
 const AccountIcon = (props) => <Icon {...props} name="settings-outline" />;
 
 const BottomTabBar = ({ navigation, state }) => (

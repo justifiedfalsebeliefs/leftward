@@ -13,6 +13,7 @@ function Screen({
   scrolling,
   back,
   navigation,
+  paddingHorizontal = 0,
 }) {
   const [refreshing, setRefreshing] = React.useState(false);
   const onRefresh = React.useCallback(() => {
@@ -22,27 +23,35 @@ function Screen({
   }, []);
   if (scrolling == true) {
     return (
-      <ScrollView
-        refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-        }
-      >
-        <Layout level={"4"} style={[styles.screen, style]}>
-          {back && (
-            <TouchableWithoutFeedback
-              onPress={() => navigation.goBack()}
-              style={styles.back}
-            >
-              <Ionicons name="ios-arrow-back" size={24} color="black" />
-            </TouchableWithoutFeedback>
-          )}
-          {children}
-        </Layout>
-      </ScrollView>
+      <Layout level="4" style={[styles.screen, { flex: 1 }]}>
+        <ScrollView
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          }
+        >
+          <Layout
+            level={"4"}
+            style={[{ paddingHorizontal: paddingHorizontal }, style]}
+          >
+            {back && (
+              <TouchableWithoutFeedback
+                onPress={() => navigation.goBack()}
+                style={styles.back}
+              >
+                <Ionicons name="ios-arrow-back" size={24} color="black" />
+              </TouchableWithoutFeedback>
+            )}
+            {children}
+          </Layout>
+        </ScrollView>
+      </Layout>
     );
   } else {
     return (
-      <Layout level={"4"} style={[styles.screen, style]}>
+      <Layout
+        level={"4"}
+        style={[styles.screen, { paddingHorizontal: paddingHorizontal }, style]}
+      >
         {back && (
           <TouchableWithoutFeedback
             onPress={() => navigation.goBack()}
@@ -60,7 +69,6 @@ function Screen({
 const styles = StyleSheet.create({
   screen: {
     paddingTop: Constants.statusBarHeight,
-    paddingHorizontal: 20,
     flex: 1,
   },
 });

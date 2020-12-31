@@ -2,9 +2,9 @@ import React from "react";
 import { FormField, SubmitButton, ErrorMessage } from "./forms";
 import { Formik } from "formik";
 import * as Yup from "yup";
+import { Layout } from "@ui-kitten/components";
 
-
-function AuthForm({ fields, onSubmit, submitTitle, error }) {
+function AuthForm({ fields, onSubmit, submitTitle, error, style }) {
   const initialValues = {};
   const validationConditions = {};
   const renderItems = [];
@@ -137,12 +137,14 @@ function AuthForm({ fields, onSubmit, submitTitle, error }) {
 
   function renderChildren(components) {
     return components.map((component) => (
-      <React.Fragment key={component.props.name}>{component}</React.Fragment>
+      <Layout level="4" key={component.props.name}>
+        {component}
+      </Layout>
     ));
   }
   const validationSchema = Yup.object().shape(validationConditions);
   return (
-    <>
+    <Layout level="4" style={style}>
       <ErrorMessage error={error} visible={error} />
       <Formik
         initialValues={initialValues}
@@ -151,10 +153,10 @@ function AuthForm({ fields, onSubmit, submitTitle, error }) {
       >
         <>
           {renderChildren(renderItems)}
-          <SubmitButton title={submitTitle} />
+          <SubmitButton title={submitTitle} style={{ marginTop: 30 }} />
         </>
       </Formik>
-    </>
+    </Layout>
   );
 }
 

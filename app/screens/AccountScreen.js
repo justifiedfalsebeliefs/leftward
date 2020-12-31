@@ -41,50 +41,53 @@ import { Button } from "@ui-kitten/components";
 // ];
 
 function AccountScreen({ navigation }) {
-  // telemetry((eventTitle = "viewAccountScreen"));
+  telemetry("viewAccountScreen", true);
   const { user, logOut } = useAuth();
   const things = useContext(RootStoreContext);
 
-  const handleButtonPress = async (buttonCommand) => {
-    if (buttonCommand.doThis == "navigate") {
-      navigation.navigate(buttonCommand.target);
-    }
-    if (buttonCommand.doThis == "link") {
-      Linking.openURL(buttonCommand.target).catch((err) =>
-        console.error("Couldn't load page", err)
-      );
-    }
-    if (buttonCommand.doThis == "share") {
-      await Share.share({
-        message: "Checkout the site Leftward.app",
-      });
-    }
+  const handleValuesPress = async () => {
+    Linking.openURL("https://leftward.app/").catch((err) =>
+      console.error("Couldn't load page", err)
+    );
+  };
+
+  const handleSharePress = async () => {
+    await Share.share({
+      message: "Checkout the site Leftward.app",
+    });
   };
   return (
-    <Screen>
-      <WidgetContainer>
-        {/* <FlatList
-          style={{ paddingBottom: 50 }}
-          data={menuItems}
-          keyExtractor={(menuItem) => menuItem.title}
-          renderItem={({ item }) => (
-            <ListItem
-              title={item.title}
-              IconComponent={
-                <Icon
-                  name={item.icon.name}
-                  backgroundColor={item.icon.backgroundColor}
-                />
-              }
-              onPress={() => handleButtonPress(item.buttonCommand)}
-            />
-          )}
-        /> */}
-        <Button onPress={() => logOut()}>Log Out</Button>
-        <Button onPress={things.toggleTheme}>Toggle Theme</Button>
-      </WidgetContainer>
+    <Screen scrolling={false} paddingHorizontal={20}>
+      <Button status={"info"} style={[styles.widgetSpacer, { marginTop: 50 }]}>
+        Manage Account
+      </Button>
+      <Button
+        status={"info"}
+        onPress={() => handleValuesPress()}
+        style={[styles.widgetSpacer]}
+      >
+        Our Values
+      </Button>
+      <Button status={"success"} onPress={() => handleSharePress()}>
+        Share Leftward
+      </Button>
+      <Layout
+        level="4"
+        style={{ flex: 1, justifyContent: "flex-end", marginBottom: 40 }}
+      >
+        <Button status={"warning"} onPress={() => logOut()} style={{}}>
+          Log Out
+        </Button>
+      </Layout>
+      {/* <Button onPress={things.toggleTheme}>Toggle Theme</Button> */}
     </Screen>
   );
 }
+
+const styles = StyleSheet.create({
+  widgetSpacer: {
+    marginBottom: 30,
+  },
+});
 
 export default AccountScreen;
