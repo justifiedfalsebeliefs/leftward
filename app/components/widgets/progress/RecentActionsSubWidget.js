@@ -1,9 +1,12 @@
-import React from "react";
+import React, { useContext } from "react";
+import { FlatList } from "react-native";
+import { RootStoreContext } from "../../../store/RootStoreContext";
 import { observer } from "mobx-react-lite";
 import { Layout, Text, useTheme } from "@ui-kitten/components";
 
-function RecentActionsSubWidget({ userStatistics }) {
+function RecentActionsSubWidget({}) {
   const theme = useTheme();
+  const things = useContext(RootStoreContext);
   return (
     <>
       <Text category="h2" style={{ fontWeight: "bold", marginBottom: 15 }}>
@@ -20,18 +23,16 @@ function RecentActionsSubWidget({ userStatistics }) {
         <Text category="s1" style={{ fontWeight: "bold" }}>
           {"Recent Actions"}
         </Text>
-        <Text category="c2" style={{ color: theme["color-basic-600"] }}>
-          - Signed petition
-        </Text>
-        <Text category="c2" style={{ color: theme["color-basic-600"] }}>
-          - Attended rally
-        </Text>
-        <Text category="c2" style={{ color: theme["color-basic-600"] }}>
-          - Signed petition
-        </Text>
-        <Text category="c2" style={{ color: theme["color-basic-600"] }}>
-          - Phone banked
-        </Text>
+        <FlatList
+          style={{ flexGrow: 0 }}
+          data={things.completed.slice(0, 4)}
+          keyExtractor={(item) => item.actionId.toString()}
+          renderItem={({ item }) => (
+            <Text category="c2" style={{ color: theme["color-basic-600"] }}>
+              - {item.actionType}
+            </Text>
+          )}
+        />
       </Layout>
     </>
   );

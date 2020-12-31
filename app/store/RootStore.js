@@ -1,9 +1,10 @@
 import { makeObservable, observable, action, reaction, when } from "mobx";
 import getData from "../data/getData";
-import pushData from "../data/pushData";
 
 export default class RootStore {
   // Main State
+  isLoading = false;
+  appStateShouldUpdate = true;
   progression = false;
   progressionShouldUpdate = true;
   curated = false;
@@ -18,10 +19,13 @@ export default class RootStore {
   // Modals
   testModalVisible = false;
   levelUpVisible = false;
+  actionCompleteModalVisible = false;
 
   constructor() {
     makeObservable(this, {
       // Main State
+      isLoading: observable,
+      appStateShouldUpdate: observable,
       progression: observable,
       progressionShouldUpdate: observable,
       curated: observable,
@@ -30,6 +34,9 @@ export default class RootStore {
       savedShouldUpdate: observable,
       completed: observable,
       completedShouldUpdate: observable,
+      updateIsLoading: action,
+      updateAppState: action,
+      updateAppStateShouldUpdate: action,
       updateProgression: action,
       updateProgressionShouldUpdate: action,
       updateCurated: action,
@@ -50,16 +57,44 @@ export default class RootStore {
       updateTestModalVisible: action,
       levelUpVisible: observable,
       updateLevelUpVisible: action,
+      actionCompleteModalVisible: observable,
+      updateActionCompleteModalVisible: action,
     });
   }
 
   // Main State
+  updateIsLoading(updateValue) {
+    this.isLoading = updateValue;
+  }
+  updateAppState() {
+    if (this.appStateShouldUpdate == true) {
+      getData("populateState", {
+        curated: true,
+        progression: true,
+        saved: true,
+        completed: true,
+      }).then(
+        action((data) => {
+          this.curated = data.curated;
+          this.progression = data.progression;
+          this.saved = data.saved;
+          this.completed = data.completed;
+          this.updateAppStateShouldUpdate(false);
+        })
+      );
+    }
+  }
+
+  updateAppStateShouldUpdate(updateValue) {
+    this.appStateShouldUpdate = updateValue;
+    this.updateAppState();
+  }
+
   updateCurated() {
     if (this.curatedShouldUpdate == true) {
-      getData(
-        "populateState",
-        (params = [{ key: "curated", value: true }])
-      ).then(
+      getData("populateState", {
+        curated: true,
+      }).then(
         action((data) => {
           this.curated = data.curated;
           this.updateCuratedShouldUpdate(false);
@@ -75,10 +110,9 @@ export default class RootStore {
 
   updateProgression = async () => {
     if (this.progressionShouldUpdate == true) {
-      getData(
-        "populateState",
-        (params = [{ key: "progression", value: true }])
-      ).then(
+      getData("populateState", {
+        progression: true,
+      }).then(
         action((data) => {
           this.progression = data.progression;
           this.updateProgressionShouldUpdate(false);
@@ -88,13 +122,15 @@ export default class RootStore {
   };
 
   updateProgressionShouldUpdate(updateValue) {
-    this.PprogressionShouldUpdate = updateValue;
+    this.progressionShouldUpdate = updateValue;
     this.updateProgression();
   }
 
   updateSaved() {
     if (this.savedShouldUpdate == true) {
-      getData("populateState", (params = [{ key: "saved", value: true }])).then(
+      getData("populateState", {
+        saved: true,
+      }).then(
         action((data) => {
           this.saved = data.saved;
           this.updateSavedShouldUpdate(false);
@@ -110,10 +146,9 @@ export default class RootStore {
 
   updateCompleted() {
     if (this.completedShouldUpdate == true) {
-      getData(
-        "populateState",
-        (params = [{ key: "completed", value: true }])
-      ).then(
+      getData("populateState", {
+        completed: true,
+      }).then(
         action((data) => {
           this.completed = data.completed;
           this.updateCompletedShouldUpdate(false);
@@ -128,23 +163,16 @@ export default class RootStore {
   }
 
   updateActionState = async (actionId, state, reward, cause) => {
-    pushData(
-      "updateUserAction",
-      (params = [
-        { key: "actionId", value: actionId },
-        { key: "actionState", value: state },
-        { key: "reward", value: reward },
-        { key: "cause", value: cause },
-      ])
-    ).then(
+    getData("updateUserAction", {
+      actionId: actionId,
+      actionState: state,
+      reward: reward,
+      cause: cause,
+    }).then(
       action((data) => {
-        this.updateCuratedShouldUpdate(true);
-        this.updateProgressionShouldUpdate(true);
-        this.updateSavedShouldUpdate(true);
-        this.updateCompletedShouldUpdate(true);
+        this.updateAppStateShouldUpdate(true);
         //this.updateListingsHiddenShouldUpdate(true);
         if (data.levelUp) {
-          console.log("Level up!");
           this.updateLevelUpVisible(true);
         }
       })
@@ -175,5 +203,8 @@ export default class RootStore {
 
   updateLevelUpVisible(updateValue) {
     this.levelUpVisible = updateValue;
+  }
+  updateActionCompleteModalVisible(updateValue) {
+    this.actionCompleteModalVisible = updateValue;
   }
 }

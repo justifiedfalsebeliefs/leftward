@@ -3,7 +3,7 @@ import { RootStoreContext } from "../store/RootStoreContext";
 import { View, StyleSheet, Linking, ScrollView } from "react-native";
 import telemetry from "../analytics/telemetry";
 import routes from "../navigation/routes";
-import { Layout, Text, Button, Tooltip } from "@ui-kitten/components";
+import { Layout, Text, Button, Popover } from "@ui-kitten/components";
 import Screen from "../components/Screen";
 import WidgetContainer from "../components/widgets/WidgetContainer";
 import AppIcon from "../components/AppIcon";
@@ -15,13 +15,17 @@ import {
 } from "react-native-gesture-handler";
 
 function ActionDetailsScreen({ route, navigation }) {
-  const action = route.params;
-  // telemetry(
-  //   ((eventTitle = "viewActionDetailsScreen"),
-  //   { actionId: action.actionId, actionTitle: action.actionTitle })
-  // );
   const things = useContext(RootStoreContext);
-  const [starIcon, setStarIcon] = useState("star-outline");
+  const action = route.params;
+  telemetry("viewActionDetailsScreen", true, {
+    actionId: action.actionId,
+    actionTitle: action.actionTitle,
+  });
+  const renderWorkflow = action.sourceList == "completed" ? false : true;
+  const renderStar = action.sourceList == "completed" ? false : true;
+  const [starIcon, setStarIcon] = useState(
+    action.sourceList == "saved" ? "star" : "star-outline"
+  );
   const [tooltipVisible, setTooltipVisible] = useState(false);
 
   const organization = {
@@ -31,28 +35,28 @@ function ActionDetailsScreen({ route, navigation }) {
   };
 
   const countMeInPress = async () => {
-    // telemetry((eventTitle = "countMeInPress"), {
-    //   actionId: action.actionId,
-    //   actionTitle: action.actionTitle,
-    // });
+    telemetry("countMeInPress", false, {
+      actionId: action.actionId,
+      actionTitle: action.actionTitle,
+    });
     navigation.navigate(routes.COMPLETEURL, action);
   };
+
   const handleOrgPress = async () => {
-    // telemetry((eventTitle = "openOrgURL"), {
-    //   actionId: action.actionId,
-    //   actionTitle: action.actionTitle,
-    // });
+    telemetry("openOrgURL", false, {
+      actionId: action.actionId,
+      actionTitle: action.actionTitle,
+    });
     Linking.openURL(organization.url).catch((err) =>
       console.error("Couldn't load page", err)
     );
   };
   const handleStarIconPress = async () => {
     if (starIcon == "star-outline") {
-      // telemetry((eventTitle = "saveIconPressSave"), {
-      //   actionId: action.actionId,
-      //   actionTitle: action.actionTitle,
-      // });
-      // update to save it
+      telemetry("saveIconPressSave", false, {
+        actionId: action.actionId,
+        actionTitle: action.actionTitle,
+      });
       setStarIcon("star");
       setTooltipVisible(true);
       things.updateActionState(
@@ -62,10 +66,10 @@ function ActionDetailsScreen({ route, navigation }) {
         action.actionCause
       );
     } else {
-      // telemetry((eventTitle = "saveIconPressUnSave"), {
-      //   actionId: action.actionId,
-      //   actionTitle: action.actionTitle,
-      // });
+      telemetry("saveIconPressUnSave", false, {
+        actionId: action.actionId,
+        actionTitle: action.actionTitle,
+      });
       setStarIcon("star-outline");
       things.updateActionState(
         action.actionId,
@@ -84,7 +88,12 @@ function ActionDetailsScreen({ route, navigation }) {
 
   return (
     <>
-      <Screen back={true} navigation={navigation} scrolling={true}>
+      <Screen
+        back={true}
+        navigation={navigation}
+        scrolling={true}
+        paddingHorizontal={20}
+      >
         <Layout level="4" style={{ alignItems: "center", paddingBottom: 30 }}>
           <AppIcon name="no-image" size="small-medium" />
           <Text category="h1" style={{ fontWeight: "bold", margin: 10 }}>
@@ -172,14 +181,18 @@ function ActionDetailsScreen({ route, navigation }) {
               {action.reward} points
             </Text>
             <Layout level="4" style={{ alignItems: "flex-end", flexGrow: 1 }}>
-              <Tooltip
-                anchor={renderStarIcon}
-                visible={tooltipVisible}
-                onBackdropPress={() => setTooltipVisible(false)}
-                placement={"bottom"}
-              >
-                Action Saved!
-              </Tooltip>
+              {renderStar && (
+                <Popover
+                  anchor={renderStarIcon}
+                  visible={tooltipVisible}
+                  onBackdropPress={() => setTooltipVisible(false)}
+                  placement={"left"}
+                >
+                  <Layout level="2" style={{ borderRadius: 15 }}>
+                    <Text> Action Saved! </Text>
+                  </Layout>
+                </Popover>
+              )}
             </Layout>
           </Layout>
         </Layout>
@@ -187,19 +200,21 @@ function ActionDetailsScreen({ route, navigation }) {
         <WidgetContainer>
           <Text category="s1">{action.actionDescription}</Text>
         </WidgetContainer>
-        <Layout level="4" style={{ padding: 25 }}></Layout>
+        <Layout level="4" style={{ padding: 35 }}></Layout>
       </Screen>
-      <Button
-        status="success"
-        style={{
-          position: "absolute",
-          bottom: 15,
-          right: 15,
-        }}
-        onPress={() => countMeInPress()}
-      >
-        Count me in
-      </Button>
+      {renderWorkflow && (
+        <Button
+          status="success"
+          style={{
+            position: "absolute",
+            bottom: 15,
+            right: 15,
+          }}
+          onPress={() => countMeInPress()}
+        >
+          Count me in
+        </Button>
+      )}
     </>
   );
 }

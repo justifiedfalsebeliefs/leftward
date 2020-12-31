@@ -10,30 +10,31 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 function ActionCompleteURLScreen({ route, navigation }) {
   const things = useContext(RootStoreContext);
   const action = route.params;
-  // telemetry(
-  //   ((eventTitle = "viewActionCompleteURLScreen"),
-  //   { actionId: action.actionId, actionTitle: action.actionTitle })
-  // );
+  telemetry("viewActionCompleteURLScreen", true, {
+    actionId: action.actionId,
+    actionTitle: action.actionTitle,
+  });
 
   const confirmComplete = async () => {
-    // telemetry((eventTitle = "confirmActionComplete"), {
-    //   actionId: action.actionId,
-    //   actionTitle: action.actionTitle,
-    // });
+    telemetry("confirmActionComplete", false, {
+      actionId: action.actionId,
+      actionTitle: action.actionTitle,
+    });
     things.updateActionState(
       action.actionId,
       "COMPLETE",
       action.reward,
       action.actionCause
     );
+    things.updateActionCompleteModalVisible(true);
     navigation.navigate(routes.DASHBOARD);
   };
 
   const handleCompleteInBrowserPress = async () => {
-    // telemetry((eventTitle = "completeInBrowserPress"), {
-    //   actionId: action.actionId,
-    //   actionTitle: action.actionTitle,
-    // });
+    telemetry("completeInBrowserPress", false, {
+      actionId: action.actionId,
+      actionTitle: action.actionTitle,
+    });
     Linking.openURL(action.actionUrl).catch((err) =>
       console.error("Couldn't load page", err)
     );
@@ -41,7 +42,7 @@ function ActionCompleteURLScreen({ route, navigation }) {
 
   return (
     <Layout level="4" style={{ flex: 1 }}>
-      <Screen back={true} navigation={navigation}>
+      <Screen back={true} navigation={navigation} paddingHorizontal={20}>
         <Layout level="4" style={{ alignItems: "center", paddingBottom: 30 }}>
           <MaterialCommunityIcons
             name="image-size-select-large"
@@ -49,8 +50,9 @@ function ActionCompleteURLScreen({ route, navigation }) {
             color="black"
           />
           <Button
-            status="success"
+            status="info"
             onPress={() => handleCompleteInBrowserPress()}
+            style={{ marginBottom: 200 }}
           >
             Complete in Browser
           </Button>

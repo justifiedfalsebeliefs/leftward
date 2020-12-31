@@ -11,14 +11,18 @@ function ActionListingsScreen({ route, navigation }) {
 
   useMountEffect(() => {
     // telemetry((eventTitle = "viewActionListingsScreen")); // update with source button
-    getData(
-      "populateActionListings",
-      (params = [{ key: "queryKey", value: route.params }])
-    ).then((data) => setListings(data.actions));
+    getData("populateActionListings", { queryKey: route.params }).then((data) =>
+      setListings(data.actions)
+    );
   });
 
   return (
-    <Screen scrolling={true} back={true} navigation={navigation}>
+    <Screen
+      scrolling={true}
+      back={true}
+      navigation={navigation}
+      paddingHorizontal={20}
+    >
       <Text
         category="h1"
         style={{
